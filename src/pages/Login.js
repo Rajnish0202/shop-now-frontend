@@ -1,25 +1,76 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import BreadCrumb from '../components/BreadCrumb';
 import MetaData from '../utils/MetaData';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearErrors, loginUser } from '../redux/actions/userActions';
+import { toast } from 'react-toastify';
+import { validateEmail } from '../utils/validateEmail';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const dispatch = useDispatch();
+  const { loading, error, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
+  const navigate = useNavigate();
+
+  const loginSubmit = (e) => {
+    e.preventDefault();
+
+    // Validation
+
+    if (!email || !password) {
+      return toast.error('All fields are required.');
+    }
+
+    if (!validateEmail(email)) {
+      return toast.error('Please enter a valid email.');
+    }
+
+    const formData = new FormData();
+    formData.set('email', email);
+    formData.set('password', password);
+
+    dispatch(loginUser(formData));
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/');
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+  }, [isAuthenticated, navigate, dispatch, error]);
+
   return (
     <>
       <MetaData title='Login' />
       <BreadCrumb title='Login' />
+      {loading && <p className='text-center mb-0'>Loading...</p>}
       <div className='login-wrapper home-wrapper-2 p-4'>
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
               <div className='auth-card'>
                 <h3 className='text-center mb-3'>Login</h3>
-                <form action='' className='d-flex flex-column gap-15'>
+                <form
+                  action=''
+                  className='d-flex flex-column gap-15'
+                  onSubmit={loginSubmit}
+                >
                   <div>
                     <input
                       type='email'
                       className='form-control'
                       placeholder='Email'
+                      name='email'
+                      onChange={(e) => setEmail(e.target.value)}
                     />
                   </div>
                   <div>
@@ -27,6 +78,8 @@ const Login = () => {
                       type='password'
                       className='form-control'
                       placeholder='Password'
+                      name='password'
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <div>
@@ -35,7 +88,11 @@ const Login = () => {
                     </Link>
                   </div>
                   <div className='d-flex justify-content-center align-items-center gap-15'>
-                    <button type='submit' className='button'>
+                    <button
+                      type='submit'
+                      className='button'
+                      disabled={loading ? true : false}
+                    >
                       Login
                     </button>
                     <Link to='/register' className='button signup'>

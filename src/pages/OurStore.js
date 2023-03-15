@@ -1,29 +1,69 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BreadCrumb from '../components/BreadCrumb';
 import MetaData from '../utils/MetaData';
 import StarRatings from 'react-star-ratings';
 import ProductCard from '../components/ProductCard';
 import Color from '../components/Color';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { clearErrors } from '../redux/actions/productCategoryAction';
+import Loader, { Spinner } from '../components/Loader/Loader';
+import { CLEAR_ERRORS } from '../redux/constants/productCategory';
+import { getProducts } from '../redux/actions/productActions';
+import { useParams } from 'react-router-dom';
 
 const OurStore = () => {
   const [grid, setGrid] = useState(3);
+  const { keyword } = useParams();
+  console.log(keyword);
+
+  const { loading, error, products } = useSelector((state) => state.products);
+  const {
+    loading: categoryLoading,
+    error: categoryError,
+    productCategories,
+    counts,
+  } = useSelector((state) => state.productCategories);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+    if (categoryError) {
+      toast.error(error);
+      dispatch(CLEAR_ERRORS());
+    }
+
+    dispatch(getProducts());
+  }, [dispatch, error, categoryError, keyword]);
 
   return (
     <>
       <MetaData title='Our Store' />
       <BreadCrumb title='Our Store' />
       <div className='store-wrapper home-wrapper-2 p-4'>
+        {loading && <Loader />}
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-3'>
               <div className='filter-card mb-2'>
-                <h3 className='filter-title'>Shop by categories</h3>
+                <h3 className='filter-title'>
+                  Shop by categories(
+                  {counts?.length > 10
+                    ? counts
+                    : counts?.toString().padStart(2, '0')}
+                  )
+                </h3>
                 <div>
                   <ul className='ps-0 mb-0'>
-                    <li>Watch</li>
-                    <li>Television</li>
-                    <li>Mobile</li>
-                    <li>laptop</li>
+                    {categoryLoading && <Spinner />}
+                    {productCategories &&
+                      productCategories.map((category) => {
+                        return <li key={category?.slug}>{category?.title}</li>;
+                      })}
                   </ul>
                 </div>
               </div>
@@ -263,10 +303,16 @@ const OurStore = () => {
                 </div>
               </div>
               <div className='product-list pb-5 d-flex gap-10 flex-wrap'>
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
-                <ProductCard grid={grid} />
+                {products &&
+                  products.map((product) => {
+                    return (
+                      <ProductCard
+                        grid={grid}
+                        product={product}
+                        key={product._id}
+                      />
+                    );
+                  })}
               </div>
             </div>
           </div>

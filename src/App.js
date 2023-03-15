@@ -1,7 +1,8 @@
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import axios from 'axios';
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import About from './pages/About';
@@ -22,8 +23,34 @@ import TermsAndCondition from './pages/TermsAndCondition';
 import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import Dashboard from './pages/Admin/Dashboard';
+import MainLayout from './components/Admin/MainLayout';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearErrors, loadUser } from './redux/actions/userActions';
+import { useEffect } from 'react';
+import { getProductCategories } from './redux/actions/productCategoryAction';
+
+axios.defaults.withCredentials = true;
 
 function App() {
+  const { isAuthenticated, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (localStorage.getItem('token')) {
+      dispatch(loadUser());
+    } else {
+      toast.info('You are not authorized,please login.');
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    dispatch(getProductCategories());
+  }, [dispatch, error]);
+
   return (
     <Router>
       <ToastContainer
@@ -37,8 +64,9 @@ function App() {
           <Route index element={<Home />} />
 
           <Route path='/ourstore' element={<OurStore />} />
+          <Route path='/ourstore/:keyword' element={<OurStore />} />
 
-          <Route path='/product/:id' element={<SingleProduct />} />
+          <Route path='/product/:slug' element={<SingleProduct />} />
 
           <Route path='/blogs' element={<Blogs />} />
           <Route path='/blogs/:id' element={<SingleBlog />} />
@@ -66,6 +94,10 @@ function App() {
           <Route path='/refund-policy' element={<RefundPolicy />} />
           <Route path='/shipping-policy' element={<ShippingPolicy />} />
           <Route path='/termsandconditions' element={<TermsAndCondition />} />
+        </Route>
+
+        <Route path='/admin' element={<MainLayout />}>
+          <Route index element={<Dashboard />} />
         </Route>
       </Routes>
     </Router>

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
+import { shortenText } from '../utils/ShortenText';
 
-const ProductCard = ({ grid }) => {
+const ProductCard = ({ grid, product }) => {
   const location = useLocation();
 
   return (
@@ -11,23 +12,30 @@ const ProductCard = ({ grid }) => {
         location.pathname === '/ourstore' ? `gr-${grid}` : 'col-3'
       }`}
     >
-      <Link to='/product/123' className='product-card position-relative'>
+      <Link
+        to={`/product/${product?.slug}`}
+        className='product-card position-relative'
+      >
         <div className='wishlist-icon position-absolute'>
           <button>
             <img src='/assests/wish.svg' alt='wishlist' />
           </button>
         </div>
         <div className='product-image'>
-          <img src='/assests/watch.jpg' alt='watch' />
-          <img src='/assests/watch-1.jpg' alt='watch-1' />
+          <img src={product?.images[0]?.url} alt={product?.slug} />
+          <img src={product?.images[1]?.url} alt={product?.slug} />
         </div>
         <div className='product-details'>
-          <h6 className='brand'>Havels</h6>
-          <h5 className='title'>
-            Kids headphones 10 pack multi colored for students
+          <h6 className='brand'>{product?.brand?.title}</h6>
+          <h5 className='title' title={product?.title}>
+            {grid && grid >= 6
+              ? product?.title
+              : grid && grid < 6 && grid && grid > 3
+              ? shortenText(product?.title, 40)
+              : shortenText(product?.title, 24)}
           </h5>
           <StarRatings
-            rating={4}
+            rating={+product?.totalRating}
             starRatedColor='#febd69'
             starDimension='20px'
             starSpacing='2px'
@@ -37,12 +45,9 @@ const ProductCard = ({ grid }) => {
               grid === 12 || grid === 6 ? 'd-block' : 'd-none'
             }`}
           >
-            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Obcaecati
-            corrupti nam dolores odio, fuga iusto fugit delectus necessitatibus
-            quisquam qui error eaque id officiis magni laborum aliquid facere
-            voluptate minima.
+            {product?.description}
           </p>
-          <p className='price'>₹1209.00</p>
+          <p className='price'>₹{product?.price}</p>
         </div>
         <div className='action-bar position-absolute'>
           <div className='d-flex flex-column gap-15'>

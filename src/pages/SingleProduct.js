@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 import BreadCrumb from '../components/BreadCrumb';
 import ProductCard from '../components/ProductCard';
@@ -9,9 +9,58 @@ import { BsHeart, BsLink } from 'react-icons/bs';
 import { TiArrowShuffle } from 'react-icons/ti';
 import { MdOutlineLocalShipping } from 'react-icons/md';
 import { toast } from 'react-toastify';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clearErrors,
+  getRelatedProducts,
+  productDetails,
+} from '../redux/actions/productActions';
+import { shortenText } from '../utils/ShortenText';
+import { capitalizeText } from '../utils/Capitalized';
+import Loader, { Spinner } from '../components/Loader/Loader';
 
 const SingleProduct = () => {
   const [toggleReview, setToggleReview] = useState(false);
+  const { slug } = useParams();
+  const dispatch = useDispatch();
+  const { loading, error, product } = useSelector(
+    (state) => state.productDetails
+  );
+  const {
+    loading: relatedLoading,
+    error: relatedError,
+    relatedProducts,
+    productCounts: count,
+  } = useSelector((state) => state.relatedProducts);
+
+  const [imageUrl, setImageUrl] = useState();
+
+  useEffect(() => {
+    if (slug) {
+      dispatch(productDetails(slug));
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (relatedError) {
+      toast.error(relatedError);
+      dispatch(clearErrors());
+    }
+
+    dispatch(getRelatedProducts(product?._id, product?.category?._id));
+  }, [
+    dispatch,
+    slug,
+    imageUrl,
+    product?.category?._id,
+    product?._id,
+    error,
+    relatedError,
+  ]);
 
   const shareLink = window.location.href;
 
@@ -27,14 +76,24 @@ const SingleProduct = () => {
   };
 
   const props = {
-    zoomWith: 600,
-    img: 'https://res.cloudinary.com/dukdn1bpp/image/upload/v1675181440/MERN-INVENTORY/lt3skh0oukrzciohedr1.webp',
+    scale: 1.8,
+    zoomWidth: 500,
+    img: `${imageUrl ? imageUrl : product?.images && product?.images[0]?.url}`,
   };
 
   return (
     <>
-      <MetaData title='Product Name' />
-      <BreadCrumb title='Product Name' />
+      <MetaData
+        title={
+          product?.title && capitalizeText(shortenText(product?.title, 24))
+        }
+      />
+      <BreadCrumb
+        title={
+          product?.title && capitalizeText(shortenText(product?.title, 24))
+        }
+      />
+      {loading && <Loader />}
       <div className='main-product-wrapper p-4 home-wrapper-2'>
         <div className='container-xxl'>
           <div className='row'>
@@ -46,44 +105,40 @@ const SingleProduct = () => {
               </div>
 
               <div className='other-product-images d-flex flex-wrap gap-15'>
-                <div>
-                  <img
-                    src='https://res.cloudinary.com/dukdn1bpp/image/upload/v1675016207/MERN-INVENTORY/b5jpjnzhxmbumtnmupxr.webp'
-                    alt=''
-                  />
-                </div>
-                <div>
-                  <img
-                    src='https://res.cloudinary.com/dukdn1bpp/image/upload/v1674885646/MERN-INVENTORY/kjbsit99vtkwtateksic.webp'
-                    alt=''
-                  />
-                </div>
-                <div>
-                  <img src='/assests/acc.jpg' alt='' />
-                </div>
-                <div>
-                  <img src='/assests/acc.jpg' alt='' />
-                </div>
+                {product?.images &&
+                  product?.images.map((img) => {
+                    return (
+                      <div
+                        key={img?.public_id}
+                        onClick={() => setImageUrl(img?.url)}
+                      >
+                        <img src={img?.url} alt={img?.url} />
+                      </div>
+                    );
+                  })}
               </div>
             </div>
             <div className='col-6'>
               <div className='main-product-details'>
                 <div className='border-bottom'>
-                  <h3 className='title'>
-                    Kids Headphones Bulk 10 Pack Multi Colored For Stidents
-                  </h3>
+                  <h3 className='title'>{product?.title}</h3>
                 </div>
 
                 <div className='border-bottom'>
-                  <p className='price'>₹1253.00</p>
+                  <p className='price'>₹{product?.price}</p>
                   <div className='d-flex  align-items-center gap-5'>
-                    <StarRatings
-                      rating={4}
-                      starRatedColor='#febd69'
-                      starDimension='18px'
-                      starSpacing='2px'
-                    />
-                    <p className='mb-0 single-review'>(2 Reviews)</p>
+                    {product?.ratings && (
+                      <StarRatings
+                        rating={+product?.totalRating}
+                        starRatedColor='#febd69'
+                        starDimension='18px'
+                        starSpacing='2px'
+                      />
+                    )}
+                    <p className='mb-0 single-review'>
+                      ({product?.ratings?.length}{' '}
+                      {product?.ratings?.length > 1 ? 'Reviews' : 'Review'})
+                    </p>
                   </div>
                   <div>
                     <a
@@ -97,29 +152,35 @@ const SingleProduct = () => {
                 </div>
 
                 <div className='pt-3'>
-                  <div className='d-flex align-items-center gap-10 mb-2'>
+                  {/* <div className='d-flex align-items-center gap-10 mb-2'>
                     <h6 className='product-heading'>Type :</h6>
                     <p className='product-data'>Headsets</p>
-                  </div>
+                  </div> */}
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Brand :</h6>
-                    <p className='product-data'>Havells</p>
+                    <p className='product-data text-capitalize'>
+                      {product?.brand?.title}
+                    </p>
                   </div>
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Category :</h6>
-                    <p className='product-data'>Havells</p>
+                    <p className='product-data text-capitalize'>
+                      {product?.category?.title}
+                    </p>
                   </div>
-                  <div className='d-flex align-items-center gap-10 my-2'>
+                  {/* <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Tag :</h6>
                     <p className='product-data'>Watch</p>
-                  </div>
-                  <div className='d-flex align-items-center gap-10 my-2'>
+                  </div> */}
+                  {/* <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>SKU :</h6>
                     <p className='product-data'>SKU1254</p>
-                  </div>
+                  </div> */}
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Availabilty :</h6>
-                    <p className='product-data'>In Stock</p>
+                    <p className='product-data'>
+                      {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}
+                    </p>
                   </div>
                   <div className='d-flex flex-column gap-5 my-2'>
                     <h6 className='product-heading'>Size :</h6>
@@ -203,14 +264,7 @@ const SingleProduct = () => {
             <div className='col-12'>
               <h4>Description</h4>
               <div className=' bg-white p-3' style={{ borderRadius: '10px' }}>
-                <p className='mb-0'>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Autem earum at consectetur impedit? Doloremque similique porro
-                  nobis, officia vel quia voluptatum. Deleniti illum earum
-                  aliquam sunt asperiores molestias! Similique tempore commodi
-                  dolorem fugiat qui ea vero, necessitatibus, animi, quo id
-                  iste? Explicabo impedit iure eius ipsam ad quam quae! Commodi!
-                </p>
+                <p className='mb-0'>{product?.description}</p>
               </div>
             </div>
           </div>
@@ -225,15 +279,20 @@ const SingleProduct = () => {
               <div className='review-inner-wrapper'>
                 <div className='review-head d-flex justify-content-between align-items-center'>
                   <div>
-                    <h4 className='mb-2'>Customer reviews</h4>
+                    <h4 className='mb-2'>Customer Reviews</h4>
                     <div className='d-flex  align-items-center gap-10'>
-                      <StarRatings
-                        rating={4}
-                        starRatedColor='#febd69'
-                        starDimension='20px'
-                        starSpacing='2px'
-                      />
-                      <p className='mb-0'>Based on 2 Reviews</p>
+                      {product?.rating && (
+                        <StarRatings
+                          rating={+product?.totalRating}
+                          starRatedColor='#febd69'
+                          starDimension='20px'
+                          starSpacing='2px'
+                        />
+                      )}
+                      <p className='mb-0'>
+                        Based on {product?.ratings?.length}{' '}
+                        {product?.ratings?.length > 1 ? 'Review' : 'Reviews'}
+                      </p>
                     </div>
                   </div>
                   <div>
@@ -250,13 +309,13 @@ const SingleProduct = () => {
                     <h4>Write a Review</h4>
                     <form action='' className='d-flex flex-column gap-15'>
                       <div>
-                        <StarRatings
+                        {/* <StarRatings
                           rating={4}
                           starRatedColor='#febd69'
                           starDimension='20px'
                           starSpacing='2px'
                           changeRating={''}
-                        />
+                        /> */}
                       </div>
 
                       <div>
@@ -278,38 +337,26 @@ const SingleProduct = () => {
                 )}
 
                 <div className='reviews'>
-                  <div className='review'>
-                    <div className='d-flex gap-15 align-items-center'>
-                      <h6 className='mb-0'>kajol raj</h6>
-                      <StarRatings
-                        rating={4}
-                        starRatedColor='#febd69'
-                        starDimension='20px'
-                        starSpacing='2px'
-                      />
-                    </div>
-                    <p className='mt-2'>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Velit sequi vel vero blanditiis, expedita quisquam autem
-                      nulla. Tenetur, cupiditate. Voluptate.
-                    </p>
-                  </div>
-                  <div className='review'>
-                    <div className='d-flex gap-15 align-items-center'>
-                      <h6 className='mb-0'>kajol raj</h6>
-                      <StarRatings
-                        rating={4}
-                        starRatedColor='#febd69'
-                        starDimension='20px'
-                        starSpacing='2px'
-                      />
-                    </div>
-                    <p className='mt-2'>
-                      Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                      Velit sequi vel vero blanditiis, expedita quisquam autem
-                      nulla. Tenetur, cupiditate. Voluptate.
-                    </p>
-                  </div>
+                  {product?.ratings &&
+                    product?.ratings.map((review) => {
+                      return (
+                        <div className='review' key={review?._id}>
+                          <div className='d-flex gap-15 align-items-center'>
+                            <h6 className='mb-0'>
+                              {review?.postedby?.firstname} &nbsp;
+                              {review?.postedby?.lastname}
+                            </h6>
+                            <StarRatings
+                              rating={review?.star}
+                              starRatedColor='#febd69'
+                              starDimension='20px'
+                              starSpacing='2px'
+                            />
+                          </div>
+                          <p className='mt-2'>{review?.comment}</p>
+                        </div>
+                      );
+                    })}
                 </div>
               </div>
             </div>
@@ -321,11 +368,17 @@ const SingleProduct = () => {
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
-              <h3 className='section-heading'>Our Popular Products</h3>
+              {relatedLoading && <Spinner />}
+              <h3 className='section-heading'>
+                Similar Products(
+                {count > 10 ? count : count?.toString().padStart(2, '0')})
+              </h3>
             </div>
             <div className='row'>
-              <ProductCard />
-              <ProductCard />
+              {relatedProducts &&
+                relatedProducts.map((product) => {
+                  return <ProductCard product={product} key={product._id} />;
+                })}
             </div>
           </div>
         </div>

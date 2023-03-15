@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
 import BlogCard from '../components/BlogCard';
@@ -6,8 +6,25 @@ import ProductCard from '../components/ProductCard';
 import SpecialProduct from '../components/SpecialProduct';
 import MetaData from '../utils/MetaData';
 import services from '../utils/Data';
+import { useDispatch, useSelector } from 'react-redux';
+import { clearErrors, getProducts } from '../redux/actions/productActions';
+import { toast } from 'react-toastify';
+import { Spinner } from '../components/Loader/Loader';
 
 const Home = () => {
+  const { loading, error, products } = useSelector((state) => state.products);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    dispatch(getProducts());
+  }, [dispatch, error]);
+
   return (
     <>
       <MetaData title='Home' />
@@ -245,10 +262,11 @@ const Home = () => {
             <div className='col-12'>
               <h3 className='section-heading'>Featured Collection </h3>
             </div>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {loading && <Spinner />}
+            {products &&
+              products.map((product) => {
+                return <ProductCard product={product} key={product?.slug} />;
+              })}
           </div>
         </div>
       </section>
@@ -323,10 +341,12 @@ const Home = () => {
             </div>
           </div>
           <div className='row'>
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {loading && <Spinner />}
+
+            {products &&
+              products.map((product) => {
+                return <ProductCard product={product} key={product?.slug} />;
+              })}
           </div>
         </div>
       </section>

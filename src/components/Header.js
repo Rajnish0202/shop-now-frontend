@@ -1,9 +1,34 @@
-import React from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { BsSearch } from 'react-icons/bs';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import { Spinner } from './Loader/Loader';
 
 const Header = () => {
+  const { loading, error, productCategories } = useSelector(
+    (state) => state.productCategories
+  );
+
+  const navigate = useNavigate();
+  const [keyword, setKeyword] = useState('');
+
+  const searchSubmitHandler = (e) => {
+    e.preventDefault();
+    if (keyword.trim()) {
+      navigate(`/ourstore/${keyword}`);
+    } else {
+      navigate('/ourstore');
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
   return (
     <>
       <header className='header-top-strip p-3'>
@@ -34,18 +59,18 @@ const Header = () => {
               </Link>
             </div>
             <div className='col-5'>
-              <div className='input-group'>
+              <form className='input-group' onSubmit={searchSubmitHandler}>
                 <input
                   type='text'
                   className='form-control py-2'
                   placeholder='Search Product Here...'
-                  aria-label='Search Product Here...'
-                  aria-describedby='basic-addon2'
+                  value={keyword}
+                  onChange={(e) => setKeyword(e.target.value)}
                 />
                 <span className='input-group-text p-3' id='basic-addon2'>
                   <BsSearch className='fs-6' />
                 </span>
-              </div>
+              </form>
             </div>
             <div className='col-5'>
               <div className='header-upper-links d-flex align-items-center justify-content-between'>
@@ -129,21 +154,17 @@ const Header = () => {
                       className='dropdown-menu'
                       aria-labelledby='dropdownMenuButton1'
                     >
-                      <li>
-                        <Link className='dropdown-item text-white' to='/'>
-                          Action
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className='dropdown-item text-white' to='/'>
-                          Another action
-                        </Link>
-                      </li>
-                      <li>
-                        <Link className='dropdown-item text-white' to='/'>
-                          Something else here
-                        </Link>
-                      </li>
+                      {productCategories &&
+                        productCategories.map((category) => {
+                          return (
+                            <li key={category.slug}>
+                              {loading && <Spinner />}
+                              <Link className='dropdown-item text-white' to='/'>
+                                {category.title}
+                              </Link>
+                            </li>
+                          );
+                        })}
                     </ul>
                   </div>
                 </div>
