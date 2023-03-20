@@ -1,22 +1,22 @@
 import axios from 'axios';
 import { BACKEND_URL } from '../../utils/backendUrl';
 import {
-  ALL_PRODUCTCATEGORY_FAIL,
-  ALL_PRODUCTCATEGORY_REQUEST,
-  ALL_PRODUCTCATEGORY_SUCCESS,
+  ALL_SIZES_FAIL,
+  ALL_SIZES_REQUEST,
+  ALL_SIZES_SUCCESS,
   CLEAR_ERRORS,
-} from '../constants/productCategory';
+} from '../constants/sizesConstants';
 
-export const getProductCategories = () => async (dispatch) => {
+export const getSizes = () => async (dispatch) => {
   try {
-    dispatch({ type: ALL_PRODUCTCATEGORY_REQUEST });
+    dispatch({ type: ALL_SIZES_REQUEST });
 
-    const { data } = await axios.get(`${BACKEND_URL}/product-category`);
+    const { data } = await axios.get(`${BACKEND_URL}/product-size`);
 
-    dispatch({ type: ALL_PRODUCTCATEGORY_SUCCESS, payload: data });
+    dispatch({ type: ALL_SIZES_SUCCESS, payload: data });
   } catch (error) {
     dispatch({
-      type: ALL_PRODUCTCATEGORY_FAIL,
+      type: ALL_SIZES_FAIL,
       payload:
         (error.response &&
           error.response.data &&

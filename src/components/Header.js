@@ -159,7 +159,10 @@ const Header = () => {
                           return (
                             <li key={category.slug}>
                               {loading && <Spinner />}
-                              <Link className='dropdown-item text-white' to='/'>
+                              <Link
+                                className='dropdown-item text-white text-capitalize'
+                                to='/'
+                              >
                                 {category.title}
                               </Link>
                             </li>

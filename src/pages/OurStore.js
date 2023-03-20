@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import BreadCrumb from '../components/BreadCrumb';
 import MetaData from '../utils/MetaData';
 import StarRatings from 'react-star-ratings';
@@ -6,18 +6,30 @@ import ProductCard from '../components/ProductCard';
 import Color from '../components/Color';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clearErrors } from '../redux/actions/productCategoryAction';
+import { clearErrors, getRandomProduct } from '../redux/actions/productActions';
 import Loader, { Spinner } from '../components/Loader/Loader';
-import { CLEAR_ERRORS } from '../redux/constants/productCategory';
 import { getProducts } from '../redux/actions/productActions';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
+import ratings from '../utils/ratings';
+import { shortenText } from '../utils/ShortenText';
 
 const OurStore = () => {
   const [grid, setGrid] = useState(3);
-  const { keyword } = useParams();
-  console.log(keyword);
+  const [limit, setLimit] = useState(8);
+  const [category, setCategory] = useState('');
+  const [brand, setBrand] = useState('');
+  const [stock, setStock] = useState('');
+  const [priceFrom, setPriceFrom] = useState(0);
+  const [priceTo, setPriceTo] = useState(10000);
+  const [type, setType] = useState('');
+  const [rating, setRating] = useState(0);
+  const [sortBy, setSortBy] = useState('');
+  const [sizes, setSizes] = useState('');
 
-  const { loading, error, products } = useSelector((state) => state.products);
+  const { keyword } = useParams();
+  const { loading, error, products, totalProducts } = useSelector(
+    (state) => state.products
+  );
   const {
     loading: categoryLoading,
     error: categoryError,
@@ -25,7 +37,45 @@ const OurStore = () => {
     counts,
   } = useSelector((state) => state.productCategories);
 
+  const price = useMemo(() => [+priceFrom, +priceTo], [priceFrom, priceTo]);
+
+  const {
+    loading: brandLoading,
+    error: brandError,
+    productBrands,
+    totalBrands,
+  } = useSelector((state) => state.productBrand);
+
+  const {
+    loading: typeLoading,
+    error: typeError,
+    types,
+    totalTypes,
+  } = useSelector((state) => state.productType);
+
+  const {
+    loading: sizeLoading,
+    error: sizeError,
+    productSizes,
+  } = useSelector((state) => state.productSizes);
+
+  const {
+    loading: randomLoading,
+    error: randomError,
+    randomProducts,
+  } = useSelector((state) => state.randomProducts);
+
   const dispatch = useDispatch();
+
+  const loadMoreHandler = () => {
+    setLimit((prev) => prev + 4);
+  };
+
+  const loadLessHandler = () => {
+    if (limit > 8) {
+      setLimit((prev) => prev - 4);
+    }
+  };
 
   useEffect(() => {
     if (error) {
@@ -34,11 +84,64 @@ const OurStore = () => {
     }
     if (categoryError) {
       toast.error(error);
-      dispatch(CLEAR_ERRORS());
+      dispatch(clearErrors());
     }
 
-    dispatch(getProducts());
-  }, [dispatch, error, categoryError, keyword]);
+    if (brandError) {
+      toast.error(brandError);
+      dispatch(clearErrors());
+    }
+
+    if (typeError) {
+      toast.error(typeError);
+      dispatch(clearErrors());
+    }
+
+    if (sizeError) {
+      toast.error(sizeError);
+      dispatch(clearErrors());
+    }
+
+    if (randomError) {
+      toast.error(randomError);
+      dispatch(clearErrors());
+    }
+
+    dispatch(
+      getProducts(
+        keyword,
+        limit,
+        category,
+        brand,
+        stock,
+        price,
+        type,
+        rating,
+        sortBy,
+        sizes
+      )
+    );
+
+    dispatch(getRandomProduct());
+  }, [
+    dispatch,
+    error,
+    categoryError,
+    keyword,
+    limit,
+    category,
+    brandError,
+    type,
+    brand,
+    stock,
+    price,
+    typeError,
+    rating,
+    sortBy,
+    sizeError,
+    sizes,
+    randomError,
+  ]);
 
   return (
     <>
@@ -51,18 +154,47 @@ const OurStore = () => {
             <div className='col-3'>
               <div className='filter-card mb-2'>
                 <h3 className='filter-title'>
-                  Shop by categories(
-                  {counts?.length > 10
-                    ? counts
-                    : counts?.toString().padStart(2, '0')}
+                  Shop by categories (
+                  {counts > 10 ? counts : counts?.toString().padStart(2, '0')})
+                </h3>
+                <div>
+                  <ul className='ps-0 mb-0 filter-scroll'>
+                    {categoryLoading && <Spinner />}
+                    {productCategories &&
+                      productCategories.map((cate) => {
+                        return (
+                          <li
+                            key={cate?.slug}
+                            onClick={() => setCategory(cate?._id)}
+                          >
+                            {cate?.title}
+                          </li>
+                        );
+                      })}
+                  </ul>
+                </div>
+              </div>
+              <div className='filter-card mb-2'>
+                <h3 className='filter-title'>
+                  Shop by brands (
+                  {totalBrands > 10
+                    ? totalBrands
+                    : totalBrands?.toString().padStart(2, '0')}
                   )
                 </h3>
                 <div>
-                  <ul className='ps-0 mb-0'>
-                    {categoryLoading && <Spinner />}
-                    {productCategories &&
-                      productCategories.map((category) => {
-                        return <li key={category?.slug}>{category?.title}</li>;
+                  <ul className='ps-0 mb-0 filter-scroll'>
+                    {brandLoading && <Spinner />}
+                    {productBrands &&
+                      productBrands.map((cate) => {
+                        return (
+                          <li
+                            key={cate?._id}
+                            onClick={() => setBrand(cate?._id)}
+                          >
+                            {cate?.title}
+                          </li>
+                        );
                       })}
                   </ul>
                 </div>
@@ -71,16 +203,28 @@ const OurStore = () => {
                 <h3 className='filter-title'>Filter by</h3>
                 <div>
                   <h5 className='sub-title'>Availablity</h5>
-                  <div>
+                  <form>
                     <div className='form-check'>
-                      <input type='checkbox' className='form-check-input' />
+                      <input
+                        type='radio'
+                        className='form-check-input'
+                        name='stock'
+                        value={stock}
+                        onClick={() => setStock(1)}
+                      />
                       <label className='form-check-label'>In Stock</label>
                     </div>
                     <div className='form-check'>
-                      <input type='checkbox' className='form-check-input' />
+                      <input
+                        type='radio'
+                        className='form-check-input'
+                        name='stock'
+                        value={stock}
+                        onClick={() => setStock('0')}
+                      />
                       <label className='form-check-label'>Out Of Stock</label>
                     </div>
-                  </div>
+                  </form>
                   <h5 className='sub-title'>Price</h5>
                   <div className='d-flex align-items-center gap-10 mb-2'>
                     ₹
@@ -90,6 +234,10 @@ const OurStore = () => {
                         className='form-control'
                         id='floatingInputFrom'
                         placeholder='From'
+                        value={priceFrom}
+                        min={0}
+                        max={100000}
+                        onChange={(e) => setPriceFrom(e.target.value)}
                       />
                       <label htmlFor='floatingInputFrom'>From</label>
                     </div>
@@ -100,6 +248,10 @@ const OurStore = () => {
                         className='form-control'
                         id='floatingInputTo'
                         placeholder='To'
+                        min={0}
+                        max={100000}
+                        value={priceTo}
+                        onChange={(e) => setPriceTo(e.target.value)}
                       />
                       <label htmlFor='floatingInputTo'>To</label>
                     </div>
@@ -111,189 +263,170 @@ const OurStore = () => {
                     </div>
                   </div>
                   <h5 className='sub-title'>Size</h5>
-                  <div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        className='form-check-input'
-                        id='XS'
-                      />
-                      <label className='form-check-label' htmlFor='XS'>
-                        XS (2)
-                      </label>
-                    </div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        id='S'
-                        className='form-check-input'
-                      />
-                      <label className='form-check-label' htmlFor='S'>
-                        S (2)
-                      </label>
-                    </div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        id='M'
-                        className='form-check-input'
-                      />
-                      <label className='form-check-label' htmlFor='M'>
-                        M (2)
-                      </label>
-                    </div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        id='L'
-                        className='form-check-input'
-                      />
-                      <label className='form-check-label' htmlFor='L'>
-                        L (2)
-                      </label>
-                    </div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        id='XL'
-                        className='form-check-input'
-                      />
-                      <label className='form-check-label' htmlFor='XL'>
-                        XL (2)
-                      </label>
-                    </div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        id='XXL'
-                        className='form-check-input'
-                      />
-                      <label className='form-check-label' htmlFor='XXL'>
-                        XXL (2)
-                      </label>
-                    </div>
-                    <div className='form-check'>
-                      <input
-                        type='checkbox'
-                        id='XXXL'
-                        className='form-check-input'
-                      />
-                      <label className='form-check-label' htmlFor='XXXL'>
-                        XXXL (2)
-                      </label>
-                    </div>
+                  <div className='filter-scroll'>
+                    {sizeLoading && <Spinner />}
+                    {productSizes &&
+                      productSizes.map((size) => {
+                        return (
+                          <div
+                            className='form-check d-flex align-items-center gap-10'
+                            key={size?._id}
+                          >
+                            <input
+                              type='radio'
+                              className='form-check-input'
+                              name='sizes'
+                              onClick={() => setSizes(size?._id)}
+                            />
+                            <label className='form-check-label'>
+                              {size?.title}
+                            </label>
+                          </div>
+                        );
+                      })}
                   </div>
+                  <h5 className='sub-title'>Ratings</h5>
+                  <form>
+                    {ratings &&
+                      ratings?.map((rate) => {
+                        return (
+                          <div
+                            className='form-check d-flex align-items-center gap-10'
+                            key={rate?.id}
+                          >
+                            <input
+                              type='radio'
+                              className='form-check-input'
+                              name='stock'
+                              onClick={() => setRating(rate?.star)}
+                            />
+                            <StarRatings
+                              rating={+rate?.star}
+                              starRatedColor='#febd69'
+                              starDimension='20px'
+                              starSpacing='2px'
+                            />
+                          </div>
+                        );
+                      })}
+                  </form>
                 </div>
               </div>
               <div className='filter-card mb-2'>
-                <h3 className='filter-title'>product tags</h3>
+                <h3 className='filter-title'>
+                  product type (
+                  {totalTypes > 10
+                    ? totalTypes
+                    : totalTypes?.toString().padStart(2, '0')}
+                  ){' '}
+                </h3>
                 <div>
-                  <div className='product-tags d-flex flex-wrap align-items-center gap-10'>
-                    <span className='badge rounded-3  py-2 px-3'>
-                      Headphone
-                    </span>
-                    <span className='badge rounded-3  py-2 px-3'>
-                      Television
-                    </span>
-                    <span className='badge rounded-3  py-2 px-3'>Mobile</span>
-                    <span className='badge rounded-3  py-2 px-3'>Speaker</span>
-                    <span className='badge rounded-3  py-2 px-3'>wire</span>
+                  {typeLoading && <Spinner />}
+                  <div className='product-tags d-flex flex-wrap align-items-center gap-10 filter-scroll'>
+                    {types &&
+                      types.map((type) => {
+                        return (
+                          <span
+                            className='badge rounded-3  py-2 px-3 text-capitalize'
+                            key={type?._id}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => setType(type?._id)}
+                          >
+                            {type?.title}
+                          </span>
+                        );
+                      })}
                   </div>
                 </div>
               </div>
-              <div className='filter-card mb-2'>
-                <h3 className='filter-title'>random Product</h3>
-                <div>
-                  <div className='random-products d-flex pt-3'>
-                    <div className='w-50'>
-                      <img
-                        src='assests/watch.jpg'
-                        alt='watch'
-                        className='img-fluid'
-                      />
-                    </div>
-                    <div className='w-50'>
-                      <h5>
-                        Kids watches bulk 10 pack multi coloured htmlFor
-                        students...
-                      </h5>
-                      <StarRatings
-                        rating={4}
-                        starRatedColor='#febd69'
-                        starDimension='20px'
-                        starSpacing='2px'
-                      />
-                      <b>₹999.00</b>
-                    </div>
-                  </div>
-                  <div className='random-products d-flex pt-3'>
-                    <div className='w-50'>
-                      <img
-                        src='assests/acc.jpg'
-                        alt='watch'
-                        className='img-fluid'
-                      />
-                    </div>
-                    <div className='w-50'>
-                      <h5>
-                        Kids headphone bulk 10 pack multi coloured htmlFor
-                        students...
-                      </h5>
-                      <StarRatings
-                        rating={4}
-                        starRatedColor='#febd69'
-                        starDimension='20px'
-                        starSpacing='2px'
-                      />
-                      <b>₹999.00</b>
-                    </div>
-                  </div>
+              {randomProducts && (
+                <div className='filter-card mb-2'>
+                  <h3 className='filter-title'>random Product</h3>
+                  {randomLoading && <Spinner />}
+                  {randomProducts &&
+                    randomProducts.map((random) => {
+                      return (
+                        <div key={random?._id}>
+                          <Link to={`/product/${random?.slug}`}>
+                            <div className='random-products d-flex pt-3 pb-3 gap-10'>
+                              <div className='w-50'>
+                                <img
+                                  src={random?.images[0]?.url}
+                                  alt={random?.images[0]?.url}
+                                  className='img-fluid'
+                                />
+                              </div>
+                              <div className='w-50'>
+                                <h5>{shortenText(random?.title, 15)}</h5>
+                                <StarRatings
+                                  rating={+random?.totalRating}
+                                  starRatedColor='#febd69'
+                                  starDimension='20px'
+                                  starSpacing='2px'
+                                />
+                                <b>₹{random?.price.toFixed(2)}</b>
+                              </div>
+                            </div>
+                          </Link>
+                        </div>
+                      );
+                    })}
                 </div>
-              </div>
+              )}
             </div>
             <div className='col-9'>
               <div className='filter-sort-grid mb-4'>
                 <div className='d-flex justify-content-between align-items-center px-2'>
                   <div className='d-flex align-items-center gap-10 '>
                     <p className='mb-0 filter-sort'>Sort By:</p>
-                    <select name='' className='form-control form-select' id=''>
+                    <select
+                      name=''
+                      className='form-control form-select'
+                      id=''
+                      onClick={(e) => setSortBy(e.target.value)}
+                    >
                       <option value=''>Featured</option>
-                      <option value=''>Best-selling</option>
-                      <option value=''>Alphabetically, A-Z</option>
-                      <option value=''>Alphabetically, Z-A</option>
-                      <option value=''>Price, low to high</option>
-                      <option value=''>Price, high to low</option>
-                      <option value=''>Date, old to new</option>
-                      <option value=''>Date, new to old</option>
+                      <option value='sold'>Best-selling</option>
+                      <option value='title'>Alphabetically, A-Z</option>
+                      <option value='-title'>Alphabetically, Z-A</option>
+                      <option value='price'>Price, low to high</option>
+                      <option value='-price'>Price, high to low</option>
+                      <option value='-createdAt'>Date, new to old</option>
+                      <option value='createdAt'>Date, old to new</option>
                     </select>
                   </div>
                   <div className='d-flex align-items-center gap-10'>
-                    <p className='totalproducts mb-0'>21 Products</p>
+                    <p className='totalproducts mb-0'>
+                      {totalProducts > 9
+                        ? totalProducts
+                        : totalProducts?.toString().padStart(2, '0')}{' '}
+                      {totalProducts > 1 ? 'Products' : 'Product'}
+                    </p>
                     <div className='d-flex align-items-center gap-10'>
                       <div className='grid-image' onClick={() => setGrid(3)}>
                         <img
-                          src='assests/gr4.svg'
+                          src='/assests/gr4.svg'
                           alt='grid'
                           className='d-block img-fluid grid-image'
                         />
                       </div>
                       <div className='grid-image' onClick={() => setGrid(4)}>
                         <img
-                          src='assests/gr3.svg'
+                          src='/assests/gr3.svg'
                           alt='grid'
                           className='d-block img-fluid '
                         />
                       </div>
                       <div className='grid-image' onClick={() => setGrid(6)}>
                         <img
-                          src='assests/gr2.svg'
+                          src='/assests/gr2.svg'
                           alt='grid'
                           className='d-block img-fluid grid-image'
                         />
                       </div>
                       <div className='grid-image' onClick={() => setGrid(12)}>
                         <img
-                          src='assests/gr.svg'
+                          src='/assests/gr.svg'
                           alt='grid'
                           className='d-block img-fluid grid-image'
                         />
@@ -303,6 +436,14 @@ const OurStore = () => {
                 </div>
               </div>
               <div className='product-list pb-5 d-flex gap-10 flex-wrap'>
+                {products?.length === 0 && (
+                  <div
+                    className='d-flex align-items-center justify-content-center w-100'
+                    style={{ height: '20rem' }}
+                  >
+                    <h3 className='text-capitalize'>No Product found.</h3>
+                  </div>
+                )}
                 {products &&
                   products.map((product) => {
                     return (
@@ -313,6 +454,18 @@ const OurStore = () => {
                       />
                     );
                   })}
+              </div>
+              <div className='load-more d-flex align-items-center justify-content-center gap-30'>
+                {products?.length >= limit && (
+                  <button className='button' onClick={loadMoreHandler}>
+                    Load More ({products.length})
+                  </button>
+                )}
+                {products?.length >= totalProducts && (
+                  <button className='button' onClick={loadLessHandler}>
+                    Load Less ({products.length})
+                  </button>
+                )}
               </div>
             </div>
           </div>

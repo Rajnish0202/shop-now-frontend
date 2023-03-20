@@ -6,6 +6,9 @@ import {
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
+  RANDOM_PRODUCT_FAIL,
+  RANDOM_PRODUCT_REQUEST,
+  RANDOM_PRODUCT_SUCCESS,
   RELATED_PRODUCT_FAIL,
   RELATED_PRODUCT_REQUEST,
   RELATED_PRODUCT_SUCCESS,
@@ -24,6 +27,7 @@ export const productReducer = (state = { products: [] }, action) => {
         loading: false,
         products: action.payload.products,
         productCounts: action.payload.productCounts,
+        totalProducts: action.payload.totalProducts,
       };
 
     case ALL_PRODUCT_FAIL:
@@ -61,6 +65,41 @@ export const productDetailsReducer = (state = { product: {} }, action) => {
     case PRODUCT_DETAILS_FAIL:
       return {
         ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const randomProductReducer = (
+  state = { randomProducts: [] },
+  action
+) => {
+  switch (action.type) {
+    case RANDOM_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        randomProducts: [],
+      };
+
+    case RANDOM_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        randomProducts: action.payload.randomProducts,
+        randomCount: action.payload.randomCount,
+      };
+
+    case RANDOM_PRODUCT_FAIL:
+      return {
         loading: false,
         error: action.payload,
       };

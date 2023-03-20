@@ -29,38 +29,11 @@ const SingleProduct = () => {
   );
   const {
     loading: relatedLoading,
-    error: relatedError,
     relatedProducts,
     productCounts: count,
   } = useSelector((state) => state.relatedProducts);
 
   const [imageUrl, setImageUrl] = useState();
-
-  useEffect(() => {
-    if (slug) {
-      dispatch(productDetails(slug));
-    }
-
-    if (error) {
-      toast.error(error);
-      dispatch(clearErrors());
-    }
-
-    if (relatedError) {
-      toast.error(relatedError);
-      dispatch(clearErrors());
-    }
-
-    dispatch(getRelatedProducts(product?._id, product?.category?._id));
-  }, [
-    dispatch,
-    slug,
-    imageUrl,
-    product?.category?._id,
-    product?._id,
-    error,
-    relatedError,
-  ]);
 
   const shareLink = window.location.href;
 
@@ -80,6 +53,19 @@ const SingleProduct = () => {
     zoomWidth: 500,
     img: `${imageUrl ? imageUrl : product?.images && product?.images[0]?.url}`,
   };
+
+  useEffect(() => {
+    if (slug) {
+      dispatch(productDetails(slug));
+    }
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    dispatch(getRelatedProducts(product?._id, product?.category?._id));
+  }, [dispatch, slug, imageUrl, product?.category?._id, product?._id, error]);
 
   return (
     <>
@@ -121,7 +107,9 @@ const SingleProduct = () => {
             <div className='col-6'>
               <div className='main-product-details'>
                 <div className='border-bottom'>
-                  <h3 className='title'>{product?.title}</h3>
+                  <h3 className='title'>
+                    {product?.title} {product?._id}
+                  </h3>
                 </div>
 
                 <div className='border-bottom'>
@@ -152,26 +140,25 @@ const SingleProduct = () => {
                 </div>
 
                 <div className='pt-3'>
-                  {/* <div className='d-flex align-items-center gap-10 mb-2'>
+                  <div className='d-flex align-items-center gap-10 mb-2'>
                     <h6 className='product-heading'>Type :</h6>
-                    <p className='product-data'>Headsets</p>
-                  </div> */}
+                    <p className='product-data text-capitalize'>
+                      {product?.type?.title} {product?.type?._id}
+                    </p>
+                  </div>
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Brand :</h6>
                     <p className='product-data text-capitalize'>
-                      {product?.brand?.title}
+                      {product?.brand?.title} {product?.brand?._id}
                     </p>
                   </div>
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Category :</h6>
                     <p className='product-data text-capitalize'>
-                      {product?.category?.title}
+                      {product?.category?.title} {product?.category?._id}
                     </p>
                   </div>
-                  {/* <div className='d-flex align-items-center gap-10 my-2'>
-                    <h6 className='product-heading'>Tag :</h6>
-                    <p className='product-data'>Watch</p>
-                  </div> */}
+
                   {/* <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>SKU :</h6>
                     <p className='product-data'>SKU1254</p>
@@ -182,23 +169,23 @@ const SingleProduct = () => {
                       {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}
                     </p>
                   </div>
-                  <div className='d-flex flex-column gap-5 my-2'>
-                    <h6 className='product-heading'>Size :</h6>
-                    <div className='d-flex flex-wrap gap-15 mt-2 mb-3'>
-                      <span className='badge border border-1 bg-white text-dark '>
-                        S
-                      </span>
-                      <span className='badge border border-1 bg-white text-dark '>
-                        M
-                      </span>
-                      <span className='badge border border-1 bg-white text-dark '>
-                        XL
-                      </span>
-                      <span className='badge border border-1 bg-white text-dark '>
-                        XXXL
-                      </span>
+                  {product?.sizes?.length > 0 && (
+                    <div className='d-flex flex-column gap-5 my-2'>
+                      <h6 className='product-heading'>Size :</h6>
+                      <div className='d-flex flex-wrap gap-15 mt-2 mb-3'>
+                        {product?.sizes.map((size) => {
+                          return (
+                            <span
+                              className='badge border border-1 bg-white text-dark '
+                              key={size?._id}
+                            >
+                              {size?.title}
+                            </span>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className='d-flex flex-column gap-10 mt-2 mb-3'>
                     <h6 className='product-heading'>Color :</h6>
                     <Color />
@@ -375,6 +362,9 @@ const SingleProduct = () => {
               </h3>
             </div>
             <div className='row'>
+              {count === 0 && (
+                <p className='text-center'>No Similar Product Found.</p>
+              )}
               {relatedProducts &&
                 relatedProducts.map((product) => {
                   return <ProductCard product={product} key={product._id} />;

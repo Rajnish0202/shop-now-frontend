@@ -1,0 +1,5 @@
+export const ALL_SIZES_REQUEST = 'ALL_SIZES_REQUEST';
+export const ALL_SIZES_SUCCESS = 'ALL_SIZES_SUCCESS';
+export const ALL_SIZES_FAIL = 'ALL_SIZES_FAIL';
+
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';

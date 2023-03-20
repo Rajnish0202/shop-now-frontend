@@ -29,6 +29,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, loadUser } from './redux/actions/userActions';
 import { useEffect } from 'react';
 import { getProductCategories } from './redux/actions/productCategoryAction';
+import { getBrands } from './redux/actions/brandAction';
+import { getTypes } from './redux/actions/productTypeAction';
+import { getSizes } from './redux/actions/sizeAction';
 
 axios.defaults.withCredentials = true;
 
@@ -49,6 +52,9 @@ function App() {
     }
 
     dispatch(getProductCategories());
+    dispatch(getBrands());
+    dispatch(getTypes());
+    dispatch(getSizes());
   }, [dispatch, error]);
 
   return (

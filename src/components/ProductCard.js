@@ -31,8 +31,8 @@ const ProductCard = ({ grid, product }) => {
             {grid && grid >= 6
               ? product?.title
               : grid && grid < 6 && grid && grid > 3
-              ? shortenText(product?.title, 40)
-              : shortenText(product?.title, 24)}
+              ? shortenText(product?.title, 30)
+              : shortenText(product?.title, 18)}
           </h5>
           <StarRatings
             rating={+product?.totalRating}

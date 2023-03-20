@@ -1,0 +1,5 @@
+export const ALL_TYPE_REQUEST = 'ALL_TYPE_REQUEST';
+export const ALL_TYPE_SUCCESS = 'ALL_TYPE_SUCCESS';
+export const ALL_TYPE_FAIL = 'ALL_TYPE_FAIL';
+
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';

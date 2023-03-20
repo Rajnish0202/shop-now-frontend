@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
 import BlogCard from '../components/BlogCard';
@@ -12,7 +12,10 @@ import { toast } from 'react-toastify';
 import { Spinner } from '../components/Loader/Loader';
 
 const Home = () => {
-  const { loading, error, products } = useSelector((state) => state.products);
+  const { loading, error, products, success } = useSelector(
+    (state) => state.products
+  );
+  const [limit, setLimit] = useState(8);
 
   const dispatch = useDispatch();
 
@@ -22,8 +25,8 @@ const Home = () => {
       dispatch(clearErrors());
     }
 
-    dispatch(getProducts());
-  }, [dispatch, error]);
+    // dispatch(getProducts(limit));
+  }, [dispatch, error, success, limit]);
 
   return (
     <>
@@ -262,11 +265,11 @@ const Home = () => {
             <div className='col-12'>
               <h3 className='section-heading'>Featured Collection </h3>
             </div>
-            {loading && <Spinner />}
+            {/* {loading && <Spinner />}
             {products &&
               products.map((product) => {
                 return <ProductCard product={product} key={product?.slug} />;
-              })}
+              })} */}
           </div>
         </div>
       </section>
@@ -341,12 +344,12 @@ const Home = () => {
             </div>
           </div>
           <div className='row'>
-            {loading && <Spinner />}
+            {/* {loading && <Spinner />}
 
             {products &&
               products.map((product) => {
                 return <ProductCard product={product} key={product?.slug} />;
-              })}
+              })} */}
           </div>
         </div>
       </section>

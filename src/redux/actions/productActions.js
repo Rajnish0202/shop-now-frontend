@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { BACKEND_URL } from '../../utils/backendUrl';
+import { toast } from 'react-toastify';
 import {
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
@@ -11,27 +12,236 @@ import {
   RELATED_PRODUCT_REQUEST,
   RELATED_PRODUCT_SUCCESS,
   RELATED_PRODUCT_FAIL,
+  RANDOM_PRODUCT_SUCCESS,
+  RANDOM_PRODUCT_FAIL,
+  RANDOM_PRODUCT_REQUEST,
 } from '../constants/productConstants';
 
-export const getProducts = () => async (dispatch) => {
-  try {
-    dispatch({ type: ALL_PRODUCT_REQUEST });
+export const getProducts =
+  (
+    keyword = '',
+    limit = '',
+    category,
+    brand,
+    stock,
+    price = [0, 100000],
+    type,
+    rating,
+    sortBy = '',
+    sizes
+  ) =>
+  async (dispatch) => {
+    console.log(sizes);
+    try {
+      dispatch({ type: ALL_PRODUCT_REQUEST });
 
-    const { data } = await axios.get(`${BACKEND_URL}/product`);
+      let link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&totalRating[gte]=${rating}&sort=${sortBy}`;
 
-    dispatch({ type: ALL_PRODUCT_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({
-      type: ALL_PRODUCT_FAIL,
-      payload:
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString(),
-    });
-  }
-};
+      if (category) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (category && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&category=${category}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && category) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&category=${category}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&type=${type}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && category) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&category=${category}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && brand) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && stock) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&sizes=${sizes}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && type) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (category && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&category=${category}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && stock && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&type=${type}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&category=${category}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && category && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&type=${type}&category=${category}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&category=${category}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && category && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&sizes=${sizes}&category=${category}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && category && type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&category=${category}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&sizes=${sizes}&&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && brand && type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&brand=${brand}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && type && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&sizes=${sizes}&&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && category && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&category=${category}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && category && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&category=${category}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && type && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&type=${type}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && type && category && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&type=${type}&category=${category}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && type && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&category=${category}&brand=${brand}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && type && category && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&type=${type}&category=${category}&brand=${brand}&sizes=${sizes}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      const { data } = await axios.get(link);
+
+      dispatch({ type: ALL_PRODUCT_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: ALL_PRODUCT_FAIL,
+        payload:
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString(),
+      });
+    }
+  };
 
 // Product Details
 
@@ -55,6 +265,28 @@ export const productDetails = (slug) => async (dispatch) => {
   }
 };
 
+export const getRandomProduct = () => async (dispatch) => {
+  try {
+    dispatch({ type: RANDOM_PRODUCT_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/product/random-product`);
+    console.log(data);
+
+    dispatch({ type: RANDOM_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: RANDOM_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+    toast.error(error);
+  }
+};
+
 export const getRelatedProducts =
   (productId, categoryId) => async (dispatch) => {
     try {
@@ -75,6 +307,7 @@ export const getRelatedProducts =
           error.message ||
           error.toString(),
       });
+      toast.error(error);
     }
   };
 
