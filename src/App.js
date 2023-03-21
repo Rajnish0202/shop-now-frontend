@@ -32,6 +32,7 @@ import { getProductCategories } from './redux/actions/productCategoryAction';
 import { getBrands } from './redux/actions/brandAction';
 import { getTypes } from './redux/actions/productTypeAction';
 import { getSizes } from './redux/actions/sizeAction';
+import { getAllColors } from './redux/actions/productColorAction';
 
 axios.defaults.withCredentials = true;
 
@@ -55,6 +56,7 @@ function App() {
     dispatch(getBrands());
     dispatch(getTypes());
     dispatch(getSizes());
+    dispatch(getAllColors());
   }, [dispatch, error]);
 
   return (

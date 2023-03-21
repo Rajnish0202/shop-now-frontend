@@ -179,7 +179,7 @@ const SingleProduct = () => {
                               className='badge border border-1 bg-white text-dark '
                               key={size?._id}
                             >
-                              {size?.title}
+                              {size?.title} {size?._id}
                             </span>
                           );
                         })}
@@ -188,7 +188,7 @@ const SingleProduct = () => {
                   )}
                   <div className='d-flex flex-column gap-10 mt-2 mb-3'>
                     <h6 className='product-heading'>Color :</h6>
-                    <Color />
+                    {product?.color && <Color colors={product?.color} />}
                   </div>
                   <div className='d-flex flex-row align-items-center gap-10 mt-2 '>
                     <h6 className='product-heading'>Quantity :</h6>

@@ -631,37 +631,6 @@ footer .input-group-text {
   border-radius: 100%;
 }
 
-.colors li:nth-child(1) {
-  background-color: red;
-}
-.colors li:nth-child(2) {
-  background-color: black;
-}
-.colors li:nth-child(3) {
-  background-color: green;
-}
-.colors li:nth-child(4) {
-  background-color: blue;
-}
-.colors li:nth-child(5) {
-  background-color: blueviolet;
-}
-.colors li:nth-child(6) {
-  background-color: beige;
-}
-.colors li:nth-child(7) {
-  background-color: white;
-}
-.colors li:nth-child(8) {
-  background-color: gray;
-}
-.colors li:nth-child(9) {
-  background-color: goldenrod;
-}
-.colors li:nth-child(10) {
-  background-color: gold;
-}
-
 .product-tags span {
   background-color: var(--color-c8c6c6);
   font-weight: 400;

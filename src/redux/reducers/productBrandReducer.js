@@ -5,12 +5,12 @@ import {
   CLEAR_ERRORS,
 } from '../constants/productBrand';
 
-export const productBrandReducer = (state = { brands: [] }, action) => {
+export const productBrandReducer = (state = { productBrands: [] }, action) => {
   switch (action.type) {
     case ALL_BRAND_REQUEST:
       return {
         loading: true,
-        productCategories: [],
+        productBrands: [],
       };
 
     case ALL_BRAND_SUCCESS:

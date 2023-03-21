@@ -13,6 +13,7 @@ import { productCategoryReducer } from './reducers/productCategoryReducer';
 import { productBrandReducer } from './reducers/productBrandReducer';
 import { productTypeReducer } from './reducers/productTypeReducer';
 import { productSizeReducer } from './reducers/productSizesRducer';
+import { productColorReducer } from './reducers/productColorReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -24,6 +25,7 @@ const reducer = combineReducers({
   productBrand: productBrandReducer,
   productType: productTypeReducer,
   productSizes: productSizeReducer,
+  productColors: productColorReducer,
 });
 
 let initialState = {};

@@ -28,10 +28,10 @@ export const getProducts =
     type,
     rating,
     sortBy = '',
-    sizes
+    sizes,
+    color
   ) =>
   async (dispatch) => {
-    console.log(sizes);
     try {
       dispatch({ type: ALL_PRODUCT_REQUEST });
 
@@ -59,6 +59,10 @@ export const getProducts =
 
       if (sizes) {
         link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&totalRating[gte]=${rating}&sort=${sortBy}`;
       }
 
       if (category && brand) {
@@ -117,6 +121,30 @@ export const getProducts =
         link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
       }
 
+      if (sizes && color) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&sizes=${sizes}&color=${color}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&color=${color}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (brand && color) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&brand=${brand}&color=${color}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (category && color) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&color=${color}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color) {
+        link = `${BACKEND_URL}/product?&keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&color=${color}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
       if (category && brand && stock) {
         link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
           price[0]
@@ -164,7 +192,7 @@ export const getProducts =
       if (sizes && brand && stock) {
         link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
           price[0]
-        }&price[lte]=${price[1]}&sizes=${sizes}&&quantity[${
+        }&price[lte]=${price[1]}&sizes=${sizes}&quantity[${
           stock === 1 ? 'gte' : 'eq'
         }]=${stock}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
       }
@@ -176,9 +204,65 @@ export const getProducts =
       if (sizes && type && stock) {
         link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
           price[0]
-        }&price[lte]=${price[1]}&sizes=${sizes}&&quantity[${
+        }&price[lte]=${price[1]}&sizes=${sizes}&quantity[${
           stock === 1 ? 'gte' : 'eq'
         }]=${stock}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && type && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&color=${color}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && sizes && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&color=${color}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&color=${color}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && category && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${price[1]}&color=${color}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&category=${category}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&brand=${brand}&category=${category}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && category && type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&type=${type}&category=${category}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && brand && type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&type=${type}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && sizes && type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&type=${type}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && sizes && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&brand=${brand}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (color && sizes && category) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&category=${category}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
       }
 
       if (type && category && brand && stock) {
@@ -217,6 +301,82 @@ export const getProducts =
         link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&type=${type}&category=${category}&brand=${brand}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
       }
 
+      if (sizes && color && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&category=${category}&brand=${brand}&sizes=${sizes}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&category=${category}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && category && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&category=${category}&brand=${brand}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color && sizes && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&sizes=${sizes}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && sizes && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&sizes=${sizes}&brand=${brand}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color && type && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&type=${type}&brand=${brand}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color && sizes && category) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&sizes=${sizes}&category=${category}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && sizes && category) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&sizes=${sizes}&category=${category}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color && type && category) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&type=${type}&category=${category}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (stock && color && type && sizes) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&type=${type}&sizes=${sizes}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
       if (sizes && type && category && brand && stock) {
         link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
           price[0]
@@ -225,6 +385,60 @@ export const getProducts =
         }&type=${type}&category=${category}&brand=${brand}&sizes=${sizes}&quantity[${
           stock === 1 ? 'gte' : 'eq'
         }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && color && category && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&category=${category}&brand=${brand}&sizes=${sizes}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (sizes && color && category && brand && type) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${price[0]}&price[lte]=${price[1]}&color=${color}&category=${category}&brand=${brand}&sizes=${sizes}&type=${type}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && category && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&category=${category}&brand=${brand}&type=${type}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && sizes && brand && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&sizes=${sizes}&brand=${brand}&type=${type}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && sizes && category && stock) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&sizes=${sizes}&category=${category}&type=${type}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&totalRating[gte]=${rating}&sort=${sortBy}`;
+      }
+
+      if (type && color && sizes && category && stock && brand) {
+        link = `${BACKEND_URL}/product?keyword=${keyword}&limit=${limit}&price[gte]=${
+          price[0]
+        }&price[lte]=${
+          price[1]
+        }&color=${color}&sizes=${sizes}&category=${category}&type=${type}&quantity[${
+          stock === 1 ? 'gte' : 'eq'
+        }]=${stock}&brand=${brand}&totalRating[gte]=${rating}&sort=${sortBy}`;
       }
 
       const { data } = await axios.get(link);
@@ -270,7 +484,6 @@ export const getRandomProduct = () => async (dispatch) => {
     dispatch({ type: RANDOM_PRODUCT_REQUEST });
 
     const { data } = await axios.get(`${BACKEND_URL}/product/random-product`);
-    console.log(data);
 
     dispatch({ type: RANDOM_PRODUCT_SUCCESS, payload: data });
   } catch (error) {

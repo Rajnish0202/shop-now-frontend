@@ -1,0 +1,5 @@
+export const ALL_COLOR_REQUEST = 'ALL_COLOR_REQUEST';
+export const ALL_COLOR_SUCCESS = 'ALL_COLOR_SUCCESS';
+export const ALL_COLOR_FAIL = 'ALL_COLOR_FAIL';
+
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';

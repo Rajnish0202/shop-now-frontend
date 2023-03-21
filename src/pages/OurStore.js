@@ -25,6 +25,7 @@ const OurStore = () => {
   const [rating, setRating] = useState(0);
   const [sortBy, setSortBy] = useState('');
   const [sizes, setSizes] = useState('');
+  const [color, setColor] = useState('');
 
   const { keyword } = useParams();
   const { loading, error, products, totalProducts } = useSelector(
@@ -60,6 +61,13 @@ const OurStore = () => {
   } = useSelector((state) => state.productSizes);
 
   const {
+    loading: colorLoading,
+    error: colorError,
+    colors,
+    totalColors,
+  } = useSelector((state) => state.productColors);
+
+  const {
     loading: randomLoading,
     error: randomError,
     randomProducts,
@@ -75,6 +83,20 @@ const OurStore = () => {
     if (limit > 8) {
       setLimit((prev) => prev - 4);
     }
+  };
+
+  const resetFilterHandler = () => {
+    setLimit(8);
+    setCategory('');
+    setBrand('');
+    setStock('');
+    setPriceFrom(0);
+    setPriceTo(100000);
+    setRating(0);
+    setSizes('');
+    setType('');
+    setSortBy('');
+    setColor('');
   };
 
   useEffect(() => {
@@ -102,6 +124,11 @@ const OurStore = () => {
       dispatch(clearErrors());
     }
 
+    if (colorError) {
+      toast.error(colorError);
+      dispatch(clearErrors());
+    }
+
     if (randomError) {
       toast.error(randomError);
       dispatch(clearErrors());
@@ -118,7 +145,8 @@ const OurStore = () => {
         type,
         rating,
         sortBy,
-        sizes
+        sizes,
+        color
       )
     );
 
@@ -140,7 +168,9 @@ const OurStore = () => {
     sortBy,
     sizeError,
     sizes,
+    colorError,
     randomError,
+    color,
   ]);
 
   return (
@@ -256,11 +286,20 @@ const OurStore = () => {
                       <label htmlFor='floatingInputTo'>To</label>
                     </div>
                   </div>
-                  <h5 className='sub-title'>Color</h5>
+                  <h5 className='sub-title'>
+                    Color (
+                    {totalColors > 10
+                      ? totalColors
+                      : totalColors?.toString().padStart(2, '0')}
+                    )
+                  </h5>
                   <div>
-                    <div>
-                      <Color />
-                    </div>
+                    {colorLoading && <Spinner />}
+                    {colors && (
+                      <div>
+                        <Color colors={colors} setColor={setColor} />
+                      </div>
+                    )}
                   </div>
                   <h5 className='sub-title'>Size</h5>
                   <div className='filter-scroll'>
@@ -394,6 +433,17 @@ const OurStore = () => {
                       <option value='-createdAt'>Date, new to old</option>
                       <option value='createdAt'>Date, old to new</option>
                     </select>
+                    <button
+                      className='normal-btn w-100'
+                      style={{
+                        border: '1px solid #000',
+                        padding: '10px',
+                        borderRadius: '10px',
+                      }}
+                      onClick={() => resetFilterHandler()}
+                    >
+                      Reset Filter
+                    </button>
                   </div>
                   <div className='d-flex align-items-center gap-10'>
                     <p className='totalproducts mb-0'>

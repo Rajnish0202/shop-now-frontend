@@ -1,12 +1,18 @@
 import React from 'react';
 
-const Color = () => {
+const Color = ({ colors, setColor }) => {
   return (
     <ul className='colors ps-0 d-flex flex-wrap align-items-center gap-10 mb-0'>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
+      {colors &&
+        colors.map((color) => {
+          return (
+            <li
+              key={color?._id}
+              style={{ backgroundColor: `${color?.hex}` }}
+              onClick={() => setColor(color?._id)}
+            ></li>
+          );
+        })}
     </ul>
   );
 };
