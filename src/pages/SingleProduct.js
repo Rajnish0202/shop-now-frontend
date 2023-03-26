@@ -9,7 +9,7 @@ import { BsHeart, BsLink } from 'react-icons/bs';
 import { TiArrowShuffle } from 'react-icons/ti';
 import { MdOutlineLocalShipping } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearErrors,
@@ -19,14 +19,27 @@ import {
 import { shortenText } from '../utils/ShortenText';
 import { capitalizeText } from '../utils/Capitalized';
 import Loader, { Spinner } from '../components/Loader/Loader';
+import { addItemsToCart, userCart } from '../redux/actions/cartAction';
+import { ADD_TO_CART_RESET } from '../redux/constants/cartConstants';
 
 const SingleProduct = () => {
   const [toggleReview, setToggleReview] = useState(false);
+  const [quantity, setQunatity] = useState(1);
+  const [size, setSize] = useState('');
+  const [color, setColor] = useState('');
+
   const { slug } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { loading, error, product } = useSelector(
     (state) => state.productDetails
   );
+
+  const { error: addToCartError, isAdded } = useSelector(
+    (state) => state.addCart
+  );
+
   const {
     loading: relatedLoading,
     relatedProducts,
@@ -54,6 +67,18 @@ const SingleProduct = () => {
     img: `${imageUrl ? imageUrl : product?.images && product?.images[0]?.url}`,
   };
 
+  const addToCartHandler = () => {
+    if (quantity > product?.quantity) {
+      return toast.info('Reached to Max Stock');
+    }
+
+    if (!color || !size) {
+      return toast.info('Please Select Color And Size');
+    }
+
+    dispatch(addItemsToCart(product?._id, quantity, color, size));
+  };
+
   useEffect(() => {
     if (slug) {
       dispatch(productDetails(slug));
@@ -64,8 +89,31 @@ const SingleProduct = () => {
       dispatch(clearErrors());
     }
 
+    if (isAdded) {
+      toast.success('Item Added To Cart');
+      dispatch(userCart());
+      navigate('/cart');
+
+      dispatch({ type: ADD_TO_CART_RESET });
+    }
+
+    if (addToCartError) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
     dispatch(getRelatedProducts(product?._id, product?.category?._id));
-  }, [dispatch, slug, imageUrl, product?.category?._id, product?._id, error]);
+  }, [
+    dispatch,
+    slug,
+    imageUrl,
+    product?.category?._id,
+    product?._id,
+    error,
+    isAdded,
+    navigate,
+    addToCartError,
+  ]);
 
   return (
     <>
@@ -107,9 +155,7 @@ const SingleProduct = () => {
             <div className='col-6'>
               <div className='main-product-details'>
                 <div className='border-bottom'>
-                  <h3 className='title'>
-                    {product?.title} {product?._id}
-                  </h3>
+                  <h3 className='title'>{product?.title}</h3>
                 </div>
 
                 <div className='border-bottom'>
@@ -143,19 +189,19 @@ const SingleProduct = () => {
                   <div className='d-flex align-items-center gap-10 mb-2'>
                     <h6 className='product-heading'>Type :</h6>
                     <p className='product-data text-capitalize'>
-                      {product?.type?.title} {product?.type?._id}
+                      {product?.type?.title}
                     </p>
                   </div>
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Brand :</h6>
                     <p className='product-data text-capitalize'>
-                      {product?.brand?.title} {product?.brand?._id}
+                      {product?.brand?.title}
                     </p>
                   </div>
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Category :</h6>
                     <p className='product-data text-capitalize'>
-                      {product?.category?.title} {product?.category?._id}
+                      {product?.category?.title}
                     </p>
                   </div>
 
@@ -165,7 +211,11 @@ const SingleProduct = () => {
                   </div> */}
                   <div className='d-flex align-items-center gap-10 my-2'>
                     <h6 className='product-heading'>Availabilty :</h6>
-                    <p className='product-data'>
+                    <p
+                      className={`product-data fw-bold ${
+                        product?.quantity > 1 ? 'text-success' : 'text-danger'
+                      }`}
+                    >
                       {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}
                     </p>
                   </div>
@@ -178,8 +228,10 @@ const SingleProduct = () => {
                             <span
                               className='badge border border-1 bg-white text-dark '
                               key={size?._id}
+                              onClick={() => setSize(size?._id)}
+                              style={{ cursor: 'pointer' }}
                             >
-                              {size?.title} {size?._id}
+                              {size?.title}
                             </span>
                           );
                         })}
@@ -188,7 +240,9 @@ const SingleProduct = () => {
                   )}
                   <div className='d-flex flex-column gap-10 mt-2 mb-3'>
                     <h6 className='product-heading'>Color :</h6>
-                    {product?.color && <Color colors={product?.color} />}
+                    {product?.color && (
+                      <Color colors={product?.color} setColor={setColor} />
+                    )}
                   </div>
                   <div className='d-flex flex-row align-items-center gap-10 mt-2 '>
                     <h6 className='product-heading'>Quantity :</h6>
@@ -196,17 +250,24 @@ const SingleProduct = () => {
                       <input
                         type='number'
                         style={{
-                          width: '50px',
+                          width: '70px',
                           padding: '5px 10px',
                           textAlign: 'center',
                         }}
                         className='form-control'
                         min={1}
-                        defaultValue={1}
+                        value={quantity}
+                        onChange={(e) => setQunatity(e.target.value)}
                       />
                     </div>
                     <div>
-                      <button className='button mx-4'>Add To Cart</button>
+                      <button
+                        className='button mx-4'
+                        onClick={() => addToCartHandler()}
+                        disabled={product?.quantity === 0}
+                      >
+                        Add To Cart
+                      </button>
                     </div>
                   </div>
                   <div className='d-flex align-items-center gap-30 mt-3 '>

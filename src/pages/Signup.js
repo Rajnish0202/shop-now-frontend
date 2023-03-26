@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import BreadCrumb from '../components/BreadCrumb';
+import Loader from '../components/Loader/Loader';
 import { clearErrors, registerUser } from '../redux/actions/userActions';
 import MetaData from '../utils/MetaData';
 import { validateEmail } from '../utils/validateEmail';
@@ -61,7 +62,7 @@ const Signup = () => {
     <>
       <MetaData title='Sign Up' />
       <BreadCrumb title='Sign Up' />
-      {loading && <p className='text-center mb-0'>Loading...</p>}
+      {!loading && <Loader />}
       <div className='login-wrapper home-wrapper-2 p-4'>
         <div className='container-xxl'>
           <div className='row'>
@@ -124,7 +125,7 @@ const Signup = () => {
                     <button
                       type='submit'
                       className='button'
-                      disabled={loading ? true : false}
+                      disabled={loading ? false : true}
                     >
                       Sign Up
                     </button>

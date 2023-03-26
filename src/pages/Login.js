@@ -3,18 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import BreadCrumb from '../components/BreadCrumb';
 import MetaData from '../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrors, loginUser } from '../redux/actions/userActions';
+import { loginUser } from '../redux/actions/userActions';
 import { toast } from 'react-toastify';
 import { validateEmail } from '../utils/validateEmail';
+import Loader from '../components/Loader/Loader';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const dispatch = useDispatch();
-  const { loading, error, isAuthenticated } = useSelector(
-    (state) => state.user
-  );
+  const { loading, isAuthenticated } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   const loginSubmit = (e) => {
@@ -41,18 +40,13 @@ const Login = () => {
     if (isAuthenticated) {
       navigate('/');
     }
-
-    if (error) {
-      toast.error(error);
-      dispatch(clearErrors());
-    }
-  }, [isAuthenticated, navigate, dispatch, error]);
+  }, [isAuthenticated, navigate, dispatch]);
 
   return (
     <>
       <MetaData title='Login' />
       <BreadCrumb title='Login' />
-      {loading && <p className='text-center mb-0'>Loading...</p>}
+      {!loading && <Loader />}
       <div className='login-wrapper home-wrapper-2 p-4'>
         <div className='container-xxl'>
           <div className='row'>
@@ -88,11 +82,7 @@ const Login = () => {
                     </Link>
                   </div>
                   <div className='d-flex justify-content-center align-items-center gap-15'>
-                    <button
-                      type='submit'
-                      className='button'
-                      disabled={loading ? true : false}
-                    >
+                    <button type='submit' className='button'>
                       Login
                     </button>
                     <Link to='/register' className='button signup'>

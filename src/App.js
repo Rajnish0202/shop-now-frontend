@@ -33,6 +33,10 @@ import { getBrands } from './redux/actions/brandAction';
 import { getTypes } from './redux/actions/productTypeAction';
 import { getSizes } from './redux/actions/sizeAction';
 import { getAllColors } from './redux/actions/productColorAction';
+import Profile from './pages/User/Profile';
+import Orders from './pages/User/Orders';
+import EditProfile from './pages/User/EditProfile';
+import { userCart } from './redux/actions/cartAction';
 
 axios.defaults.withCredentials = true;
 
@@ -41,10 +45,8 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (localStorage.getItem('token')) {
+    if (!isAuthenticated) {
       dispatch(loadUser());
-    } else {
-      toast.info('You are not authorized,please login.');
     }
 
     if (error) {
@@ -57,7 +59,8 @@ function App() {
     dispatch(getTypes());
     dispatch(getSizes());
     dispatch(getAllColors());
-  }, [dispatch, error]);
+    dispatch(userCart());
+  }, [dispatch, error, isAuthenticated]);
 
   return (
     <Router>
@@ -83,7 +86,10 @@ function App() {
 
           <Route path='/contact' element={<Contact />} />
 
-          <Route path='/cart' element={<Cart />} />
+          <Route
+            path='/cart'
+            element={isAuthenticated ? <Cart /> : <Login />}
+          />
           <Route path='/checkout' element={<Checkout />} />
 
           <Route path='/compare-product' element={<Compare />} />
@@ -102,6 +108,19 @@ function App() {
           <Route path='/refund-policy' element={<RefundPolicy />} />
           <Route path='/shipping-policy' element={<ShippingPolicy />} />
           <Route path='/termsandconditions' element={<TermsAndCondition />} />
+
+          <Route
+            path='/user-profile'
+            element={isAuthenticated ? <Profile /> : <Login />}
+          />
+          <Route
+            path='/user-orders'
+            element={isAuthenticated ? <Orders /> : <Login />}
+          />
+          <Route
+            path='/user-profile/update'
+            element={isAuthenticated ? <EditProfile /> : <Login />}
+          />
         </Route>
 
         <Route path='/admin' element={<MainLayout />}>

@@ -8,7 +8,7 @@ const Color = ({ colors, setColor }) => {
           return (
             <li
               key={color?._id}
-              style={{ backgroundColor: `${color?.hex}` }}
+              style={{ backgroundColor: `${color?.hex}`, cursor: 'pointer' }}
               onClick={() => setColor(color?._id)}
             ></li>
           );

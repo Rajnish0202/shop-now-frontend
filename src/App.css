@@ -52,6 +52,11 @@ a {
   color: var(--color-131921);
 }
 
+.button:disabled {
+  background-color: var(--color-c8c6c6);
+  cursor: not-allowed;
+}
+
 .form-control {
   background-color: var(--color-f5f5f7);
   border-radius: 10px;
@@ -93,6 +98,7 @@ a {
 
 .header-upper {
   background: var(--color-131921);
+  position: relative;
 }
 
 .header-upper .input-group-text {
@@ -103,6 +109,22 @@ a {
 .header-upper .header-upper-links img {
   width: 35px;
   height: 35px;
+}
+
+.header-upper .user-settings {
+  position: absolute;
+  background: var(--color-1c1c1b);
+  width: 15rem;
+  top: 100%;
+  z-index: 10;
+  padding: 5px;
+  transition: all 0.5s linear;
+  border-radius: 5px;
+}
+
+.header-upper .user-settings li {
+  padding: 10px;
+  border-bottom: 1px solid var(--color-ededed);
 }
 
 .header-bottom {
@@ -1140,9 +1162,17 @@ footer .input-group-text {
   border: 1px solid rgba(0, 0, 0, 0.25);
   border-radius: 5px;
   background-color: white;
-  width: 70px;
-  padding: 5px 10px;
+  width: 50px;
   text-align: center;
+  padding: 5px 10px;
+}
+
+.cart-col-3 .form-control[type='number']::-webkit-inner-spin-button,
+.cart-col-3 .form-control[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
 }
 
 .trash-btn {
@@ -1212,3 +1242,38 @@ footer .input-group-text {
 }
 
 /* Checkout Page Ends */
+
+/* Profile Page */
+
+.updateProfileInput {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+  padding: 0 10px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.updateProfileInput input,
+.updateProfileInput textarea {
+  padding: 10px 10px;
+  width: 100%;
+  border: none;
+  outline: none;
+}
+
+.updateProfileInput textarea {
+  resize: none;
+}
+
+.delete-account {
+  background-color: var(--color-bf4800);
+}
+
+.delete-account:hover {
+  background-color: red;
+}
+
+/* Profile Page Ends */

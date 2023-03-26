@@ -1,18 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 
 import { BsSearch } from 'react-icons/bs';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spinner } from './Loader/Loader';
+import { clearErrors } from '../redux/actions/userActions';
+import UserSettings from './UserSettings';
 
 const Header = () => {
-  const { loading, error, productCategories } = useSelector(
-    (state) => state.productCategories
-  );
+  const { isAuthenticated, error, user } = useSelector((state) => state.user);
+  const { cart } = useSelector((state) => state.cart);
+
+  const {
+    loading,
+    error: categoriesError,
+    productCategories,
+  } = useSelector((state) => state.productCategories);
+
+  const dispatch = useDispatch();
+  const ref = useRef(null);
 
   const navigate = useNavigate();
   const [keyword, setKeyword] = useState('');
+  const [settings, setSettings] = useState(false);
 
   const searchSubmitHandler = (e) => {
     e.preventDefault();
@@ -23,11 +34,25 @@ const Header = () => {
     }
   };
 
+  const userSettingHandler = useCallback((e) => {
+    if (ref?.current && !ref?.current?.contains(e.target)) {
+      setSettings(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch(clearErrors());
     }
-  }, [error]);
+
+    document.addEventListener('mousedown', userSettingHandler);
+
+    if (categoriesError) {
+      toast.error(categoriesError);
+      dispatch(clearErrors());
+    }
+  }, [error, dispatch, categoriesError, userSettingHandler]);
 
   return (
     <>
@@ -97,15 +122,40 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link
-                    to='/login'
-                    className='d-flex align-items-center gap-10 text-white'
-                  >
-                    <img src='/assests/user.svg' alt='login' />
-                    <p className='mb-0'>
-                      Log in <br /> My Account
-                    </p>
-                  </Link>
+                  {!isAuthenticated ? (
+                    <Link
+                      to='/login'
+                      className='d-flex align-items-center gap-10 text-white'
+                    >
+                      <img src='/assests/user.svg' alt='login' />
+                      <p className='mb-0'>
+                        Log in <br /> My Account
+                      </p>
+                    </Link>
+                  ) : (
+                    <>
+                      <button
+                        className='normal-btn d-flex align-items-center gap-10 text-white'
+                        onClick={() => setSettings(!settings)}
+                      >
+                        <div>
+                          <img
+                            src='https://res.cloudinary.com/dukdn1bpp/image/upload/v1674883325/MERN-INVENTORY/nbqkarlgegbdyzomwadv.png'
+                            alt='user'
+                          />
+                        </div>
+                        <p
+                          className='mb-0 text-capitalize'
+                          style={{ color: '#FFFFFF' }}
+                        >
+                          {user?.firstname}
+                        </p>
+                      </button>
+                      <div ref={ref}>
+                        {settings && <UserSettings user={user} />}
+                      </div>
+                    </>
+                  )}
                 </div>
                 <div>
                   <Link
@@ -114,8 +164,18 @@ const Header = () => {
                   >
                     <img src='/assests/cart.svg' alt='cart' />
                     <div className='d-flex flex-column'>
-                      <span className='badge bg-white text-dark'>0</span>
-                      <p className='mb-0'>₹ 5000</p>
+                      <span className='badge bg-white text-dark'>
+                        {cart?.products
+                          ? cart?.products?.length > 9
+                            ? cart?.products?.length
+                            : cart?.products?.length.toString().padStart(2, '0')
+                          : ''}
+                      </span>
+
+                      <p className='mb-0'>
+                        {cart?.products ? '₹' : ''}
+                        {cart && cart?.cartTotal}
+                      </p>
                     </div>
                   </Link>
                 </div>
