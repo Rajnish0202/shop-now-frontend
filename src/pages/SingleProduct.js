@@ -9,7 +9,7 @@ import { BsHeart, BsLink } from 'react-icons/bs';
 import { TiArrowShuffle } from 'react-icons/ti';
 import { MdOutlineLocalShipping } from 'react-icons/md';
 import { toast } from 'react-toastify';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearErrors,
@@ -35,6 +35,8 @@ const SingleProduct = () => {
   const { loading, error, product } = useSelector(
     (state) => state.productDetails
   );
+
+  const { user } = useSelector((state) => state.user);
 
   const { error: addToCartError, isAdded } = useSelector(
     (state) => state.addCart
@@ -261,13 +263,19 @@ const SingleProduct = () => {
                       />
                     </div>
                     <div>
-                      <button
-                        className='button mx-4'
-                        onClick={() => addToCartHandler()}
-                        disabled={product?.quantity === 0}
-                      >
-                        Add To Cart
-                      </button>
+                      {user ? (
+                        <button
+                          className='button mx-4'
+                          onClick={() => addToCartHandler()}
+                          disabled={product?.quantity === 0}
+                        >
+                          Add To Cart
+                        </button>
+                      ) : (
+                        <Link to='/login' className='px-4 text-danger fs-6'>
+                          Please Login to Add Cart
+                        </Link>
+                      )}
                     </div>
                   </div>
                   <div className='d-flex align-items-center gap-30 mt-3 '>

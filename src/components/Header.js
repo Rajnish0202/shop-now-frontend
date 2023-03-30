@@ -40,6 +40,10 @@ const Header = () => {
     }
   }, []);
 
+  const cartTotal =
+    cart?.products &&
+    cart?.products?.reduce((a, b) => a + b.price * b.count, 0);
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -174,7 +178,7 @@ const Header = () => {
 
                       <p className='mb-0'>
                         {cart?.products ? '₹' : ''}
-                        {cart && cart?.cartTotal}
+                        {cartTotal?.toFixed(2)}
                       </p>
                     </div>
                   </Link>

@@ -3,9 +3,13 @@ import {
   ADD_TO_CART_FAIL,
   ADD_TO_CART_REQUEST,
   ADD_TO_CART_SUCCESS,
+  REMOVE_ALL_CART_ITEM_FAIL,
+  REMOVE_ALL_CART_ITEM_REQUEST,
+  REMOVE_ALL_CART_ITEM_SUCCESS,
   REMOVE_CART_ITEM_FAIL,
   REMOVE_CART_ITEM_REQUEST,
   REMOVE_CART_ITEM_SUCCESS,
+  SAVE_SHIPPING_INFO,
   USER_CART_FAIL,
   USER_CART_REQUEST,
   USER_CART_SUCCESS,
@@ -80,4 +84,31 @@ export const removeItemsFromCart = (productId) => async (dispatch) => {
         error.toString(),
     });
   }
+};
+
+export const emptyCart = () => async (dispatch) => {
+  try {
+    dispatch({ type: REMOVE_ALL_CART_ITEM_REQUEST });
+    const { data } = await axios.put(`${BACKEND_URL}/user/all-empty-cart`);
+
+    dispatch({ type: REMOVE_ALL_CART_ITEM_SUCCESS, payload: data.message });
+  } catch (error) {
+    dispatch({
+      type: REMOVE_ALL_CART_ITEM_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const saveShippingInfo = (data) => async (dispatch) => {
+  dispatch({
+    type: SAVE_SHIPPING_INFO,
+    payload: data,
+  });
+  localStorage.setItem('shippingAddress', JSON.stringify(data));
 };

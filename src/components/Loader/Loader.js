@@ -20,4 +20,12 @@ export const Spinner = () => {
   );
 };
 
+export const TextSpinner = () => {
+  return (
+    <div className={styles.textSpinner}>
+      <div></div>
+    </div>
+  );
+};
+
 export default Loader;

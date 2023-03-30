@@ -13,8 +13,15 @@
   justify-content: center;
 }
 
+.textSpinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .loading > div,
-.spinner > div {
+.spinner > div,
+.textSpinner > div {
   width: 10vmax;
   height: 10vmax;
   border-bottom: 5px solid rgba(0, 0, 0, 0.719);
@@ -28,6 +35,12 @@
   width: 3rem;
   height: 3rem;
   border-bottom: 2px solid rgba(0, 0, 0, 0.719);
+}
+
+.textSpinner > div {
+  width: 20px;
+  height: 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.719);
 }
 
 @keyframes loadingRotate {

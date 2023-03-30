@@ -12,6 +12,8 @@ import { FaCity, FaHome, FaStreetView } from 'react-icons/fa';
 import { GiEarthAmerica } from 'react-icons/gi';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Country, State } from 'country-state-city';
+
 import {
   clearErrors,
   loadUser,
@@ -213,7 +215,7 @@ const EditProfile = () => {
                   borderRadius: '10px',
                 }}
               >
-                <div className='updateProfileInput '>
+                <div className='updateProfileInput'>
                   <FaHome size={25} />
                   <input
                     type='text'
@@ -234,27 +236,48 @@ const EditProfile = () => {
                     onChange={(e) => setCity(e.target.value)}
                   />
                 </div>
-                <div className='updateProfileInput'>
-                  <MdOutlineRealEstateAgent size={25} />
-                  <input
-                    type='text'
-                    placeholder='State'
-                    required
-                    value={state}
-                    onChange={(e) => setState(e.target.value)}
-                  />
-                </div>
+
                 <div className='updateProfileInput'>
                   <GiEarthAmerica size={25} />
 
-                  <input
-                    type='text'
-                    placeholder='Country'
+                  <select
                     required
+                    type='text'
                     value={country}
                     onChange={(e) => setCountry(e.target.value)}
-                  />
+                    className='form-control'
+                    style={{ background: 'transparent', cursor: 'pointer' }}
+                  >
+                    <option value=''>Country</option>
+                    {Country &&
+                      Country.getAllCountries().map((item) => (
+                        <option value={item.isoCode} key={item.isoCode}>
+                          {item.name}
+                        </option>
+                      ))}
+                  </select>
                 </div>
+                {country && (
+                  <div className='updateProfileInput'>
+                    <MdOutlineRealEstateAgent size={25} />
+                    <select
+                      required
+                      value={state}
+                      onChange={(e) => setState(e.target.value)}
+                      className='form-control'
+                      style={{ background: 'transparent', cursor: 'pointer' }}
+                    >
+                      <option value=''>State</option>
+                      {State &&
+                        State.getStatesOfCountry(country).map((item) => (
+                          <option value={item.isoCode} key={item.isoCode}>
+                            {item.name}
+                          </option>
+                        ))}
+                    </select>
+                  </div>
+                )}
+
                 <div className='updateProfileInput'>
                   <FaStreetView size={25} />
 

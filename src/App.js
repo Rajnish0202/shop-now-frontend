@@ -27,7 +27,7 @@ import Dashboard from './pages/Admin/Dashboard';
 import MainLayout from './components/Admin/MainLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, loadUser } from './redux/actions/userActions';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getProductCategories } from './redux/actions/productCategoryAction';
 import { getBrands } from './redux/actions/brandAction';
 import { getTypes } from './redux/actions/productTypeAction';
@@ -37,11 +37,19 @@ import Profile from './pages/User/Profile';
 import Orders from './pages/User/Orders';
 import EditProfile from './pages/User/EditProfile';
 import { userCart } from './redux/actions/cartAction';
+import Shipping from './pages/Shipping';
+import PaymentMethod from './pages/PaymentMethod';
+import PlaceOrder from './pages/PlaceOrder';
+import OrderSuccess from './pages/OrderSuccess';
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { BACKEND_URL } from './utils/backendUrl';
 
 axios.defaults.withCredentials = true;
 
 function App() {
   const { isAuthenticated, error } = useSelector((state) => state.user);
+  const [stripeApiKey, setStripeApiKey] = useState('');
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -53,6 +61,13 @@ function App() {
       toast.error(error);
       dispatch(clearErrors());
     }
+
+    async function getStripeApiKey() {
+      const { data } = await axios.get(`${BACKEND_URL}/payment/stripeApiKey`);
+      setStripeApiKey(data.stripeApiKey);
+    }
+
+    getStripeApiKey();
 
     dispatch(getProductCategories());
     dispatch(getBrands());
@@ -90,6 +105,33 @@ function App() {
             path='/cart'
             element={isAuthenticated ? <Cart /> : <Login />}
           />
+
+          <Route
+            path='/shipping'
+            element={isAuthenticated ? <Shipping /> : <Login />}
+          />
+
+          <Route
+            path='/payment-method'
+            element={isAuthenticated ? <PaymentMethod /> : <Login />}
+          />
+
+          {stripeApiKey && (
+            <Route
+              path='/placeorder'
+              element={
+                <Elements stripe={loadStripe(stripeApiKey)}>
+                  {isAuthenticated ? <PlaceOrder /> : <Login />}
+                </Elements>
+              }
+            />
+          )}
+
+          <Route
+            path='/order-success'
+            element={isAuthenticated ? <OrderSuccess /> : <Login />}
+          />
+
           <Route path='/checkout' element={<Checkout />} />
 
           <Route path='/compare-product' element={<Compare />} />

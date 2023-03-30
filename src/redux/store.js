@@ -19,6 +19,12 @@ import { productTypeReducer } from './reducers/productTypeReducer';
 import { productSizeReducer } from './reducers/productSizesRducer';
 import { productColorReducer } from './reducers/productColorReducer';
 import { addCartReducer, cartReducer } from './reducers/cartReducer';
+import {
+  allCouponReducer,
+  couponDetailsReducer,
+  couponReducer,
+} from './reducers/couponReducer';
+import { newOrderReducer } from './reducers/orderReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -35,6 +41,10 @@ const reducer = combineReducers({
   productColors: productColorReducer,
   addCart: addCartReducer,
   cart: cartReducer,
+  allCoupon: allCouponReducer,
+  singleCoupon: couponDetailsReducer,
+  couponApplied: couponReducer,
+  newOrder: newOrderReducer,
 });
 
 let initialState = {

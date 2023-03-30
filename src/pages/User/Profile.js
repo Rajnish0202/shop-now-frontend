@@ -59,7 +59,7 @@ const Profile = () => {
             <div>
               <h5 className='mb-0'>Joined On</h5>
               <p className='mb-0'>
-                {moment(user?.createdAt).format('DD MMMM YYYY ')}
+                {moment(user?.createdAt).format('DD MMMM YYYY')}
               </p>
             </div>
             <div className='d-flex gap-15 mt-2'>
