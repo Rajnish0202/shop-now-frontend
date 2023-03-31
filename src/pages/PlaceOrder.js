@@ -70,7 +70,9 @@ const PlaceOrder = () => {
     );
   }
 
-  const totalPriceAfterDiscount = totalAfterDiscount + shippingPrice + taxPrice;
+  const totalPriceAfterDiscount = round2(
+    totalAfterDiscount + shippingPrice + taxPrice
+  );
 
   const paymentData = {
     amount: isApplied ? totalPriceAfterDiscount * 100 : +totalPrice * 100,
@@ -214,12 +216,12 @@ const PlaceOrder = () => {
               }}
             >
               <h5 className='fw-bolder'>Shipping Address</h5>
-              <p>
+              <p className='mb-0'>
                 {shippingAddress.street},&nbsp;{shippingAddress.city},&nbsp;
                 {shippingAddress.state},&nbsp;{shippingAddress.country} - &nbsp;
                 {shippingAddress.pinCode},
               </p>
-              <div className='d-flex align-items-center gap-10 '>
+              <div className='mt-2 d-flex align-items-center gap-10 '>
                 <p className='fw-bold mb-0'>Mobile : </p>
                 <p className='mb-0'>{shippingAddress.phoneNo}</p>
               </div>
@@ -318,8 +320,30 @@ const PlaceOrder = () => {
                 <div>
                   <h4>Order Summary</h4>
                   <div className='d-flex align-items-center justify-content-between my-2'>
-                    <p className='fw-bold mb-0'>Items:</p>
-                    <p className='mb-0'>₹{cartTotal?.toFixed(2)}</p>
+                    <p
+                      className='fw-bold mb-0'
+                      style={{
+                        textDecoration: `${
+                          totalAfterDiscount ? 'line-through' : 'none'
+                        }`,
+                      }}
+                    >
+                      Items:
+                    </p>
+                    <p
+                      className='mb-0'
+                      style={{
+                        textDecoration: `${
+                          totalAfterDiscount ? 'line-through' : 'none'
+                        }`,
+                      }}
+                    >
+                      ₹{cartTotal?.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className='d-flex align-items-center justify-content-between my-2'>
+                    <p className='fw-bold mb-0'>After Discount:</p>
+                    <p className='mb-0'>₹{totalAfterDiscount?.toFixed(2)}</p>
                   </div>
                   <div className='d-flex align-items-center justify-content-between my-2'>
                     <p className='fw-bold mb-0'>Tax:</p>

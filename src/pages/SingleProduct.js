@@ -5,7 +5,7 @@ import ProductCard from '../components/ProductCard';
 import MetaData from '../utils/MetaData';
 import ReactImageZoom from 'react-image-zoom';
 import Color from '../components/Color';
-import { BsHeart, BsLink } from 'react-icons/bs';
+import { BsFillHeartFill, BsHeart, BsLink } from 'react-icons/bs';
 import { TiArrowShuffle } from 'react-icons/ti';
 import { MdOutlineLocalShipping } from 'react-icons/md';
 import { toast } from 'react-toastify';
@@ -21,12 +21,18 @@ import { capitalizeText } from '../utils/Capitalized';
 import Loader, { Spinner } from '../components/Loader/Loader';
 import { addItemsToCart, userCart } from '../redux/actions/cartAction';
 import { ADD_TO_CART_RESET } from '../redux/constants/cartConstants';
+import { addWishlist, removeWishlist } from '../redux/actions/wishlistAction';
+import {
+  ADD_WISHLIST_RESET,
+  REMOVE_WISHLIST_RESET,
+} from '../redux/constants/wishlistConstants';
 
 const SingleProduct = () => {
   const [toggleReview, setToggleReview] = useState(false);
   const [quantity, setQunatity] = useState(1);
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
+  const [wishAdd, setWishAdd] = useState(false);
 
   const { slug } = useParams();
   const dispatch = useDispatch();
@@ -47,6 +53,12 @@ const SingleProduct = () => {
     relatedProducts,
     productCounts: count,
   } = useSelector((state) => state.relatedProducts);
+
+  const {
+    error: wishError,
+    isAdded: addWish,
+    isRemoved,
+  } = useSelector((state) => state.wishlistAction);
 
   const [imageUrl, setImageUrl] = useState();
 
@@ -81,6 +93,17 @@ const SingleProduct = () => {
     dispatch(addItemsToCart(product?._id, quantity, color, size));
   };
 
+  const addWishlistHandler = (productId) => {
+    setWishAdd(!wishAdd);
+    if (!wishAdd) {
+      dispatch(addWishlist(productId));
+      dispatch(productDetails(slug));
+    } else {
+      dispatch(removeWishlist(productId));
+      dispatch(productDetails(slug));
+    }
+  };
+
   useEffect(() => {
     if (slug) {
       dispatch(productDetails(slug));
@@ -99,9 +122,28 @@ const SingleProduct = () => {
       dispatch({ type: ADD_TO_CART_RESET });
     }
 
+    if (addWish) {
+      toast.success('Wishlist is added.');
+      dispatch({ type: ADD_WISHLIST_RESET });
+    }
+
+    if (isRemoved) {
+      toast.success('Wishlist is removed.');
+      dispatch({ type: REMOVE_WISHLIST_RESET });
+    }
+
+    if (wishError) {
+      toast.error(wishError);
+      dispatch(clearErrors());
+    }
+
     if (addToCartError) {
       toast.error(error);
       dispatch(clearErrors());
+    }
+
+    if (user?.wishlist?.some((wish) => wish?.wishId === product?._id)) {
+      setWishAdd(true);
     }
 
     dispatch(getRelatedProducts(product?._id, product?.category?._id));
@@ -115,6 +157,10 @@ const SingleProduct = () => {
     isAdded,
     navigate,
     addToCartError,
+    wishError,
+    addWish,
+    isRemoved,
+    user?.wishlist,
   ]);
 
   return (
@@ -267,7 +313,7 @@ const SingleProduct = () => {
                         <button
                           className='button mx-4'
                           onClick={() => addToCartHandler()}
-                          disabled={product?.quantity === 0}
+                          disabled={product?.quantity <= 0}
                         >
                           Add To Cart
                         </button>
@@ -279,9 +325,29 @@ const SingleProduct = () => {
                     </div>
                   </div>
                   <div className='d-flex align-items-center gap-30 mt-3 '>
-                    <div className='additional-btns'>
-                      <BsHeart size={20} />
-                      <button className='normal-btn'>Add To Wishlist</button>
+                    <div
+                      className='additional-btns'
+                      onClick={() => addWishlistHandler(product?._id)}
+                    >
+                      {wishAdd ? (
+                        <BsFillHeartFill size={20} color={'#028a0f'} />
+                      ) : (
+                        <BsHeart
+                          size={20}
+                          style={{
+                            cursor: 'pointer',
+                          }}
+                        />
+                      )}
+
+                      <button
+                        className='normal-btn'
+                        style={{
+                          color: `${wishAdd ? '#028a0f' : 'initial'}`,
+                        }}
+                      >
+                        Add To Wishlist
+                      </button>
                     </div>
                     <div className='additional-btns'>
                       <TiArrowShuffle size={20} />

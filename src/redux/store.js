@@ -24,7 +24,15 @@ import {
   couponDetailsReducer,
   couponReducer,
 } from './reducers/couponReducer';
-import { newOrderReducer } from './reducers/orderReducer';
+import {
+  allOrdersReducer,
+  newOrderReducer,
+  orderDetailsReducer,
+} from './reducers/orderReducer';
+import {
+  allWishlistReducer,
+  wishlistActionReducer,
+} from './reducers/wishlistReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -45,6 +53,10 @@ const reducer = combineReducers({
   singleCoupon: couponDetailsReducer,
   couponApplied: couponReducer,
   newOrder: newOrderReducer,
+  allOrders: allOrdersReducer,
+  orderDetails: orderDetailsReducer,
+  wishlistAction: wishlistActionReducer,
+  getAllWishlist: allWishlistReducer,
 });
 
 let initialState = {

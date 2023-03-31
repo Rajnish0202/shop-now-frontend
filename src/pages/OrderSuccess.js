@@ -15,7 +15,9 @@ const OrderSuccess = () => {
             <h5 className='text-center mb-4'>Our Order Successfully Placed.</h5>
           </div>
           <div className='d-flex align-items-center gap-30'>
-            <button className='button'>My Order</button>
+            <Link to='/user-orders' className='button'>
+              My Order
+            </Link>
             <Link to='/' className='button'>
               Back To Shopping
             </Link>

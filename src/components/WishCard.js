@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { shortenText } from '../utils/ShortenText';
 
-const WishCard = () => {
+const WishCard = ({ wish, removeWishlistHandler }) => {
   return (
     <div className='col-3'>
       <div className='wishlist-card position-relative'>
@@ -8,12 +10,21 @@ const WishCard = () => {
           src='assests/cross.svg'
           alt='cross'
           className='position-absolute cross img-fluid'
+          onClick={() => removeWishlistHandler(wish?.wishId?._id)}
         />
-        <div className='wishlist-card-image w-100 mb-3'>
-          <img src='assests/acc.jpg' className='w-100 img-fluid' alt='acc' />
-        </div>
-        <h5 className='title'>Smart Watch Series 7</h5>
-        <h6 className='price'>₹1524.00</h6>
+        <Link to={`/product/${wish?.wishId?.slug}`}>
+          <div className='wishlist-card-image w-100 mb-3'>
+            <img
+              src={wish?.wishId?.images[0]?.url}
+              className='w-100 img-fluid'
+              alt={wish?.wishId?.images[0]?.url}
+            />
+          </div>
+          <h5 className='title' title={wish?.title}>
+            {shortenText(wish?.wishId?.title, 24)}
+          </h5>
+          <h6 className='price'>₹{wish?.wishId?.price.toFixed(2)}</h6>
+        </Link>
       </div>
     </div>
   );

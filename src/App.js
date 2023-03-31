@@ -22,7 +22,6 @@ import ShippingPolicy from './pages/ShippingPolicy';
 import TermsAndCondition from './pages/TermsAndCondition';
 import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
 import Dashboard from './pages/Admin/Dashboard';
 import MainLayout from './components/Admin/MainLayout';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,6 +43,7 @@ import OrderSuccess from './pages/OrderSuccess';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { BACKEND_URL } from './utils/backendUrl';
+import OrderDetails from './pages/User/OrderDetails';
 
 axios.defaults.withCredentials = true;
 
@@ -132,8 +132,6 @@ function App() {
             element={isAuthenticated ? <OrderSuccess /> : <Login />}
           />
 
-          <Route path='/checkout' element={<Checkout />} />
-
           <Route path='/compare-product' element={<Compare />} />
 
           <Route path='/wishlist' element={<Wishlist />} />
@@ -159,6 +157,12 @@ function App() {
             path='/user-orders'
             element={isAuthenticated ? <Orders /> : <Login />}
           />
+
+          <Route
+            path='/user-orders/:id'
+            element={isAuthenticated ? <OrderDetails /> : <Login />}
+          />
+
           <Route
             path='/user-profile/update'
             element={isAuthenticated ? <EditProfile /> : <Login />}
