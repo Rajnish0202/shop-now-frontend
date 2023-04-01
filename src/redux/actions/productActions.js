@@ -15,6 +15,9 @@ import {
   RANDOM_PRODUCT_SUCCESS,
   RANDOM_PRODUCT_FAIL,
   RANDOM_PRODUCT_REQUEST,
+  RATING_PRODUCT_REQUEST,
+  RATING_PRODUCT_SUCCESS,
+  RATING_PRODUCT_FAIL,
 } from '../constants/productConstants';
 
 export const getProducts =
@@ -478,6 +481,31 @@ export const productDetails = (slug) => async (dispatch) => {
     });
   }
 };
+
+export const productRatings =
+  (productId, star, comment) => async (dispatch) => {
+    try {
+      dispatch({ type: RATING_PRODUCT_REQUEST });
+
+      const { data } = await axios.put(`${BACKEND_URL}/product/rating`, {
+        productId,
+        star,
+        comment,
+      });
+
+      dispatch({ type: RATING_PRODUCT_SUCCESS, payload: data.finalProduct });
+    } catch (error) {
+      dispatch({
+        type: RATING_PRODUCT_FAIL,
+        payload:
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString(),
+      });
+    }
+  };
 
 export const getRandomProduct = () => async (dispatch) => {
   try {

@@ -4,6 +4,7 @@ import thunk from 'redux-thunk';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   productDetailsReducer,
+  productRatingsReducer,
   productReducer,
   randomProductReducer,
   relatedProductReducer,
@@ -48,6 +49,7 @@ const reducer = combineReducers({
   productType: productTypeReducer,
   productSizes: productSizeReducer,
   productColors: productColorReducer,
+  ratings: productRatingsReducer,
   addCart: addCartReducer,
   cart: cartReducer,
   allCoupon: allCouponReducer,

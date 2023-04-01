@@ -1064,14 +1064,14 @@ footer .input-group-text {
 
 .review-inner-wrapper {
   background-color: white;
-  padding: 30px;
+  padding: 20px 30px;
   border-radius: 10px;
   transition: all 0.5s ease;
 }
 
 .review-head {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding-bottom: 20px;
+  padding-bottom: 10px;
 }
 
 .review-head h4 {
@@ -1101,9 +1101,13 @@ footer .input-group-text {
   color: var(--color-777777);
 }
 
+.review {
+  margin: 0;
+}
+
 .review:not(:last-child) {
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  margin: 10px 0;
+  margin: 5px 0;
 }
 
 .review p {

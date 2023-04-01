@@ -15,10 +15,11 @@ import {
   clearErrors,
   getRelatedProducts,
   productDetails,
+  productRatings,
 } from '../redux/actions/productActions';
 import { shortenText } from '../utils/ShortenText';
 import { capitalizeText } from '../utils/Capitalized';
-import Loader, { Spinner } from '../components/Loader/Loader';
+import Loader, { Spinner, TextSpinner } from '../components/Loader/Loader';
 import { addItemsToCart, userCart } from '../redux/actions/cartAction';
 import { ADD_TO_CART_RESET } from '../redux/constants/cartConstants';
 import { addWishlist, removeWishlist } from '../redux/actions/wishlistAction';
@@ -27,6 +28,8 @@ import {
   REMOVE_WISHLIST_RESET,
 } from '../redux/constants/wishlistConstants';
 import { addItemsToCompare } from '../redux/actions/compareAction';
+import { RATING_PRODUCT_RESET } from '../redux/constants/productConstants';
+import { allUserOrders } from '../redux/actions/orderActions';
 
 const SingleProduct = () => {
   const [toggleReview, setToggleReview] = useState(false);
@@ -35,6 +38,8 @@ const SingleProduct = () => {
   const [color, setColor] = useState('');
   const [wishAdd, setWishAdd] = useState(false);
   const [compare, setCompare] = useState(false);
+  const [star, setStar] = useState(0);
+  const [comment, setComment] = useState('');
 
   const { slug } = useParams();
   const dispatch = useDispatch();
@@ -61,6 +66,19 @@ const SingleProduct = () => {
     isAdded: addWish,
     isRemoved,
   } = useSelector((state) => state.wishlistAction);
+
+  const {
+    error: ratingError,
+    isRated,
+    loading: ratingLoading,
+  } = useSelector((state) => state.ratings);
+
+  const { orders } = useSelector((state) => state.allOrders);
+
+  const isExistsInUserOrders = orders?.map((order) =>
+    order?.products.some((prod) => prod?.product?._id === product?._id)
+  );
+  console.log(isExistsInUserOrders);
 
   const [imageUrl, setImageUrl] = useState();
 
@@ -111,9 +129,19 @@ const SingleProduct = () => {
     toast.success('Product added to compare');
   };
 
+  const reviewSubmitHandler = (e) => {
+    e.preventDefault();
+    setToggleReview(false);
+    dispatch(productRatings(product?._id, star, comment));
+  };
+
   useEffect(() => {
     if (slug) {
       dispatch(productDetails(slug));
+    }
+
+    if (toggleReview) {
+      dispatch(allUserOrders());
     }
 
     if (error) {
@@ -137,6 +165,17 @@ const SingleProduct = () => {
     if (isRemoved) {
       toast.success('Wishlist is removed.');
       dispatch({ type: REMOVE_WISHLIST_RESET });
+    }
+
+    if (isRated) {
+      toast.success('Review Added');
+      dispatch({ type: RATING_PRODUCT_RESET });
+      dispatch(productDetails(slug));
+    }
+
+    if (ratingError) {
+      toast.error(error);
+      dispatch(clearErrors());
     }
 
     if (wishError) {
@@ -177,6 +216,9 @@ const SingleProduct = () => {
     addWish,
     isRemoved,
     user?.wishlist,
+    isRated,
+    ratingError,
+    toggleReview,
   ]);
 
   return (
@@ -434,18 +476,18 @@ const SingleProduct = () => {
                 <div className='review-head d-flex justify-content-between align-items-center'>
                   <div>
                     <h4 className='mb-2'>Customer Reviews</h4>
-                    <div className='d-flex  align-items-center gap-10'>
-                      {product?.rating && (
+                    <div className='d-flex align-items-center gap-10'>
+                      {product?.ratings && (
                         <StarRatings
-                          rating={+product?.totalRating}
+                          rating={product?.totalRating}
                           starRatedColor='#febd69'
                           starDimension='20px'
                           starSpacing='2px'
                         />
                       )}
-                      <p className='mb-0'>
+                      <p className='mb-0' style={{ marginTop: '5px' }}>
                         Based on {product?.ratings?.length}{' '}
-                        {product?.ratings?.length > 1 ? 'Review' : 'Reviews'}
+                        {product?.ratings?.length > 0 ? 'Review' : 'Reviews'}
                       </p>
                     </div>
                   </div>
@@ -458,18 +500,24 @@ const SingleProduct = () => {
                     </button>
                   </div>
                 </div>
-                {toggleReview && (
+                {toggleReview && isExistsInUserOrders.includes(true) && (
                   <div className='review-form' id='review'>
                     <h4>Write a Review</h4>
-                    <form action='' className='d-flex flex-column gap-15'>
+                    <form
+                      action=''
+                      className='d-flex flex-column gap-15'
+                      onSubmit={reviewSubmitHandler}
+                    >
                       <div>
-                        {/* <StarRatings
-                          rating={4}
+                        <StarRatings
+                          rating={star}
                           starRatedColor='#febd69'
                           starDimension='20px'
                           starSpacing='2px'
-                          changeRating={''}
-                        /> */}
+                          numberOfStars={5}
+                          starHoverColor='#febd69'
+                          changeRating={(e) => setStar(e)}
+                        />
                       </div>
 
                       <div>
@@ -479,24 +527,32 @@ const SingleProduct = () => {
                           placeholder='Comment...'
                           rows='4'
                           cols='30'
+                          value={comment}
+                          onChange={(e) => setComment(e.target.value)}
                         ></textarea>
                       </div>
                       <div className='d-flex justify-content-end'>
                         <button className='button' type='submit'>
-                          Submit Review
+                          {ratingLoading ? <TextSpinner /> : 'Submit Review'}
                         </button>
                       </div>
                     </form>
                   </div>
                 )}
-
+                {toggleReview && !isExistsInUserOrders.includes(true) && (
+                  <div className='review-form' id='review'>
+                    <p className='mb-0 text-center fs-5 text-danger'>
+                      You are not allowed to review before buy this product.
+                    </p>
+                  </div>
+                )}
                 <div className='reviews'>
                   {product?.ratings &&
                     product?.ratings.map((review) => {
                       return (
                         <div className='review' key={review?._id}>
                           <div className='d-flex gap-15 align-items-center'>
-                            <h6 className='mb-0'>
+                            <h6 className='mb-0' style={{ marginTop: '5px' }}>
                               {review?.postedby?.firstname} &nbsp;
                               {review?.postedby?.lastname}
                             </h6>
@@ -507,7 +563,7 @@ const SingleProduct = () => {
                               starSpacing='2px'
                             />
                           </div>
-                          <p className='mt-2'>{review?.comment}</p>
+                          <p className='p-1 mb-0'>{review?.comment}</p>
                         </div>
                       );
                     })}
