@@ -78,7 +78,6 @@ const SingleProduct = () => {
   const isExistsInUserOrders = orders?.map((order) =>
     order?.products.some((prod) => prod?.product?._id === product?._id)
   );
-  console.log(isExistsInUserOrders);
 
   const [imageUrl, setImageUrl] = useState();
 
