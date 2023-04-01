@@ -26,6 +26,7 @@ import {
   ADD_WISHLIST_RESET,
   REMOVE_WISHLIST_RESET,
 } from '../redux/constants/wishlistConstants';
+import { addItemsToCompare } from '../redux/actions/compareAction';
 
 const SingleProduct = () => {
   const [toggleReview, setToggleReview] = useState(false);
@@ -33,6 +34,7 @@ const SingleProduct = () => {
   const [size, setSize] = useState('');
   const [color, setColor] = useState('');
   const [wishAdd, setWishAdd] = useState(false);
+  const [compare, setCompare] = useState(false);
 
   const { slug } = useParams();
   const dispatch = useDispatch();
@@ -104,6 +106,11 @@ const SingleProduct = () => {
     }
   };
 
+  const addToCompareHandler = () => {
+    dispatch(addItemsToCompare(slug));
+    toast.success('Product added to compare');
+  };
+
   useEffect(() => {
     if (slug) {
       dispatch(productDetails(slug));
@@ -144,6 +151,15 @@ const SingleProduct = () => {
 
     if (user?.wishlist?.some((wish) => wish?.wishId === product?._id)) {
       setWishAdd(true);
+    }
+
+    if (
+      localStorage.getItem('compareItems') &&
+      JSON.parse(localStorage.getItem('compareItems')).some(
+        (compare) => compare?._id === product?._id
+      )
+    ) {
+      setCompare(true);
     }
 
     dispatch(getRelatedProducts(product?._id, product?.category?._id));
@@ -327,7 +343,7 @@ const SingleProduct = () => {
                   <div className='d-flex align-items-center gap-30 mt-3 '>
                     <div
                       className='additional-btns'
-                      onClick={() => addWishlistHandler(product?._id)}
+                      onClick={addWishlistHandler}
                     >
                       {wishAdd ? (
                         <BsFillHeartFill size={20} color={'#028a0f'} />
@@ -349,9 +365,25 @@ const SingleProduct = () => {
                         Add To Wishlist
                       </button>
                     </div>
-                    <div className='additional-btns'>
-                      <TiArrowShuffle size={20} />
-                      <button className='normal-btn'>Add To Compare</button>
+                    <div
+                      className='additional-btns'
+                      onClick={() => addToCompareHandler(product?.slug)}
+                    >
+                      <TiArrowShuffle
+                        size={20}
+                        style={{
+                          cursor: 'pointer',
+                          color: `${compare ? '#00BFFF' : 'initial'}`,
+                        }}
+                      />
+                      <button
+                        className='normal-btn'
+                        style={{
+                          color: `${compare ? '#00BFFF' : 'initial'}`,
+                        }}
+                      >
+                        Add To Compare
+                      </button>
                     </div>
                   </div>
 

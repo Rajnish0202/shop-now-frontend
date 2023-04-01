@@ -190,11 +190,13 @@ const Cart = () => {
                 </div>
               </>
             ) : (
-              <div className='col-12 p-4'>
-                <p className='text-center w-100' style={{ fontSize: '34px' }}>
-                  Your Cart Is Empty
-                </p>
-                <div className='d-flex justify-content-center py-4'>
+              <div
+                className='col-12 d-flex flex-column align-items-center justify-content-center'
+                style={{ height: '15rem' }}
+              >
+                <h4>Empty Cart</h4>
+                <p>You have no items in your cart. Start adding!</p>
+                <div className='d-flex justify-content-center py-2'>
                   <Link to='/ourstore' className='button'>
                     Continue To Shopping
                   </Link>

@@ -57,7 +57,10 @@ const Wishlist = () => {
           {loading && <Spinner />}
           {wishlists && wishlists?.length === 0 ? (
             <div className='row'>
-              <div className='col-12'>
+              <div
+                className='col-12 d-flex flex-column align-items-center justify-content-center'
+                style={{ height: '15rem' }}
+              >
                 <h4>Empty Wishlist</h4>
                 <p>You have no items in your wishlist. Start adding!</p>
               </div>

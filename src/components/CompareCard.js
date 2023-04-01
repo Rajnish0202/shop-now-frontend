@@ -1,7 +1,8 @@
 import React from 'react';
 import Color from './Color';
+import { shortenText } from '../utils/ShortenText';
 
-const CompareCard = () => {
+const CompareCard = ({ compare, removeFromCompare }) => {
   return (
     <div className='col-3 '>
       <div className='compare-product-card position-relative'>
@@ -9,43 +10,51 @@ const CompareCard = () => {
           src='assests/cross.svg'
           alt='cross'
           className='position-absolute cross img-fluid'
+          onClick={() => removeFromCompare(compare?._id)}
         />
         <div className='product-card-image'>
-          <img src='assests/watch.jpg' alt='watch' />
+          <img src={compare?.images[0]?.url} alt={compare?.images[0]?.url} />
           <div className='compare-product-details'>
-            <h5 className='title'>
-              Beoplay A1 Protable Bluetooth Speaker With...
+            <h5 className='title' title={compare?.title}>
+              {shortenText(compare?.title, 30)}
             </h5>
-            <h6 className='price'>₹2500.00</h6>
+            <h6 className='price'>₹{compare?.price?.toFixed(2)}</h6>
             <div>
               <div className='product-detail'>
                 <h5>Brand:</h5>
-                <p>Havels</p>
+                <p>{compare?.brand?.title}</p>
               </div>
               <div className='product-detail'>
                 <h5>Type:</h5>
-                <p>Tablet Computers</p>
+                <p>{compare?.type?.title}</p>
               </div>
               <div className='product-detail'>
-                <h5>SKU:</h5>
-                <p>Havels</p>
+                <h5>Category:</h5>
+                <p>{compare?.category?.title}</p>
               </div>
               <div className='product-detail'>
                 <h5>Availability:</h5>
-                <p>In Stock</p>
+                <p
+                  style={{
+                    color: `${compare?.quantity >= 1 ? '#028a0f' : '#ff2400'}`,
+                  }}
+                >
+                  {compare?.quantity >= 1 ? 'In Stock' : 'Out Stock'}
+                </p>
               </div>
               <div className='product-detail'>
                 <h5>Color:</h5>
                 <div>
-                  <Color />
+                  <Color colors={compare?.color} />
                 </div>
               </div>
               <div className='product-detail'>
                 <h5>Size:</h5>
                 <div className='d-flex align-items-center gap-10'>
-                  <p>S</p>
-                  <p>XL</p>
-                  <p>XLL</p>
+                  {compare?.sizes &&
+                    compare?.sizes?.map((size) => {
+                      return <p key={size?._id}>{size?.title}</p>;
+                    })}
                 </div>
               </div>
             </div>

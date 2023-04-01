@@ -33,6 +33,7 @@ import {
   allWishlistReducer,
   wishlistActionReducer,
 } from './reducers/wishlistReducer';
+import { compareReducer } from './reducers/compareReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -57,11 +58,17 @@ const reducer = combineReducers({
   orderDetails: orderDetailsReducer,
   wishlistAction: wishlistActionReducer,
   getAllWishlist: allWishlistReducer,
+  compareProducts: compareReducer,
 });
 
 let initialState = {
-  cart: {
-    cartItems: [],
+  // cart: {
+  //   cartItems: [],
+  // },
+  compareProducts: {
+    compareItems: localStorage.getItem('compareItems')
+      ? JSON.parse(localStorage.getItem('compareItems'))
+      : [],
   },
 };
 const middleware = [thunk];

@@ -488,10 +488,11 @@ const OurStore = () => {
               <div className='product-list pb-5 d-flex gap-10 flex-wrap'>
                 {products?.length === 0 && (
                   <div
-                    className='d-flex align-items-center justify-content-center w-100'
-                    style={{ height: '20rem' }}
+                    className='col-12 d-flex flex-column align-items-center justify-content-center'
+                    style={{ height: '15rem' }}
                   >
-                    <h3 className='text-capitalize'>No Product found.</h3>
+                    <h4>No Products Found</h4>
+                    <p>You have no items in your products.</p>
                   </div>
                 )}
                 {products &&
