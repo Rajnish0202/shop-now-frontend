@@ -48,6 +48,8 @@ import OrderDetails from './pages/User/OrderDetails';
 axios.defaults.withCredentials = true;
 
 function App() {
+  const [category, setCategory] = useState('');
+  console.log(category);
   const { isAuthenticated, error } = useSelector((state) => state.user);
   const [stripeApiKey, setStripeApiKey] = useState('');
   const dispatch = useDispatch();
@@ -86,11 +88,23 @@ function App() {
         style={{ fontSize: '16px' }}
       />
       <Routes>
-        <Route path='/' element={<Layout />}>
-          <Route index element={<Home />} />
+        <Route path='/' element={<Layout setCategory={setCategory} />}>
+          <Route index element={<Home setCategory={setCategory} />} />
 
-          <Route path='/ourstore' element={<OurStore />} />
-          <Route path='/ourstore/:keyword' element={<OurStore />} />
+          <Route path='/ourstore'>
+            <Route
+              index
+              element={
+                <OurStore setCategory={setCategory} category={category} />
+              }
+            />
+            <Route
+              path=':keyword'
+              element={
+                <OurStore setCategory={setCategory} category={category} />
+              }
+            />
+          </Route>
 
           <Route path='/product/:slug' element={<SingleProduct />} />
 

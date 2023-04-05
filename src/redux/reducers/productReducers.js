@@ -3,6 +3,12 @@ import {
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
   CLEAR_ERRORS,
+  FEATURED_PRODUCT_FAIL,
+  FEATURED_PRODUCT_REQUEST,
+  FEATURED_PRODUCT_SUCCESS,
+  POPULAR_PRODUCT_FAIL,
+  POPULAR_PRODUCT_REQUEST,
+  POPULAR_PRODUCT_SUCCESS,
   PRODUCT_DETAILS_FAIL,
   PRODUCT_DETAILS_REQUEST,
   PRODUCT_DETAILS_SUCCESS,
@@ -178,6 +184,76 @@ export const relatedProductReducer = (
       };
 
     case RELATED_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const popularProductReducer = (
+  state = { popularProducts: [] },
+  action
+) => {
+  switch (action.type) {
+    case POPULAR_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        popularProducts: [],
+      };
+
+    case POPULAR_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        popularProducts: action.payload.popular,
+        productCounts: action.payload.popularCount,
+        totalPopular: action.payload.totalPopular,
+      };
+
+    case POPULAR_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const featuredProductReducer = (
+  state = { featuredProducts: [] },
+  action
+) => {
+  switch (action.type) {
+    case FEATURED_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        featuredProducts: [],
+      };
+
+    case FEATURED_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        featuredProducts: action.payload,
+      };
+
+    case FEATURED_PRODUCT_FAIL:
       return {
         loading: false,
         error: action.payload,

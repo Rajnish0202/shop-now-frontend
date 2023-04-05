@@ -18,6 +18,12 @@ import {
   RATING_PRODUCT_REQUEST,
   RATING_PRODUCT_SUCCESS,
   RATING_PRODUCT_FAIL,
+  POPULAR_PRODUCT_REQUEST,
+  POPULAR_PRODUCT_SUCCESS,
+  POPULAR_PRODUCT_FAIL,
+  FEATURED_PRODUCT_REQUEST,
+  FEATURED_PRODUCT_SUCCESS,
+  FEATURED_PRODUCT_FAIL,
 } from '../constants/productConstants';
 
 export const getProducts =
@@ -548,9 +554,56 @@ export const getRelatedProducts =
           error.message ||
           error.toString(),
       });
-      toast.error(error);
     }
   };
+
+// Popular Products
+
+export const getPopularProducts = (limit) => async (dispatch) => {
+  try {
+    dispatch({ type: POPULAR_PRODUCT_REQUEST });
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/product/popular-product?limit=${limit}`
+    );
+
+    dispatch({ type: POPULAR_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: POPULAR_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Featured Products
+
+export const getFeaturedProducts = (limit) => async (dispatch) => {
+  try {
+    dispatch({ type: FEATURED_PRODUCT_REQUEST });
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/product/featured-product?limit=${limit}`
+    );
+
+    dispatch({ type: FEATURED_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: FEATURED_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
 
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {

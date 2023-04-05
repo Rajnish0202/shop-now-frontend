@@ -12,6 +12,7 @@ import {
 } from '../redux/actions/wishlistAction';
 import { REMOVE_WISHLIST_RESET } from '../redux/constants/wishlistConstants';
 import MetaData from '../utils/MetaData';
+import { Link } from 'react-router-dom';
 
 const Wishlist = () => {
   const { loading, error, wishlists } = useSelector(
@@ -63,6 +64,11 @@ const Wishlist = () => {
               >
                 <h4>Empty Wishlist</h4>
                 <p>You have no items in your wishlist. Start adding!</p>
+                <div className='d-flex justify-content-center py-2'>
+                  <Link to='/ourstore' className='button'>
+                    Continue To Shopping
+                  </Link>
+                </div>
               </div>
             </div>
           ) : (

@@ -13,10 +13,9 @@ import { Link, useParams } from 'react-router-dom';
 import ratings from '../utils/ratings';
 import { shortenText } from '../utils/ShortenText';
 
-const OurStore = () => {
+const OurStore = ({ category, setCategory }) => {
   const [grid, setGrid] = useState(3);
   const [limit, setLimit] = useState(8);
-  const [category, setCategory] = useState('');
   const [brand, setBrand] = useState('');
   const [stock, setStock] = useState('');
   const [priceFrom, setPriceFrom] = useState(0);
@@ -28,6 +27,7 @@ const OurStore = () => {
   const [color, setColor] = useState('');
 
   const { keyword } = useParams();
+
   const { loading, error, products, totalProducts } = useSelector(
     (state) => state.products
   );

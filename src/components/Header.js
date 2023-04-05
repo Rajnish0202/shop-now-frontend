@@ -8,7 +8,7 @@ import { Spinner } from './Loader/Loader';
 import { clearErrors } from '../redux/actions/userActions';
 import UserSettings from './UserSettings';
 
-const Header = () => {
+const Header = ({ setCategory }) => {
   const { isAuthenticated, error, user } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
 
@@ -32,6 +32,11 @@ const Header = () => {
     } else {
       navigate('/ourstore');
     }
+  };
+
+  const categoryHandler = (cate) => {
+    navigate('/ourstore');
+    setCategory(cate);
   };
 
   const userSettingHandler = useCallback((e) => {
@@ -96,7 +101,11 @@ const Header = () => {
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                 />
-                <span className='input-group-text p-3' id='basic-addon2'>
+                <span
+                  className='input-group-text p-3'
+                  id='basic-addon2'
+                  onClick={searchSubmitHandler}
+                >
                   <BsSearch className='fs-6' />
                 </span>
               </form>
@@ -221,14 +230,14 @@ const Header = () => {
                       {productCategories &&
                         productCategories.map((category) => {
                           return (
-                            <li key={category.slug}>
+                            <li key={category?.slug}>
                               {loading && <Spinner />}
-                              <Link
+                              <button
                                 className='dropdown-item text-white text-capitalize'
-                                to='/'
+                                onClick={() => categoryHandler(category?._id)}
                               >
-                                {category.title}
-                              </Link>
+                                {category?.title}
+                              </button>
                             </li>
                           );
                         })}

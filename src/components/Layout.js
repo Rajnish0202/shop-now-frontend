@@ -3,10 +3,10 @@ import Footer from './Footer';
 import Header from './Header';
 import { Outlet } from 'react-router-dom';
 
-const Layout = () => {
+const Layout = ({ setCategory }) => {
   return (
     <>
-      <Header />
+      <Header setCategory={setCategory} />
       <Outlet />
       <Footer />
     </>

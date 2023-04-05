@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
 import BlogCard from '../components/BlogCard';
 import ProductCard from '../components/ProductCard';
@@ -7,17 +7,70 @@ import SpecialProduct from '../components/SpecialProduct';
 import MetaData from '../utils/MetaData';
 import services from '../utils/Data';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrors, getProducts } from '../redux/actions/productActions';
+import {
+  clearErrors,
+  getFeaturedProducts,
+  getPopularProducts,
+} from '../redux/actions/productActions';
 import { toast } from 'react-toastify';
 import { Spinner } from '../components/Loader/Loader';
+import { getProductCountCategories } from '../redux/actions/productCategoryAction';
 
-const Home = () => {
-  const { loading, error, products, success } = useSelector(
-    (state) => state.products
+const Home = ({ setCategory }) => {
+  const [limit, setLimit] = useState(4);
+  const [limitFeatured, setLimitFeatured] = useState(4);
+
+  const { loading, error, popularProducts, totalPopular } = useSelector(
+    (state) => state.popularProducts
   );
-  const [limit, setLimit] = useState(8);
+
+  const {
+    loading: featuredLoading,
+    error: featuredError,
+    featuredProducts,
+  } = useSelector((state) => state.featuredProducts);
+
+  const {
+    loading: countLoading,
+    error: countError,
+    productCountCategories,
+  } = useSelector((state) => state.productCountCategories);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const categoryHandler = (id) => {
+    navigate('/ourstore');
+    setCategory(id);
+  };
+
+  const featuredMoreHandler = () => {
+    if (limitFeatured > featuredProducts.length) {
+      return;
+    }
+    setLimitFeatured((prev) => prev + 4);
+  };
+
+  const featuredLessHandler = () => {
+    if (limitFeatured < 4) {
+      return;
+    }
+    setLimitFeatured((prev) => prev - 4);
+  };
+
+  const popularMoreHandler = () => {
+    if (limit >= totalPopular) {
+      return;
+    }
+    setLimit((prev) => prev + 4);
+  };
+
+  const popularLessHandler = () => {
+    if (limit < 4) {
+      return;
+    }
+    setLimit((prev) => prev - 4);
+  };
 
   useEffect(() => {
     if (error) {
@@ -25,8 +78,20 @@ const Home = () => {
       dispatch(clearErrors());
     }
 
-    // dispatch(getProducts(limit));
-  }, [dispatch, error, success, limit]);
+    if (countError) {
+      toast.error(countError);
+      dispatch(clearErrors());
+    }
+
+    if (featuredError) {
+      toast.error(featuredError);
+      dispatch(clearErrors());
+    }
+
+    dispatch(getPopularProducts(limit));
+    dispatch(getFeaturedProducts(limitFeatured));
+    dispatch(getProductCountCategories());
+  }, [dispatch, error, limit, countError, limitFeatured, featuredError]);
 
   return (
     <>
@@ -196,63 +261,40 @@ const Home = () => {
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
+              {countLoading && <Spinner />}
               <div className='categories d-flex justify-content-between align-items-center flex-wrap'>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Cameras & Videos</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/camera.jpg' alt='camera' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Smart Television</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/tv.jpg' alt='tv' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Headpones</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/headphone.jpg' alt='headphone' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Music & Gaming</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/gaming.jpg' alt='gaming' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Mobiles & Tablets</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/mobile.jpg' alt='mobile' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Computers & Laptop</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/laptop.jpg' alt='laptop' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Accessories</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/acc.jpg' alt='accessories' />
-                </div>
-                <div className='d-flex align-items-center gap-15'>
-                  <div>
-                    <h6>Portable Speakers</h6>
-                    <p>10 Items</p>
-                  </div>
-                  <img src='assests/speaker.jpg' alt='speaker' />
-                </div>
+                {productCountCategories &&
+                  productCountCategories?.map((productCate) => {
+                    return (
+                      <div
+                        className='d-flex align-items-center gap-15'
+                        key={productCate?._id}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => categoryHandler(productCate?._id)}
+                      >
+                        <div>
+                          <h6 className='text-capitalize'>
+                            {productCate?.title}
+                          </h6>
+                          <p>
+                            {productCate?.number_of_product}{' '}
+                            {productCate?.number_of_product > 1
+                              ? 'Items'
+                              : 'Item'}
+                          </p>
+                        </div>
+                        <img
+                          style={{
+                            width: '80px',
+                            height: '80px',
+                            objectFit: 'cover',
+                          }}
+                          src={productCate?.image?.url}
+                          alt={productCate?.image?.url}
+                        />
+                      </div>
+                    );
+                  })}
               </div>
             </div>
           </div>
@@ -265,11 +307,21 @@ const Home = () => {
             <div className='col-12'>
               <h3 className='section-heading'>Featured Collection </h3>
             </div>
-            {/* {loading && <Spinner />}
-            {products &&
-              products.map((product) => {
+            {featuredLoading && <Spinner />}
+            {featuredProducts &&
+              featuredProducts.map((product) => {
                 return <ProductCard product={product} key={product?.slug} />;
-              })} */}
+              })}
+            <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
+              {limitFeatured > 4 && (
+                <button className='button' onClick={featuredLessHandler}>
+                  Load Less
+                </button>
+              )}
+              <button className='button' onClick={featuredMoreHandler}>
+                Load More
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -340,16 +392,32 @@ const Home = () => {
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
-              <h3 className='section-heading'>Our Popular Products </h3>
+              <h3 className='section-heading'>
+                Our Popular Products (
+                {totalPopular && totalPopular > 10
+                  ? totalPopular
+                  : totalPopular?.toString()?.padStart(2, '0')}
+                )
+              </h3>
             </div>
           </div>
           <div className='row'>
-            {/* {loading && <Spinner />}
+            {loading && <Spinner />}
 
-            {products &&
-              products.map((product) => {
+            {popularProducts &&
+              popularProducts.map((product) => {
                 return <ProductCard product={product} key={product?.slug} />;
-              })} */}
+              })}
+            <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
+              {limit > 4 && (
+                <button className='button' onClick={popularLessHandler}>
+                  Load Less
+                </button>
+              )}
+              <button className='button' onClick={popularMoreHandler}>
+                Load More
+              </button>
+            </div>
           </div>
         </div>
       </section>

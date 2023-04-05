@@ -5,6 +5,7 @@ import MetaData from '../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import { removeItemsFromCompare } from '../redux/actions/compareAction';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 
 const Compare = () => {
   const { compareItems } = useSelector((state) => state.compareProducts);
@@ -30,6 +31,11 @@ const Compare = () => {
                 >
                   <h4>Empty Compare</h4>
                   <p>You have no items in your compare. Start adding!</p>
+                  <div className='d-flex justify-content-center py-2'>
+                    <Link to='/ourstore' className='button'>
+                      Continue To Shopping
+                    </Link>
+                  </div>
                 </div>
               </div>
             )}

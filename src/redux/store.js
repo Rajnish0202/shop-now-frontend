@@ -3,6 +3,8 @@ import thunk from 'redux-thunk';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
+  featuredProductReducer,
+  popularProductReducer,
   productDetailsReducer,
   productRatingsReducer,
   productReducer,
@@ -14,7 +16,10 @@ import {
   userProfileReducer,
   userReducer,
 } from './reducers/userReducer';
-import { productCategoryReducer } from './reducers/productCategoryReducer';
+import {
+  productCategoryReducer,
+  productCountCategoryReducer,
+} from './reducers/productCategoryReducer';
 import { productBrandReducer } from './reducers/productBrandReducer';
 import { productTypeReducer } from './reducers/productTypeReducer';
 import { productSizeReducer } from './reducers/productSizesRducer';
@@ -42,9 +47,12 @@ const reducer = combineReducers({
   userAddress: userAddressReducer,
   products: productReducer,
   productCategories: productCategoryReducer,
+  productCountCategories: productCountCategoryReducer,
   productDetails: productDetailsReducer,
   randomProducts: randomProductReducer,
   relatedProducts: relatedProductReducer,
+  popularProducts: popularProductReducer,
+  featuredProducts: featuredProductReducer,
   productBrand: productBrandReducer,
   productType: productTypeReducer,
   productSizes: productSizeReducer,
