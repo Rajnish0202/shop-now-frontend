@@ -49,7 +49,9 @@ axios.defaults.withCredentials = true;
 
 function App() {
   const [category, setCategory] = useState('');
-  console.log(category);
+  const [type, setType] = useState('');
+  const [brand, setBrand] = useState('');
+
   const { isAuthenticated, error } = useSelector((state) => state.user);
   const [stripeApiKey, setStripeApiKey] = useState('');
   const dispatch = useDispatch();
@@ -89,19 +91,42 @@ function App() {
       />
       <Routes>
         <Route path='/' element={<Layout setCategory={setCategory} />}>
-          <Route index element={<Home setCategory={setCategory} />} />
+          <Route
+            index
+            element={
+              <Home
+                setCategory={setCategory}
+                setType={setType}
+                setBrand={setBrand}
+              />
+            }
+          />
 
           <Route path='/ourstore'>
             <Route
               index
               element={
-                <OurStore setCategory={setCategory} category={category} />
+                <OurStore
+                  setCategory={setCategory}
+                  category={category}
+                  setType={setType}
+                  type={type}
+                  brand={brand}
+                  setBrand={setBrand}
+                />
               }
             />
             <Route
               path=':keyword'
               element={
-                <OurStore setCategory={setCategory} category={category} />
+                <OurStore
+                  setCategory={setCategory}
+                  category={category}
+                  setType={setType}
+                  type={type}
+                  brand={brand}
+                  setBrand={setBrand}
+                />
               }
             />
           </Route>

@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { BACKEND_URL } from '../../utils/backendUrl';
 import {
+  ALL_TYPE_COUNT_FAIL,
+  ALL_TYPE_COUNT_REQUEST,
+  ALL_TYPE_COUNT_SUCCESS,
   ALL_TYPE_FAIL,
   ALL_TYPE_REQUEST,
   ALL_TYPE_SUCCESS,
@@ -17,6 +20,29 @@ export const getTypes = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_TYPE_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const getAllTypesCount = (limit) => async (dispatch) => {
+  console.log(limit);
+  try {
+    dispatch({ type: ALL_TYPE_COUNT_REQUEST });
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/product-type/type?limit=${limit}`
+    );
+
+    dispatch({ type: ALL_TYPE_COUNT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: ALL_TYPE_COUNT_FAIL,
       payload:
         (error.response &&
           error.response.data &&

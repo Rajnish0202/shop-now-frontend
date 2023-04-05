@@ -15,10 +15,13 @@ import {
 import { toast } from 'react-toastify';
 import { Spinner } from '../components/Loader/Loader';
 import { getProductCountCategories } from '../redux/actions/productCategoryAction';
+import { getAllTypesCount } from '../redux/actions/productTypeAction';
+import { getBrands } from '../redux/actions/brandAction';
 
-const Home = ({ setCategory }) => {
+const Home = ({ setCategory, setType, setBrand }) => {
   const [limit, setLimit] = useState(4);
   const [limitFeatured, setLimitFeatured] = useState(4);
+  const [limitType, setLimitType] = useState(4);
 
   const { loading, error, popularProducts, totalPopular } = useSelector(
     (state) => state.popularProducts
@@ -36,12 +39,34 @@ const Home = ({ setCategory }) => {
     productCountCategories,
   } = useSelector((state) => state.productCountCategories);
 
+  const {
+    loading: typeLoading,
+    error: typeError,
+    countTypes,
+  } = useSelector((state) => state.productTypeCount);
+
+  const {
+    loadin: brandLoading,
+    error: brandError,
+    productBrands,
+  } = useSelector((state) => state.productBrand);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const categoryHandler = (id) => {
     navigate('/ourstore');
     setCategory(id);
+  };
+
+  const typeHandler = (id) => {
+    navigate('/ourstore');
+    setType(id);
+  };
+
+  const brandHandler = (id) => {
+    navigate('/ourstore');
+    setBrand(id);
   };
 
   const featuredMoreHandler = () => {
@@ -72,6 +97,18 @@ const Home = ({ setCategory }) => {
     setLimit((prev) => prev - 4);
   };
 
+  const typeMoreHandler = () => {
+    if (limitType > countTypes.length) return;
+    setLimitType((prev) => prev + 4);
+  };
+
+  const typeLessHandler = () => {
+    if (limitType < 4) {
+      return;
+    }
+    setLimitType((prev) => prev - 4);
+  };
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -88,10 +125,32 @@ const Home = ({ setCategory }) => {
       dispatch(clearErrors());
     }
 
+    if (typeError) {
+      toast.error(typeError);
+      dispatch(clearErrors());
+    }
+
+    if (brandError) {
+      toast.error(brandError);
+      dispatch(clearErrors());
+    }
+
     dispatch(getPopularProducts(limit));
     dispatch(getFeaturedProducts(limitFeatured));
+    dispatch(getAllTypesCount(limitType));
     dispatch(getProductCountCategories());
-  }, [dispatch, error, limit, countError, limitFeatured, featuredError]);
+    dispatch(getBrands());
+  }, [
+    dispatch,
+    error,
+    limit,
+    countError,
+    limitFeatured,
+    featuredError,
+    limitType,
+    typeError,
+    brandError,
+  ]);
 
   return (
     <>
@@ -272,11 +331,11 @@ const Home = ({ setCategory }) => {
                         style={{ cursor: 'pointer' }}
                         onClick={() => categoryHandler(productCate?._id)}
                       >
-                        <div>
+                        <div className='d-flex flex-column'>
                           <h6 className='text-capitalize'>
                             {productCate?.title}
                           </h6>
-                          <p>
+                          <p className='mb-0'>
                             {productCate?.number_of_product}{' '}
                             {productCate?.number_of_product > 1
                               ? 'Items'
@@ -328,46 +387,47 @@ const Home = ({ setCategory }) => {
 
       <section className='famous-wrapper p-4 home-wrapper-2'>
         <div className='container-xxl'>
-          <div className='row'>
-            <div className='col-3'>
-              <div className='famous-card position-relative'>
-                <img src='assests/famous-01.jpg' alt='watch' />
-                <div className='famous-content position-absolute'>
-                  <h5>Big Screen</h5>
-                  <h6>Smart Watch Series 7</h6>
-                  <p>Form ₹1250 or ₹235/mo. for 24 mo.</p>
-                </div>
-              </div>
-            </div>
-            <div className='col-3'>
-              <div className='famous-card position-relative'>
-                <img src='assests/famous-02.jpg' alt='watch' />
-                <div className='famous-content position-absolute'>
-                  <h5>Big Screen</h5>
-                  <h6>Smart Watch Series 7</h6>
-                  <p>Form ₹1250 or ₹235/mo. for 24 mo.</p>
-                </div>
-              </div>
-            </div>
-            <div className='col-3'>
-              <div className='famous-card position-relative'>
-                <img src='assests/famous-03.jpg' alt='watch' />
-                <div className='famous-content position-absolute'>
-                  <h5>Big Screen</h5>
-                  <h6>Smart Watch Series 7</h6>
-                  <p>Form ₹1250 or ₹235/mo. for 24 mo.</p>
-                </div>
-              </div>
-            </div>
-            <div className='col-3'>
-              <div className='famous-card position-relative'>
-                <img src='assests/famous-04.jpg' alt='watch' />
-                <div className='famous-content position-absolute'>
-                  <h5>Big Screen</h5>
-                  <h6>Smart Watch Series 7</h6>
-                  <p>Form ₹1250 or ₹235/mo. for 24 mo.</p>
-                </div>
-              </div>
+          <div className='row' style={{ rowGap: '20px' }}>
+            {typeLoading && <Spinner />}
+            {countTypes &&
+              countTypes?.map((type) => {
+                return (
+                  <div
+                    className='col-3'
+                    key={type?._id}
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => typeHandler(type?._id)}
+                  >
+                    <div className='famous-card position-relative'>
+                      <img src={type?.image?.url} alt={type?.image?.url} />
+                      <div className='famous-content position-absolute'>
+                        <h5>Big Screen</h5>
+                        <h6 className='text-capitalize' title='{type?.title}'>
+                          {type?.title}
+                        </h6>
+                        <p>
+                          {type?.number_of_product >= 10
+                            ? type?.number_of_product
+                            : type?.number_of_product
+                                ?.toString()
+                                ?.padStart(2, '0')}{' '}
+                          &nbsp;
+                          {type?.number_of_product > 1 ? 'Items' : 'Item'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
+              {limitType > 4 && (
+                <button className='button' onClick={typeLessHandler}>
+                  Load Less
+                </button>
+              )}
+              <button className='button' onClick={typeMoreHandler}>
+                Load More
+              </button>
             </div>
           </div>
         </div>
@@ -425,33 +485,30 @@ const Home = ({ setCategory }) => {
       <section className='marque-wrapper p-4'>
         <div className='container-xxl'>
           <div className='row'>
+            {brandLoading && <Spinner />}
             <div className='col-12'>
               <div className='marque-inner-wrapper card-wrapper'>
                 <Marquee className='d-flex align-items-center justify-content-between gap-30'>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-01.png' alt='apple' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-02.png' alt='bose' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-03.png' alt='canon' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-04.png' alt='dell' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-05.png' alt='intel' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-06.png' alt='lg' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-07.png' alt='samsung' />
-                  </div>
-                  <div className='mx-4 w-25'>
-                    <img src='assests/brand-08.png' alt='sandisk' />
-                  </div>
+                  {productBrands &&
+                    productBrands?.map((brand) => {
+                      return (
+                        <div
+                          className='mx-4 w-25'
+                          key={brand?._id}
+                          onClick={() => brandHandler(brand?._id)}
+                        >
+                          <img
+                            src={brand?.logo?.url}
+                            alt={brand?.logo?.url}
+                            style={{
+                              height: '100px',
+                              objectFit: 'cover',
+                              cursor: 'pointer',
+                            }}
+                          />
+                        </div>
+                      );
+                    })}
                 </Marquee>
               </div>
             </div>

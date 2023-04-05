@@ -13,14 +13,19 @@ import { Link, useParams } from 'react-router-dom';
 import ratings from '../utils/ratings';
 import { shortenText } from '../utils/ShortenText';
 
-const OurStore = ({ category, setCategory }) => {
+const OurStore = ({
+  category,
+  setCategory,
+  type,
+  setType,
+  brand,
+  setBrand,
+}) => {
   const [grid, setGrid] = useState(3);
   const [limit, setLimit] = useState(8);
-  const [brand, setBrand] = useState('');
   const [stock, setStock] = useState('');
   const [priceFrom, setPriceFrom] = useState(0);
   const [priceTo, setPriceTo] = useState(10000);
-  const [type, setType] = useState('');
   const [rating, setRating] = useState(0);
   const [sortBy, setSortBy] = useState('');
   const [sizes, setSizes] = useState('');

@@ -21,7 +21,10 @@ import {
   productCountCategoryReducer,
 } from './reducers/productCategoryReducer';
 import { productBrandReducer } from './reducers/productBrandReducer';
-import { productTypeReducer } from './reducers/productTypeReducer';
+import {
+  productTypeCountReducer,
+  productTypeReducer,
+} from './reducers/productTypeReducer';
 import { productSizeReducer } from './reducers/productSizesRducer';
 import { productColorReducer } from './reducers/productColorReducer';
 import { addCartReducer, cartReducer } from './reducers/cartReducer';
@@ -55,6 +58,7 @@ const reducer = combineReducers({
   featuredProducts: featuredProductReducer,
   productBrand: productBrandReducer,
   productType: productTypeReducer,
+  productTypeCount: productTypeCountReducer,
   productSizes: productSizeReducer,
   productColors: productColorReducer,
   ratings: productRatingsReducer,
