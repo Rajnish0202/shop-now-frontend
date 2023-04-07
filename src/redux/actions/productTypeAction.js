@@ -31,7 +31,6 @@ export const getTypes = () => async (dispatch) => {
 };
 
 export const getAllTypesCount = (limit) => async (dispatch) => {
-  console.log(limit);
   try {
     dispatch({ type: ALL_TYPE_COUNT_REQUEST });
 

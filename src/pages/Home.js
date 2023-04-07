@@ -17,11 +17,13 @@ import { Spinner } from '../components/Loader/Loader';
 import { getProductCountCategories } from '../redux/actions/productCategoryAction';
 import { getAllTypesCount } from '../redux/actions/productTypeAction';
 import { getBrands } from '../redux/actions/brandAction';
+import { getAllBlogs } from '../redux/actions/blogActions';
 
 const Home = ({ setCategory, setType, setBrand }) => {
   const [limit, setLimit] = useState(4);
   const [limitFeatured, setLimitFeatured] = useState(4);
   const [limitType, setLimitType] = useState(4);
+  const [blogLimit, setBlogLimit] = useState(4);
 
   const { loading, error, popularProducts, totalPopular } = useSelector(
     (state) => state.popularProducts
@@ -50,6 +52,12 @@ const Home = ({ setCategory, setType, setBrand }) => {
     error: brandError,
     productBrands,
   } = useSelector((state) => state.productBrand);
+
+  const {
+    loading: blogLoading,
+    error: blogError,
+    blogs,
+  } = useSelector((state) => state.allBlogs);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -135,11 +143,17 @@ const Home = ({ setCategory, setType, setBrand }) => {
       dispatch(clearErrors());
     }
 
+    if (blogError) {
+      toast.error(blogError);
+      dispatch(clearErrors());
+    }
+
     dispatch(getPopularProducts(limit));
     dispatch(getFeaturedProducts(limitFeatured));
     dispatch(getAllTypesCount(limitType));
     dispatch(getProductCountCategories());
     dispatch(getBrands());
+    dispatch(getAllBlogs(blogLimit));
   }, [
     dispatch,
     error,
@@ -150,6 +164,8 @@ const Home = ({ setCategory, setType, setBrand }) => {
     limitType,
     typeError,
     brandError,
+    blogLimit,
+    blogError,
   ]);
 
   return (
@@ -522,10 +538,11 @@ const Home = ({ setCategory, setType, setBrand }) => {
             <div className='col-12'>
               <h3 className='section-heading'>Our Latest Blogs</h3>
             </div>
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
-            <BlogCard />
+            {blogLoading && <Spinner />}
+            {blogs &&
+              blogs?.allBlog?.map((blog) => {
+                return <BlogCard blog={blog} key={blog?._id} />;
+              })}
           </div>
         </div>
       </section>

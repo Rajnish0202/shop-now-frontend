@@ -43,6 +43,8 @@ import {
   wishlistActionReducer,
 } from './reducers/wishlistReducer';
 import { compareReducer } from './reducers/compareReducer';
+import { allBlogReducer, singleBlogReducer } from './reducers/blogReducer';
+import { allBlogCategoryReducer } from './reducers/blogCategoryReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -73,6 +75,9 @@ const reducer = combineReducers({
   wishlistAction: wishlistActionReducer,
   getAllWishlist: allWishlistReducer,
   compareProducts: compareReducer,
+  allBlogs: allBlogReducer,
+  singleBlog: singleBlogReducer,
+  blogCategory: allBlogCategoryReducer,
 });
 
 let initialState = {
