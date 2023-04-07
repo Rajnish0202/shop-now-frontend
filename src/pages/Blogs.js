@@ -13,7 +13,7 @@ const Blogs = () => {
   const [category, setCategory] = useState('');
 
   const { loading, error, blogs } = useSelector((state) => state.allBlogs);
-  console.log(limit, blogs?.allBlog?.length, blogs?.blogCount);
+
   const {
     loading: categoryLoading,
     error: categoryError,

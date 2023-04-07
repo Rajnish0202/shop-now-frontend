@@ -4,23 +4,75 @@ import BreadCrumb from '../components/BreadCrumb';
 import MetaData from '../utils/MetaData';
 import { HiOutlineArrowLongLeft } from 'react-icons/hi2';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSingleBlog } from '../redux/actions/blogActions';
-import { Spinner } from '../components/Loader/Loader';
+import {
+  clearErrors,
+  dislikeBlog,
+  getSingleBlog,
+  likeBlog,
+} from '../redux/actions/blogActions';
+import { Spinner, TextSpinner } from '../components/Loader/Loader';
 import moment from 'moment';
 import { FaEye } from 'react-icons/fa';
 import { SlLike, SlDislike } from 'react-icons/sl';
+import { toast } from 'react-toastify';
+import {
+  DISLIKE_BLOG_RESET,
+  LIKE_BLOG_RESET,
+} from '../redux/constants/blogConstants';
 
 const SingleBlog = () => {
   const { id } = useParams();
 
   const { loading, blog } = useSelector((state) => state.singleBlog);
+  const {
+    loading: likeLoading,
+    isLiked,
+    error: likeError,
+  } = useSelector((state) => state.likeBlog);
+
+  const {
+    loading: dislikeLoading,
+    isDisliked,
+    error: dislikeError,
+  } = useSelector((state) => state.dislikeBlog);
+
   const dispatch = useDispatch();
+
+  const likeHandler = (id) => {
+    dispatch(likeBlog(id));
+  };
+
+  const dislikeHandler = (id) => {
+    dispatch(dislikeBlog(id));
+  };
 
   useEffect(() => {
     if (id) {
       dispatch(getSingleBlog(id));
     }
-  }, [id, dispatch]);
+
+    if (isLiked) {
+      toast.success('You Liked This Blog 😍');
+      dispatch({ type: LIKE_BLOG_RESET });
+      dispatch(getSingleBlog(id));
+    }
+
+    if (isDisliked) {
+      toast.success('You Disliked This Blog 😌');
+      dispatch({ type: DISLIKE_BLOG_RESET });
+      dispatch(getSingleBlog(id));
+    }
+
+    if (likeError) {
+      toast.error(likeError);
+      dispatch(clearErrors());
+    }
+
+    if (dislikeError) {
+      toast.error(dislikeError);
+      dispatch(clearErrors());
+    }
+  }, [id, dispatch, isLiked, isDisliked, dislikeError, likeError]);
 
   return (
     <>
@@ -61,31 +113,49 @@ const SingleBlog = () => {
                       className='mb-0 text-dark fw-bold'
                       style={{ marginTop: '2px', letterSpacing: '1px' }}
                     >
-                      {blog?.numViews} {blog?.numViews > 1 ? 'Views' : 'View'}
+                      {blog?.numViews} &nbsp;
+                      {blog?.numViews > 1 ? 'Views' : 'View'}
                     </p>
                   </div>
-                  <div className='d-flex align-items-center gap-10'>
+                  <div
+                    className='d-flex align-items-center gap-10'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => likeHandler(blog?._id)}
+                  >
                     <p className='mb-0'>
                       <SlLike size={25} color='#0B6623' />
                     </p>
-                    <p
-                      className='mb-0 text-dark fw-bold'
-                      style={{ marginTop: '2px', letterSpacing: '1px' }}
-                    >
-                      {blog?.numViews} {blog?.numViews > 1 ? 'Likes' : 'Like'}
-                    </p>
+                    {likeLoading ? (
+                      <TextSpinner />
+                    ) : (
+                      <p
+                        className='mb-0 text-dark fw-bold'
+                        style={{ marginTop: '2px', letterSpacing: '1px' }}
+                      >
+                        {blog?.likes?.length} &nbsp;
+                        {blog?.likes?.length > 1 ? 'Likes' : 'Like'}
+                      </p>
+                    )}
                   </div>
-                  <div className='d-flex align-items-center gap-10'>
+                  <div
+                    className='d-flex align-items-center gap-10'
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => dislikeHandler(blog?._id)}
+                  >
                     <p className='mb-0'>
                       <SlDislike size={25} color='#Fe2020' />
                     </p>
-                    <p
-                      className='mb-0 text-dark fw-bold'
-                      style={{ marginTop: '2px', letterSpacing: '1px' }}
-                    >
-                      {blog?.numViews}{' '}
-                      {blog?.numViews > 1 ? 'Dislikes' : 'Dislike'}
-                    </p>
+                    {dislikeLoading ? (
+                      <TextSpinner />
+                    ) : (
+                      <p
+                        className='mb-0 text-dark fw-bold'
+                        style={{ marginTop: '2px', letterSpacing: '1px' }}
+                      >
+                        {blog?.dislikes?.length} &nbsp;
+                        {blog?.dislikes?.length > 1 ? 'Dislikes' : 'Dislike'}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
