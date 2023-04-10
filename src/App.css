@@ -927,7 +927,7 @@ footer .input-group-text {
 /* Single Product Page */
 
 .main-product-image {
-  padding: 20px;
+  padding: 10px;
   background: white;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
@@ -940,25 +940,17 @@ footer .input-group-text {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 500px;
-}
-
-.main-product-image img {
-  width: 100%;
-  object-fit: contain !important;
-  height: 100%;
-}
-
-.main-product-image .js-image-zoom__zoomed-image {
-  left: 45px !important;
-  z-index: 999 !important;
-  border: 1px solid red;
+  height: 400px;
 }
 
 .main-product-details {
   padding: 20px;
   background-color: white;
   border-radius: 10px;
+}
+
+.activeImage {
+  border: 1px solid var(--color-bf4800) !important;
 }
 
 .main-product-details .title {

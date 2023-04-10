@@ -91,11 +91,15 @@ const SingleBlog = () => {
                   </Link>
                 </div>
                 <h3 className='title'>{blog?.title}</h3>
-                <img
-                  src={blog?.images?.[0]?.url}
-                  alt={blog?.images?.[0]?.url}
-                  className='single-blog-image my-4'
-                />
+                {blog?.images?.map((image) => {
+                  return (
+                    <img
+                      src={image?.url}
+                      alt={image?.url}
+                      className='single-blog-image my-4'
+                    />
+                  );
+                })}
                 <p className='mb-0'>{blog?.description}</p>
                 <div className='d-flex align-items-center gap-30'>
                   <code>{moment(blog?.createdAt).format('DD MMMM YYYY')}</code>

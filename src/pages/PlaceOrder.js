@@ -279,19 +279,23 @@ const PlaceOrder = () => {
                               {shortenText(item?.product?.title, 50)}
                             </p>
                           </Link>
-                          <p className='mb-0'>Size: {item?.size?.title}</p>
-                          <p className='mb-0 d-flex gap-5 align-items-center'>
-                            Color:
-                            <span
-                              style={{
-                                display: 'inline-block',
-                                width: '15px',
-                                height: '15px',
-                                backgroundColor: `${item?.color?.hex}`,
-                                borderRadius: '100%',
-                              }}
-                            ></span>
-                          </p>
+                          {item?.size && (
+                            <p className='mb-0'>Size: {item?.size?.title}</p>
+                          )}
+                          {item?.color && (
+                            <p className='mb-0 d-flex gap-5 align-items-center'>
+                              Color:
+                              <span
+                                style={{
+                                  display: 'inline-block',
+                                  width: '15px',
+                                  height: '15px',
+                                  backgroundColor: `${item?.color?.hex}`,
+                                  borderRadius: '100%',
+                                }}
+                              ></span>
+                            </p>
+                          )}
                         </td>
                         <td>
                           <p className='mb-0 text-center'>{item?.count}</p>

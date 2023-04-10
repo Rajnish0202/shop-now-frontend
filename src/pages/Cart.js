@@ -101,18 +101,20 @@ const Cart = () => {
                             </div>
                             <div>
                               <p className='mb-0'>{product?.product?.title}</p>
-                              <p className='mb-0 d-flex gap-5 align-items-center'>
-                                Color:
-                                <span
-                                  style={{
-                                    display: 'inline-block',
-                                    width: '15px',
-                                    height: '15px',
-                                    backgroundColor: `${product?.color?.hex}`,
-                                    borderRadius: '100%',
-                                  }}
-                                ></span>
-                              </p>
+                              {product?.color && (
+                                <p className='mb-0 d-flex gap-5 align-items-center'>
+                                  Color:
+                                  <span
+                                    style={{
+                                      display: 'inline-block',
+                                      width: '15px',
+                                      height: '15px',
+                                      backgroundColor: `${product?.color?.hex}`,
+                                      borderRadius: '100%',
+                                    }}
+                                  ></span>
+                                </p>
+                              )}
                               {product?.size && (
                                 <p className='mb-0'>
                                   Size: {product?.size?.title}

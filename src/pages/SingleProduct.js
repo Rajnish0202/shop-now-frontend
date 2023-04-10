@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
 import BreadCrumb from '../components/BreadCrumb';
 import ProductCard from '../components/ProductCard';
 import MetaData from '../utils/MetaData';
-import ReactImageZoom from 'react-image-zoom';
 import Color from '../components/Color';
+import ReactImageMagnify from 'react-image-magnify';
 import { BsFillHeartFill, BsHeart, BsLink } from 'react-icons/bs';
 import { TiArrowShuffle } from 'react-icons/ti';
 import { MdOutlineLocalShipping } from 'react-icons/md';
@@ -32,6 +32,10 @@ import { RATING_PRODUCT_RESET } from '../redux/constants/productConstants';
 import { allUserOrders } from '../redux/actions/orderActions';
 
 const SingleProduct = () => {
+  const { loading, error, product } = useSelector(
+    (state) => state.productDetails
+  );
+
   const [toggleReview, setToggleReview] = useState(false);
   const [quantity, setQunatity] = useState(1);
   const [size, setSize] = useState('');
@@ -40,14 +44,11 @@ const SingleProduct = () => {
   const [compare, setCompare] = useState(false);
   const [star, setStar] = useState(0);
   const [comment, setComment] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
 
   const { slug } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const { loading, error, product } = useSelector(
-    (state) => state.productDetails
-  );
 
   const { user } = useSelector((state) => state.user);
 
@@ -79,9 +80,25 @@ const SingleProduct = () => {
     order?.products.some((prod) => prod?.product?._id === product?._id)
   );
 
-  const [imageUrl, setImageUrl] = useState();
-
   const shareLink = window.location.href;
+
+  const imageHandler = (image, i) => {
+    setImageUrl(image);
+    refs.current[i].classList.add('activeImage');
+    for (let j = 0; j < product?.images?.length; j++) {
+      if (i !== j) {
+        refs.current[j].classList.remove('activeImage');
+      }
+    }
+  };
+
+  const refs = useRef([]);
+  refs.current = [];
+  const addRefs = (el) => {
+    if (el && !refs.current.includes(el)) {
+      refs.current.push(el);
+    }
+  };
 
   const copyToClipboard = (text) => {
     // console.log('text', text);
@@ -94,19 +111,22 @@ const SingleProduct = () => {
     toast.success('Copied!');
   };
 
-  const props = {
-    scale: 1.8,
-    zoomWidth: 500,
-    img: `${imageUrl ? imageUrl : product?.images && product?.images[0]?.url}`,
-  };
-
   const addToCartHandler = () => {
     if (quantity > product?.quantity) {
       return toast.info('Reached to Max Stock');
     }
 
-    if (!color || !size) {
-      return toast.info('Please Select Color And Size');
+    if (product?.sizes?.length === 0 && product?.color?.length > 0) {
+      if (!color) {
+        return toast.info('Please Select Color ');
+      }
+      dispatch(addItemsToCart(product?._id, quantity, color));
+    } else if (product?.sizes?.length === 0 && product?.color?.length === 0) {
+      dispatch(addItemsToCart(product?._id, quantity));
+    } else {
+      if (!color || !size) {
+        return toast.info('Please Select Color And Size');
+      }
     }
 
     dispatch(addItemsToCart(product?._id, quantity, color, size));
@@ -239,17 +259,50 @@ const SingleProduct = () => {
             <div className='col-6'>
               <div className='main-product-image'>
                 <div>
-                  <ReactImageZoom {...props} />
+                  <ReactImageMagnify
+                    {...{
+                      smallImage: {
+                        alt: imageUrl
+                          ? imageUrl
+                          : product?.images && product?.images?.[0].url,
+                        isFluidWidth: true,
+                        src: imageUrl
+                          ? imageUrl
+                          : product?.images && product?.images?.[0].url,
+                      },
+
+                      largeImage: {
+                        src: imageUrl
+                          ? imageUrl
+                          : product?.images && product?.images?.[0].url,
+                        width: 800,
+                        height: 1000,
+                        sizes:
+                          '(max-width: 480px) 100vw, (max-width: 1200px) 30vw, 360px',
+                      },
+                      enlargedImageContainerStyle: {
+                        zIndex: '10',
+                        marginLeft: '12rem',
+                        marginTop: '-5rem',
+                      },
+                      enlargedImageContainerDimensions: {
+                        width: '200%',
+                        height: '150%',
+                      },
+                    }}
+                  />
                 </div>
               </div>
 
               <div className='other-product-images d-flex flex-wrap gap-15'>
                 {product?.images &&
-                  product?.images.map((img) => {
+                  product?.images.map((img, i) => {
                     return (
                       <div
+                        className={i === 0 ? 'activeImage' : ''}
                         key={img?.public_id}
-                        onClick={() => setImageUrl(img?.url)}
+                        onClick={() => imageHandler(img?.url, i)}
+                        ref={addRefs}
                       >
                         <img src={img?.url} alt={img?.url} />
                       </div>
@@ -343,12 +396,13 @@ const SingleProduct = () => {
                       </div>
                     </div>
                   )}
-                  <div className='d-flex flex-column gap-10 mt-2 mb-3'>
-                    <h6 className='product-heading'>Color :</h6>
-                    {product?.color && (
+                  {product?.color?.length > 0 && (
+                    <div className='d-flex flex-column gap-10 mt-2 mb-3'>
+                      <h6 className='product-heading'>Color :</h6>
+
                       <Color colors={product?.color} setColor={setColor} />
-                    )}
-                  </div>
+                    </div>
+                  )}
                   <div className='d-flex flex-row align-items-center gap-10 mt-2 '>
                     <h6 className='product-heading'>Quantity :</h6>
                     <div>
@@ -384,7 +438,7 @@ const SingleProduct = () => {
                   <div className='d-flex align-items-center gap-30 mt-3 '>
                     <div
                       className='additional-btns'
-                      onClick={addWishlistHandler}
+                      onClick={() => addWishlistHandler(product?._id)}
                     >
                       {wishAdd ? (
                         <BsFillHeartFill size={20} color={'#028a0f'} />
