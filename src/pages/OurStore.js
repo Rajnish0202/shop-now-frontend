@@ -302,7 +302,11 @@ const OurStore = ({
                     {colorLoading && <Spinner />}
                     {colors && (
                       <div>
-                        <Color colors={colors} setColor={setColor} />
+                        <Color
+                          colors={colors}
+                          setColor={setColor}
+                          color={color}
+                        />
                       </div>
                     )}
                   </div>

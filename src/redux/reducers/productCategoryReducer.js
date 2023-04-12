@@ -6,6 +6,9 @@ import {
   ALL_PRODUCTCATEGORY_REQUEST,
   ALL_PRODUCTCATEGORY_SUCCESS,
   CLEAR_ERRORS,
+  QUICK_CATEGORY_FAIL,
+  QUICK_CATEGORY_REQUEST,
+  QUICK_CATEGORY_SUCCESS,
 } from '../constants/productCategory';
 
 export const productCategoryReducer = (
@@ -62,6 +65,41 @@ export const productCountCategoryReducer = (
       };
 
     case ALL_PRODUCTCATEGORY_COUNT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const quickCategoryReducer = (
+  state = { quickCategories: [] },
+  action
+) => {
+  switch (action.type) {
+    case QUICK_CATEGORY_REQUEST:
+      return {
+        loading: true,
+        quickCategories: [],
+      };
+
+    case QUICK_CATEGORY_SUCCESS:
+      return {
+        loading: false,
+        quickCategories: action.payload.categories,
+        counts: action.payload.count,
+      };
+
+    case QUICK_CATEGORY_FAIL:
       return {
         loading: false,
         error: action.payload,

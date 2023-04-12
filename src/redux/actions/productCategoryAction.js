@@ -8,6 +8,9 @@ import {
   ALL_PRODUCTCATEGORY_REQUEST,
   ALL_PRODUCTCATEGORY_SUCCESS,
   CLEAR_ERRORS,
+  QUICK_CATEGORY_FAIL,
+  QUICK_CATEGORY_REQUEST,
+  QUICK_CATEGORY_SUCCESS,
 } from '../constants/productCategory';
 
 export const getProductCategories = () => async (dispatch) => {
@@ -44,6 +47,28 @@ export const getProductCountCategories = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_PRODUCTCATEGORY_COUNT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const getQuickCategories = () => async (dispatch) => {
+  try {
+    dispatch({ type: QUICK_CATEGORY_REQUEST });
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/product-category/quick-category`
+    );
+
+    dispatch({ type: QUICK_CATEGORY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: QUICK_CATEGORY_FAIL,
       payload:
         (error.response &&
           error.response.data &&

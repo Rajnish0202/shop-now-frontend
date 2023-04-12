@@ -1,8 +1,10 @@
 import React from 'react';
 import { BsFacebook, BsGithub, BsInstagram, BsLinkedin } from 'react-icons/bs';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const Footer = () => {
+const Footer = ({ setCategory }) => {
+  const { quickCategories } = useSelector((state) => state.quickCategories);
   return (
     <>
       <footer className='p-3 py-4'>
@@ -92,21 +94,39 @@ const Footer = () => {
             <div className='col-3'>
               <h4 className='text-white mb-4'>Account</h4>
               <div className='d-flex flex-column'>
-                <Link className='text-white py-2 mb-1'>Search</Link>
-                <Link className='text-white py-2 mb-1'>About Us</Link>
-                <Link className='text-white py-2 mb-1'>Faq</Link>
-                <Link className='text-white py-2 mb-1'>Contact</Link>
-                <Link className='text-white py-2 mb-1'>Size Chart</Link>
+                <a href='#search' className='text-white py-2 mb-1'>
+                  Search
+                </a>
+                <Link to='about-us' className='text-white py-2 mb-1'>
+                  About Us
+                </Link>
+                <Link to='faq' className='text-white py-2 mb-1'>
+                  Faq
+                </Link>
+                <Link to='contact' className='text-white py-2 mb-1'>
+                  Contact
+                </Link>
+                <Link to='size-chart' className='text-white py-2 mb-1'>
+                  Size Chart
+                </Link>
               </div>
             </div>
             <div className='col-2'>
               <h4 className='text-white mb-4'>Quick Links</h4>
               <div className='footer-links d-flex flex-column '>
-                <Link className='text-white py-2 mb-1'>Accessories</Link>
-                <Link className='text-white py-2 mb-1'>Laptops</Link>
-                <Link className='text-white py-2 mb-1'>Headphones</Link>
-                <Link className='text-white py-2 mb-1'>Tablets</Link>
-                <Link className='text-white py-2 mb-1'>Smart Watches</Link>
+                {quickCategories &&
+                  quickCategories.map((quick) => {
+                    return (
+                      <Link
+                        key={quick?._id}
+                        to='/ourstore'
+                        className='normal-btn text-white py-2 mb-1 text-capitalize text-start'
+                        onClick={() => setCategory(quick?._id)}
+                      >
+                        {quick?.title}
+                      </Link>
+                    );
+                  })}
               </div>
             </div>
           </div>

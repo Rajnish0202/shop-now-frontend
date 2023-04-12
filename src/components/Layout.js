@@ -8,7 +8,7 @@ const Layout = ({ setCategory }) => {
     <>
       <Header setCategory={setCategory} />
       <Outlet />
-      <Footer />
+      <Footer setCategory={setCategory} />
     </>
   );
 };

@@ -13,7 +13,10 @@ const CompareCard = ({ compare, removeFromCompare }) => {
           onClick={() => removeFromCompare(compare?._id)}
         />
         <div className='product-card-image'>
-          <img src={compare?.images[0]?.url} alt={compare?.images[0]?.url} />
+          <img
+            src={compare?.images?.[0]?.url}
+            alt={compare?.images?.[0]?.url}
+          />
           <div className='compare-product-details'>
             <h5 className='title' title={compare?.title}>
               {shortenText(compare?.title, 30)}

@@ -100,6 +100,7 @@ const Header = ({ setCategory }) => {
                   placeholder='Search Product Here...'
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
+                  id='search'
                 />
                 <span
                   className='input-group-text p-3'

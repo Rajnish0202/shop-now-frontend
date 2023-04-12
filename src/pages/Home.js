@@ -265,7 +265,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
                   />
                   <div className='small-banner-content position-absolute '>
                     <h4>New Arrival</h4>
-                    <h5>Buyy iPad Air.</h5>
+                    <h5>Buy iPad Air.</h5>
                     <p>
                       From ₹2599.00 <br />
                       or ₹1023.52/mo.

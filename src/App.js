@@ -27,7 +27,10 @@ import MainLayout from './components/Admin/MainLayout';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, loadUser } from './redux/actions/userActions';
 import { useEffect, useState } from 'react';
-import { getProductCategories } from './redux/actions/productCategoryAction';
+import {
+  getProductCategories,
+  getQuickCategories,
+} from './redux/actions/productCategoryAction';
 import { getBrands } from './redux/actions/brandAction';
 import { getTypes } from './redux/actions/productTypeAction';
 import { getSizes } from './redux/actions/sizeAction';
@@ -44,6 +47,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { BACKEND_URL } from './utils/backendUrl';
 import OrderDetails from './pages/User/OrderDetails';
+import Faq from './pages/Faq';
+import SizeCart from './pages/SizeCart';
 
 axios.defaults.withCredentials = true;
 
@@ -74,6 +79,7 @@ function App() {
     getStripeApiKey();
 
     dispatch(getProductCategories());
+    dispatch(getQuickCategories());
     dispatch(getBrands());
     dispatch(getTypes());
     dispatch(getSizes());
@@ -136,7 +142,7 @@ function App() {
           <Route path='/blogs' element={<Blogs />} />
           <Route path='/blogs/:id' element={<SingleBlog />} />
 
-          <Route path='/about' element={<About />} />
+          <Route path='/about-us' element={<About />} />
 
           <Route path='/contact' element={<Contact />} />
 
@@ -187,6 +193,8 @@ function App() {
           <Route path='/refund-policy' element={<RefundPolicy />} />
           <Route path='/shipping-policy' element={<ShippingPolicy />} />
           <Route path='/termsandconditions' element={<TermsAndCondition />} />
+          <Route path='/faq' element={<Faq />} />
+          <Route path='/size-chart' element={<SizeCart />} />
 
           <Route
             path='/user-profile'

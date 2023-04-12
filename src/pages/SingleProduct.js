@@ -381,15 +381,19 @@ const SingleProduct = () => {
                     <div className='d-flex flex-column gap-5 my-2'>
                       <h6 className='product-heading'>Size :</h6>
                       <div className='d-flex flex-wrap gap-15 mt-2 mb-3'>
-                        {product?.sizes.map((size) => {
+                        {product?.sizes.map((curSize) => {
                           return (
                             <span
-                              className='badge border border-1 bg-white text-dark '
-                              key={size?._id}
-                              onClick={() => setSize(size?._id)}
+                              className={
+                                size === curSize?._id
+                                  ? 'badge border border-2 bg-white border-success text-success'
+                                  : 'badge border border-1 bg-white text-dark'
+                              }
+                              key={curSize?._id}
+                              onClick={() => setSize(curSize?._id)}
                               style={{ cursor: 'pointer' }}
                             >
-                              {size?.title}
+                              {curSize?.title}
                             </span>
                           );
                         })}
@@ -400,7 +404,11 @@ const SingleProduct = () => {
                     <div className='d-flex flex-column gap-10 mt-2 mb-3'>
                       <h6 className='product-heading'>Color :</h6>
 
-                      <Color colors={product?.color} setColor={setColor} />
+                      <Color
+                        colors={product?.color}
+                        setColor={setColor}
+                        color={color}
+                      />
                     </div>
                   )}
                   <div className='d-flex flex-row align-items-center gap-10 mt-2 '>

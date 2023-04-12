@@ -19,6 +19,7 @@ import {
 import {
   productCategoryReducer,
   productCountCategoryReducer,
+  quickCategoryReducer,
 } from './reducers/productCategoryReducer';
 import { productBrandReducer } from './reducers/productBrandReducer';
 import {
@@ -57,6 +58,7 @@ const reducer = combineReducers({
   userAddress: userAddressReducer,
   products: productReducer,
   productCategories: productCategoryReducer,
+  quickCategories: quickCategoryReducer,
   productCountCategories: productCountCategoryReducer,
   productDetails: productDetailsReducer,
   randomProducts: randomProductReducer,
@@ -88,9 +90,6 @@ const reducer = combineReducers({
 });
 
 let initialState = {
-  // cart: {
-  //   cartItems: [],
-  // },
   compareProducts: {
     compareItems: localStorage.getItem('compareItems')
       ? JSON.parse(localStorage.getItem('compareItems'))

@@ -1,10 +1,27 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import StarRatings from 'react-star-ratings';
 import { shortenText } from '../utils/ShortenText';
+import { useDispatch } from 'react-redux';
+import { addWishlist } from '../redux/actions/wishlistAction';
+import { addItemsToCompare } from '../redux/actions/compareAction';
+import { toast } from 'react-toastify';
 
 const ProductCard = ({ grid, product }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const compareHandler = (slug) => {
+    dispatch(addItemsToCompare(slug));
+    toast.success('Added to compare list.');
+  };
+  const wishHandler = (id) => {
+    dispatch(addWishlist(id));
+  };
+  const viewHandler = (slug) => {
+    navigate(`/product/${slug}`);
+  };
 
   return (
     <div
@@ -17,7 +34,7 @@ const ProductCard = ({ grid, product }) => {
         className='product-card position-relative'
       >
         <div className='wishlist-icon position-absolute'>
-          <button>
+          <button onClick={() => wishHandler(product?._id)}>
             <img src='/assests/wish.svg' alt='wishlist' />
           </button>
         </div>
@@ -28,9 +45,9 @@ const ProductCard = ({ grid, product }) => {
         <div className='product-details'>
           <h6 className='brand'>{product?.brand?.title}</h6>
           <h5 className='title' title={product?.title}>
-            {grid && grid >= 6
-              ? product?.title
-              : grid && grid < 6 && grid && grid > 3
+            {grid && grid > 6
+              ? shortenText(product?.title, 50)
+              : grid && grid <= 6 && grid && grid > 3
               ? shortenText(product?.title, 30)
               : shortenText(product?.title, 18)}
           </h5>
@@ -45,21 +62,19 @@ const ProductCard = ({ grid, product }) => {
               grid === 12 || grid === 6 ? 'd-block' : 'd-none'
             }`}
           >
-            {product?.description}
+            {grid === 6 || grid === 12
+              ? shortenText(product?.description, 450)
+              : product?.description}
           </p>
           <p className='price'>₹{product?.price}</p>
         </div>
         <div className='action-bar position-absolute'>
           <div className='d-flex flex-column gap-15'>
-            <button to=''>
+            <button onClick={() => compareHandler(product?.slug)}>
               <img src='/assests/prodcompare.svg' alt='compare' />
             </button>
-            <button to=''>
+            <button onClick={() => viewHandler(product?.slug)}>
               <img src='/assests/view.svg' alt='view' />
-            </button>
-
-            <button to=''>
-              <img src='/assests/add-cart.svg' alt='cart' />
             </button>
           </div>
         </div>
