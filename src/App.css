@@ -1384,3 +1384,12 @@ footer .input-group-text {
 }
 
 /* FAQ Ends */
+
+/* Size Chart */
+
+.size-chart .table tbody td,
+.size-chart .table thead th {
+  padding: 1rem !important;
+}
+
+/* Size Chart Ends */

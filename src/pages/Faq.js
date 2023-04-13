@@ -34,11 +34,13 @@ const Faq = () => {
         <div className='container-xxl'>
           <div className='row'>
             <h3 className='text-center mb-4'>
-              FAQs (
-              {faqs?.faqCount > 10
-                ? faqs?.faqCount
-                : faqs?.faqCount?.toString().padStart(2, '0')}
-              )
+              <u>
+                FAQs (
+                {faqs?.faqCount > 10
+                  ? faqs?.faqCount
+                  : faqs?.faqCount?.toString().padStart(2, '0')}
+                )
+              </u>
             </h3>
             <div className='col-12 d-flex gap-15'>
               <div className='col-3'>

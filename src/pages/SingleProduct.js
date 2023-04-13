@@ -5,7 +5,12 @@ import ProductCard from '../components/ProductCard';
 import MetaData from '../utils/MetaData';
 import Color from '../components/Color';
 import ReactImageMagnify from 'react-image-magnify';
-import { BsFillHeartFill, BsHeart, BsLink } from 'react-icons/bs';
+import {
+  BsFillBarChartLineFill,
+  BsFillHeartFill,
+  BsHeart,
+  BsLink,
+} from 'react-icons/bs';
 import { TiArrowShuffle } from 'react-icons/ti';
 import { MdOutlineLocalShipping } from 'react-icons/md';
 import { toast } from 'react-toastify';
@@ -380,7 +385,7 @@ const SingleProduct = () => {
                   {product?.sizes?.length > 0 && (
                     <div className='d-flex flex-column gap-5 my-2'>
                       <h6 className='product-heading'>Size :</h6>
-                      <div className='d-flex flex-wrap gap-15 mt-2 mb-3'>
+                      <div className='d-flex flex-wrap gap-15 mt-2'>
                         {product?.sizes.map((curSize) => {
                           return (
                             <span
@@ -398,6 +403,17 @@ const SingleProduct = () => {
                           );
                         })}
                       </div>
+                      <Link
+                        to='/size-chart'
+                        className='d-flex align-items-center gap-15 normal-btn'
+                      >
+                        <p className='mb-0' style={{ marginTop: '4px' }}>
+                          <u>Size Chart</u>
+                        </p>
+                        <p className='mb-0'>
+                          <BsFillBarChartLineFill size={18} />
+                        </p>
+                      </Link>
                     </div>
                   )}
                   {product?.color?.length > 0 && (
