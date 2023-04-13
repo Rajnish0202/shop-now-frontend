@@ -49,6 +49,7 @@ import { BACKEND_URL } from './utils/backendUrl';
 import OrderDetails from './pages/User/OrderDetails';
 import Faq from './pages/Faq';
 import SizeCart from './pages/SizeCart';
+import { getAllFaqCategories } from './redux/actions/faqCategoryActions';
 
 axios.defaults.withCredentials = true;
 
@@ -85,6 +86,7 @@ function App() {
     dispatch(getSizes());
     dispatch(getAllColors());
     dispatch(userCart());
+    dispatch(getAllFaqCategories());
   }, [dispatch, error, isAuthenticated]);
 
   return (

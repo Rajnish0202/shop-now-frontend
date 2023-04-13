@@ -16,6 +16,7 @@ const CompareCard = ({ compare, removeFromCompare }) => {
           <img
             src={compare?.images?.[0]?.url}
             alt={compare?.images?.[0]?.url}
+            className='img-fluid'
           />
           <div className='compare-product-details'>
             <h5 className='title' title={compare?.title}>

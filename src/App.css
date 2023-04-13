@@ -1362,3 +1362,25 @@ footer .input-group-text {
 }
 
 /* Payment Component Ends */
+
+/* FAQ  */
+
+.accordion-item {
+  margin: 15px 0;
+}
+
+.accordion-button:focus {
+  border-color: none !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.25);
+}
+
+.accordion-item:not(:first-of-type) {
+  border-top: initial;
+}
+
+.accordion-button:not(.collapsed) {
+  color: initial;
+  background-color: initial;
+}
+
+/* FAQ Ends */

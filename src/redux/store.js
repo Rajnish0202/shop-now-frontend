@@ -51,6 +51,8 @@ import {
   singleBlogReducer,
 } from './reducers/blogReducer';
 import { allBlogCategoryReducer } from './reducers/blogCategoryReducer';
+import { allFaqReducer } from './reducers/faqReducer';
+import { allFaqCategoryReducer } from './reducers/faqCategoryReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -87,6 +89,8 @@ const reducer = combineReducers({
   blogCategory: allBlogCategoryReducer,
   likeBlog: likeBlogReducer,
   dislikeBlog: dislikeBlogReducer,
+  faqs: allFaqReducer,
+  faqCategories: allFaqCategoryReducer,
 });
 
 let initialState = {
