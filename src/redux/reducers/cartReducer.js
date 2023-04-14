@@ -17,6 +17,10 @@ import {
   REMOVE_ALL_CART_ITEM_SUCCESS,
   REMOVE_ALL_CART_ITEM_FAIL,
   REMOVE_ALL_CART_ITEM_RESET,
+  UPDATE_CART_QUANTITY_REQUEST,
+  UPDATE_CART_QUANTITY_SUCCESS,
+  UPDATE_CART_QUANTITY_FAIL,
+  UPDATE_CART_QUANTITY_RESET,
 } from '../constants/cartConstants';
 
 export const addCartReducer = (
@@ -124,6 +128,45 @@ export const cartReducer = (state = { cart: [] }, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const updateCartReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_CART_QUANTITY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_CART_QUANTITY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdatedQty: true,
+      };
+
+    case UPDATE_CART_QUANTITY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case UPDATE_CART_QUANTITY_RESET:
+      return {
+        ...state,
+        isUpdatedQty: false,
       };
 
     case CLEAR_ERRORS:

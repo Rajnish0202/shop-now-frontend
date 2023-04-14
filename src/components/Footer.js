@@ -56,16 +56,32 @@ const Footer = ({ setCategory }) => {
                   rajnish.0202kumar@gmail.com
                 </Link>
                 <div className='social_icons d-flex align-items-center gap-30 mt-2'>
-                  <Link to='' className='text-white'>
+                  <Link
+                    to='https://www.linkedin.com/in/rajnish-kumar-501b03257'
+                    className='text-white'
+                    target='_blank'
+                  >
                     <BsLinkedin size={25} />
                   </Link>
-                  <Link to='' className='text-white'>
+                  <Link
+                    to='https://github.com/Rajnish0202'
+                    className='text-white'
+                    target='_blank'
+                  >
                     <BsGithub size={25} />
                   </Link>
-                  <Link to='' className='text-white'>
+                  <Link
+                    to='https://www.instagram.com/rajnish.raichu92'
+                    target='_blank'
+                    className='text-white'
+                  >
                     <BsInstagram size={25} />
                   </Link>
-                  <Link to='' className='text-white'>
+                  <Link
+                    to='https://www.facebook.com/rajnish.kumar.169067'
+                    target='_blank'
+                    className='text-white'
+                  >
                     <BsFacebook size={25} />
                   </Link>
                 </div>
@@ -97,16 +113,16 @@ const Footer = ({ setCategory }) => {
                 <a href='#search' className='text-white py-2 mb-1'>
                   Search
                 </a>
-                <Link to='about-us' className='text-white py-2 mb-1'>
+                <Link to='/about-us' className='text-white py-2 mb-1'>
                   About Us
                 </Link>
-                <Link to='faq' className='text-white py-2 mb-1'>
+                <Link to='/faq' className='text-white py-2 mb-1'>
                   Faq
                 </Link>
-                <Link to='contact' className='text-white py-2 mb-1'>
+                <Link to='/contact' className='text-white py-2 mb-1'>
                   Contact
                 </Link>
-                <Link to='size-chart' className='text-white py-2 mb-1'>
+                <Link to='/size-chart' className='text-white py-2 mb-1'>
                   Size Chart
                 </Link>
               </div>

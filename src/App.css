@@ -1202,6 +1202,31 @@ footer .input-group-text {
   justify-content: center;
   padding: 10px;
 }
+
+.trash-btn:hover {
+  color: var(--color-131921);
+  background: #bf4800;
+  transition: all 0.5s linear;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.action-btn:hover {
+  border-color: var(--color-bf4800);
+  color: var(--color-bf4800);
+  transition: all 0.5s linear;
+}
 /* Cart Page Ends */
 
 /* Checkout Page */

@@ -10,6 +10,9 @@ import {
   REMOVE_CART_ITEM_REQUEST,
   REMOVE_CART_ITEM_SUCCESS,
   SAVE_SHIPPING_INFO,
+  UPDATE_CART_QUANTITY_FAIL,
+  UPDATE_CART_QUANTITY_REQUEST,
+  UPDATE_CART_QUANTITY_SUCCESS,
   USER_CART_FAIL,
   USER_CART_REQUEST,
   USER_CART_SUCCESS,
@@ -44,6 +47,34 @@ export const addItemsToCart =
       });
     }
   };
+
+// Update Cart
+
+export const updateQtyInCart = (productId, qty) => async (dispatch) => {
+  console.log(productId, qty);
+  try {
+    dispatch({
+      type: UPDATE_CART_QUANTITY_REQUEST,
+    });
+
+    const { data } = await axios.put(`${BACKEND_URL}/user/cart-update`, {
+      productId,
+      count: +qty,
+    });
+
+    dispatch({ type: UPDATE_CART_QUANTITY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_CART_QUANTITY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
 
 export const userCart = () => async (dispatch) => {
   try {
