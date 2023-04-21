@@ -22,6 +22,9 @@ import {
   RELATED_PRODUCT_FAIL,
   RELATED_PRODUCT_REQUEST,
   RELATED_PRODUCT_SUCCESS,
+  SPECIAL_PRODUCT_FAIL,
+  SPECIAL_PRODUCT_REQUEST,
+  SPECIAL_PRODUCT_SUCCESS,
 } from '../constants/productConstants';
 
 export const productReducer = (state = { products: [] }, action) => {
@@ -254,6 +257,41 @@ export const featuredProductReducer = (
       };
 
     case FEATURED_PRODUCT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const specialProductReducer = (
+  state = { specialProducts: [] },
+  action
+) => {
+  switch (action.type) {
+    case SPECIAL_PRODUCT_REQUEST:
+      return {
+        loading: true,
+        specialProducts: [],
+      };
+
+    case SPECIAL_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        specialProducts: action.payload.special,
+        totalSpecial: action.payload.specialCount,
+      };
+
+    case SPECIAL_PRODUCT_FAIL:
       return {
         loading: false,
         error: action.payload,

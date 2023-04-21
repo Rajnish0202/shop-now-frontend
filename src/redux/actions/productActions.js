@@ -24,6 +24,9 @@ import {
   FEATURED_PRODUCT_REQUEST,
   FEATURED_PRODUCT_SUCCESS,
   FEATURED_PRODUCT_FAIL,
+  SPECIAL_PRODUCT_REQUEST,
+  SPECIAL_PRODUCT_SUCCESS,
+  SPECIAL_PRODUCT_FAIL,
 } from '../constants/productConstants';
 
 export const getProducts =
@@ -595,6 +598,30 @@ export const getFeaturedProducts = (limit) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: FEATURED_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Featured Products
+
+export const getSpecialProducts = (limit) => async (dispatch) => {
+  try {
+    dispatch({ type: SPECIAL_PRODUCT_REQUEST });
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/product/special-product?limit=${limit}`
+    );
+
+    dispatch({ type: SPECIAL_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: SPECIAL_PRODUCT_FAIL,
       payload:
         (error.response &&
           error.response.data &&

@@ -10,6 +10,7 @@ import {
   productReducer,
   randomProductReducer,
   relatedProductReducer,
+  specialProductReducer,
 } from './reducers/productReducers';
 import {
   userAddressReducer,
@@ -71,6 +72,7 @@ const reducer = combineReducers({
   relatedProducts: relatedProductReducer,
   popularProducts: popularProductReducer,
   featuredProducts: featuredProductReducer,
+  specialProducts: specialProductReducer,
   productBrand: productBrandReducer,
   productType: productTypeReducer,
   productTypeCount: productTypeCountReducer,

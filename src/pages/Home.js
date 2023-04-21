@@ -11,6 +11,7 @@ import {
   clearErrors,
   getFeaturedProducts,
   getPopularProducts,
+  getSpecialProducts,
 } from '../redux/actions/productActions';
 import { toast } from 'react-toastify';
 import { Spinner } from '../components/Loader/Loader';
@@ -24,6 +25,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
   const [limitFeatured, setLimitFeatured] = useState(4);
   const [limitType, setLimitType] = useState(4);
   const [blogLimit, setBlogLimit] = useState(4);
+  const [specialLimit, setSpecialLimit] = useState(4);
 
   const { loading, error, popularProducts, totalPopular } = useSelector(
     (state) => state.popularProducts
@@ -40,6 +42,13 @@ const Home = ({ setCategory, setType, setBrand }) => {
     error: countError,
     productCountCategories,
   } = useSelector((state) => state.productCountCategories);
+
+  const {
+    loading: specialLoading,
+    error: specialerror,
+    specialProducts,
+    totalSpecial,
+  } = useSelector((state) => state.specialProducts);
 
   const {
     loading: typeLoading,
@@ -154,6 +163,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
     dispatch(getProductCountCategories());
     dispatch(getBrands());
     dispatch(getAllBlogs(blogLimit));
+    dispatch(getSpecialProducts(specialLimit));
   }, [
     dispatch,
     error,
@@ -166,6 +176,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
     brandError,
     blogLimit,
     blogError,
+    specialLimit,
   ]);
 
   return (
@@ -418,7 +429,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
                       <img src={type?.image?.url} alt={type?.image?.url} />
                       <div className='famous-content position-absolute'>
                         <h5>Big Screen</h5>
-                        <h6 className='text-capitalize' title='{type?.title}'>
+                        <h6 className='text-capitalize' title={type?.title}>
                           {type?.title}
                         </h6>
                         <p>
@@ -457,9 +468,11 @@ const Home = ({ setCategory, setType, setBrand }) => {
             </div>
           </div>
           <div className='row'>
-            <SpecialProduct />
-            <SpecialProduct />
-            <SpecialProduct />
+            {specialLoading && <Spinner />}
+            {specialProducts &&
+              specialProducts?.map((special) => {
+                return <SpecialProduct key={special?._id} special={special} />;
+              })}
           </div>
         </div>
       </section>

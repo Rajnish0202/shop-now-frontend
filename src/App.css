@@ -504,12 +504,19 @@ footer .input-group-text {
 }
 
 .special-product-card .special-image {
-  height: 200px;
+  min-width: 200px;
 }
 
 .special-product-card .special-image img {
   height: 100%;
   object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.special-product-content {
+  padding: 10px 20px;
 }
 
 .special-product-card .discount-till span {
