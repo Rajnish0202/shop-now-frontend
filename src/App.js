@@ -50,6 +50,7 @@ import OrderDetails from './pages/User/OrderDetails';
 import Faq from './pages/Faq';
 import SizeCart from './pages/SizeCart';
 import { getAllFaqCategories } from './redux/actions/faqCategoryActions';
+import Invoice from './pages/User/Invoice';
 
 axios.defaults.withCredentials = true;
 
@@ -210,6 +211,10 @@ function App() {
           <Route
             path='/user-orders/:id'
             element={isAuthenticated ? <OrderDetails /> : <Login />}
+          />
+          <Route
+            path='/invoice/:id'
+            element={isAuthenticated ? <Invoice /> : <Login />}
           />
 
           <Route

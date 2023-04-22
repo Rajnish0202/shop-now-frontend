@@ -30,10 +30,13 @@ const SpecialProduct = ({ special }) => {
             <div className='price mt-2'>
               <span className='red-p'>
                 ₹
-                {((special?.price * special?.special?.offer) / 100)?.toFixed(2)}
+                {(
+                  special?.price -
+                  (special?.price * special?.special?.offer) / 100
+                )?.toFixed(2)}
               </span>
-              &nbsp;
-              <strike>₹{special?.price}</strike>
+              &nbsp; &nbsp;
+              <strike>₹{special?.price?.toFixed(2)}</strike>
               <div className='discount-till d-flex align-items-center gap-10 mt-2'>
                 <Timer deadline={special?.special?.specialTime} />
               </div>

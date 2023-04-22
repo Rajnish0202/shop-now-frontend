@@ -322,7 +322,31 @@ const SingleProduct = () => {
                 </div>
 
                 <div className='border-bottom'>
-                  <p className='price'>₹{product?.price}</p>
+                  {product?.special?.offer && (
+                    <div className='d-flex align-items-center gap-15 pt-2'>
+                      <p className='text-danger mb-0 fs-4'>
+                        -{product?.special?.offer}% off
+                      </p>
+                      <p className='mb-0 fw-bolder'>
+                        ₹
+                        {product?.price -
+                          (
+                            (product?.price * product?.special?.offer) /
+                            100
+                          ).toFixed(2)}
+                      </p>
+                    </div>
+                  )}
+                  {product?.special?.offer ? (
+                    <p
+                      className='price'
+                      style={{ textDecoration: 'line-through' }}
+                    >
+                      ₹{product?.price?.toFixed(2)}
+                    </p>
+                  ) : (
+                    <p className='price'>₹{product?.price?.toFixed(2)}</p>
+                  )}
                   <div className='d-flex  align-items-center gap-5'>
                     {product?.ratings && (
                       <StarRatings

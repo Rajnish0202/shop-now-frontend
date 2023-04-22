@@ -253,7 +253,8 @@ export const featuredProductReducer = (
     case FEATURED_PRODUCT_SUCCESS:
       return {
         loading: false,
-        featuredProducts: action.payload,
+        featuredProducts: action.payload.featured,
+        featuredTotal: action.payload.featuredTotal,
       };
 
     case FEATURED_PRODUCT_FAIL:

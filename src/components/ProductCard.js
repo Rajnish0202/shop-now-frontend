@@ -66,7 +66,56 @@ const ProductCard = ({ grid, product }) => {
               ? shortenText(product?.description, 450)
               : product?.description}
           </p>
-          <p className='price'>₹{product?.price}</p>
+          {product?.special?.offer && (
+            <div
+              className={`d-flex align-items-center price ${
+                grid === 3 ? 'gap-10' : 'gap-15'
+              }`}
+            >
+              <p
+                className='text-danger mb-0'
+                style={{
+                  fontSize: `${grid === 3 ? '12px' : '16px'}`,
+                }}
+              >
+                -{product?.special?.offer}% off
+              </p>
+              <p
+                className='mb-0 fw-bold'
+                style={{
+                  fontSize: `${grid === 3 ? '12px' : '16px'}`,
+                }}
+              >
+                ₹{' '}
+                {product?.price -
+                  ((product?.price * product?.special?.offer) / 100).toFixed(2)}
+              </p>
+              <div
+                style={{
+                  fontSize: `${grid === 3 ? '12px' : '16px'}`,
+                }}
+              >
+                {product?.special?.offer && (
+                  <p
+                    className='mb-0 text-dark fw-bold'
+                    style={{ textDecoration: 'line-through' }}
+                  >
+                    ₹ {product?.price?.toFixed(2)}
+                  </p>
+                )}
+              </div>
+            </div>
+          )}
+          {!product?.special?.offer && (
+            <p
+              className='price mb-0 fw-bold'
+              style={{
+                fontSize: `${grid === 3 ? '12px' : '16px'}`,
+              }}
+            >
+              ₹ {product?.price?.toFixed(2)}
+            </p>
+          )}
         </div>
         <div className='action-bar position-absolute'>
           <div className='d-flex flex-column gap-15'>

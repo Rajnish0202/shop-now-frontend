@@ -121,7 +121,8 @@ const CartCard = ({ product }) => {
       <div className='cart-col-4'>
         <div>
           <h5 className='mb-0'>
-            ₹ {`${product?.price}` * `${product?.count}`}
+            ₹{' '}
+            {`${product?.price?.toFixed(2)}` * `${product?.count?.toFixed(2)}`}
           </h5>
         </div>
       </div>

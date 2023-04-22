@@ -103,17 +103,16 @@ const Blogs = () => {
                   })}
               </div>
               <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
-                {blogs?.blogCount >= limit && (
+                {limit > 8 && (
                   <button className='button' onClick={blogLessHandler}>
                     Load Less
                   </button>
                 )}
-                {limit < blogs?.blogCount &&
-                  blogs?.allBlog?.length <= blogs?.blogCount && (
-                    <button className='button' onClick={blogMoreHandler}>
-                      Load More
-                    </button>
-                  )}
+                {limit < blogs?.blogCount && (
+                  <button className='button' onClick={blogMoreHandler}>
+                    Load More
+                  </button>
+                )}
               </div>
             </div>
           </div>

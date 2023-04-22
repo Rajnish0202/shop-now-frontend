@@ -35,6 +35,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
     loading: featuredLoading,
     error: featuredError,
     featuredProducts,
+    featuredTotal,
   } = useSelector((state) => state.featuredProducts);
 
   const {
@@ -45,10 +46,14 @@ const Home = ({ setCategory, setType, setBrand }) => {
 
   const {
     loading: specialLoading,
-    error: specialerror,
+    error: specialError,
     specialProducts,
     totalSpecial,
   } = useSelector((state) => state.specialProducts);
+
+  const filterSpecial = specialProducts?.filter(
+    (special) => Date.parse(special?.special?.specialTime) > Date.now()
+  );
 
   const {
     loading: typeLoading,
@@ -126,6 +131,32 @@ const Home = ({ setCategory, setType, setBrand }) => {
     setLimitType((prev) => prev - 4);
   };
 
+  const blogLessHandler = () => {
+    if (blogLimit < 4) {
+      return;
+    }
+    setBlogLimit((prev) => prev - 4);
+  };
+
+  const blogMoreHandler = () => {
+    if (blogLimit > blogs?.blogCount) return;
+
+    setBlogLimit((prev) => prev + 4);
+  };
+
+  const specialLessHandler = () => {
+    if (specialLimit < 4) {
+      return;
+    }
+    setSpecialLimit((prev) => prev - 4);
+  };
+
+  const specialMoreHandler = () => {
+    if (specialLimit > blogs?.blogCount) return;
+
+    setSpecialLimit((prev) => prev + 4);
+  };
+
   useEffect(() => {
     if (error) {
       toast.error(error);
@@ -157,6 +188,11 @@ const Home = ({ setCategory, setType, setBrand }) => {
       dispatch(clearErrors());
     }
 
+    if (specialError) {
+      toast.error(specialError);
+      dispatch(clearErrors());
+    }
+
     dispatch(getPopularProducts(limit));
     dispatch(getFeaturedProducts(limitFeatured));
     dispatch(getAllTypesCount(limitType));
@@ -177,6 +213,7 @@ const Home = ({ setCategory, setType, setBrand }) => {
     blogLimit,
     blogError,
     specialLimit,
+    specialError,
   ]);
 
   return (
@@ -391,11 +428,17 @@ const Home = ({ setCategory, setType, setBrand }) => {
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
-              <h3 className='section-heading'>Featured Collection </h3>
+              <h3 className='section-heading'>
+                Featured Collection (
+                {featuredTotal > 10
+                  ? featuredTotal
+                  : featuredTotal?.toString().padStart(2, 0)}
+                ){' '}
+              </h3>
             </div>
             {featuredLoading && <Spinner />}
             {featuredProducts &&
-              featuredProducts.map((product) => {
+              featuredProducts?.map((product) => {
                 return <ProductCard product={product} key={product?.slug} />;
               })}
             <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
@@ -404,9 +447,11 @@ const Home = ({ setCategory, setType, setBrand }) => {
                   Load Less
                 </button>
               )}
-              <button className='button' onClick={featuredMoreHandler}>
-                Load More
-              </button>
+              {limitFeatured <= featuredTotal && (
+                <button className='button' onClick={featuredMoreHandler}>
+                  Load More
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -452,9 +497,11 @@ const Home = ({ setCategory, setType, setBrand }) => {
                   Load Less
                 </button>
               )}
-              <button className='button' onClick={typeMoreHandler}>
-                Load More
-              </button>
+              {limitType <= countTypes.length && (
+                <button className='button' onClick={typeMoreHandler}>
+                  Load More
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -464,15 +511,34 @@ const Home = ({ setCategory, setType, setBrand }) => {
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
-              <h3 className='section-heading'>Special Products</h3>
+              <h3 className='section-heading'>
+                Special Products (
+                {totalSpecial > 9
+                  ? totalSpecial
+                  : totalSpecial?.toString().padStart(2, '0')}
+                )
+              </h3>
             </div>
           </div>
           <div className='row'>
             {specialLoading && <Spinner />}
-            {specialProducts &&
-              specialProducts?.map((special) => {
+            {filterSpecial &&
+              filterSpecial?.map((special) => {
                 return <SpecialProduct key={special?._id} special={special} />;
               })}
+            <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
+              {specialLimit > 4 ||
+                (specialLimit >= 2 && (
+                  <button className='button' onClick={specialLessHandler}>
+                    Load Less
+                  </button>
+                ))}
+              {specialLimit < totalSpecial && (
+                <button className='button' onClick={specialMoreHandler}>
+                  Load More
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -503,9 +569,11 @@ const Home = ({ setCategory, setType, setBrand }) => {
                   Load Less
                 </button>
               )}
-              <button className='button' onClick={popularMoreHandler}>
-                Load More
-              </button>
+              {limit < totalPopular && (
+                <button className='button' onClick={popularMoreHandler}>
+                  Load More
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -556,6 +624,18 @@ const Home = ({ setCategory, setType, setBrand }) => {
               blogs?.allBlog?.map((blog) => {
                 return <BlogCard blog={blog} key={blog?._id} />;
               })}
+            <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
+              {blogLimit > 4 && (
+                <button className='button' onClick={blogLessHandler}>
+                  Load Less
+                </button>
+              )}
+              {blogLimit !== blogs?.blogCount && (
+                <button className='button' onClick={blogMoreHandler}>
+                  Load More
+                </button>
+              )}
+            </div>
           </div>
         </div>
       </section>

@@ -441,6 +441,8 @@ const OurStore = ({
                       <option value='-price'>Price, high to low</option>
                       <option value='-createdAt'>Date, new to old</option>
                       <option value='createdAt'>Date, old to new</option>
+                      <option value='special.offer'>Offer, low to high</option>
+                      <option value='-special.offer'>Offer, high to low</option>
                     </select>
                     <button
                       className='normal-btn w-100'
@@ -516,14 +518,14 @@ const OurStore = ({
                   })}
               </div>
               <div className='load-more d-flex align-items-center justify-content-center gap-30'>
-                {products?.length >= limit && (
-                  <button className='button' onClick={loadMoreHandler}>
-                    Load More ({products.length})
+                {limit > 8 && (
+                  <button className='button' onClick={loadLessHandler}>
+                    Load Less
                   </button>
                 )}
-                {products?.length >= totalProducts && (
-                  <button className='button' onClick={loadLessHandler}>
-                    Load Less ({products.length})
+                {limit <= totalProducts && (
+                  <button className='button' onClick={loadMoreHandler}>
+                    Load More ({products.length})
                   </button>
                 )}
               </div>

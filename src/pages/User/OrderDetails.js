@@ -14,7 +14,9 @@ const OrderDetails = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(orderdetails(id));
+    if (id) {
+      dispatch(orderdetails(id));
+    }
   }, [dispatch, id]);
 
   return (
@@ -195,6 +197,7 @@ const OrderDetails = () => {
               style={{
                 boxShadow: '0 0 10px rgba(0, 0, 0, 0.25)',
                 borderRadius: '10px',
+                width: '24%',
               }}
             >
               <ul className='p-4'>
@@ -261,9 +264,11 @@ const OrderDetails = () => {
                         }}
                       >
                         ₹
-                        {order?.cartTotal +
+                        {(
+                          order?.cartTotal +
                           order?.paymentIntent?.taxPrice +
-                          order?.paymentIntent?.shippingPrice}
+                          order?.paymentIntent?.shippingPrice
+                        ).toFixed(2)}
                       </p>
                     </div>
                     {order?.totalAfterDiscount > 1 && (
@@ -275,6 +280,11 @@ const OrderDetails = () => {
                   </div>
                 </li>
               </ul>
+              <div className='d-flex align-items-center justify-content-center'>
+                <Link to={`/invoice/${order?._id}`} className='btn btn-primary'>
+                  Download Invoice
+                </Link>
+              </div>
             </div>
           </div>
         )}

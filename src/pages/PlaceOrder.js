@@ -345,10 +345,14 @@ const PlaceOrder = () => {
                       ₹{cartTotal?.toFixed(2)}
                     </p>
                   </div>
-                  <div className='d-flex align-items-center justify-content-between my-2'>
-                    <p className='fw-bold mb-0'>After Discount:</p>
-                    <p className='mb-0'>₹{totalAfterDiscount?.toFixed(2)}</p>
-                  </div>
+                  {totalAfterDiscount ? (
+                    <div className='d-flex align-items-center justify-content-between my-2'>
+                      <p className='fw-bold mb-0'>After Discount:</p>
+                      <p className='mb-0'>₹{totalAfterDiscount?.toFixed(2)}</p>
+                    </div>
+                  ) : (
+                    ''
+                  )}
                   <div className='d-flex align-items-center justify-content-between my-2'>
                     <p className='fw-bold mb-0'>Tax:</p>
                     <p className='mb-0'>₹{taxPrice?.toFixed(2)}</p>
