@@ -21,6 +21,12 @@ import {
   USER_ADDRESS_FAIL,
   USER_ADDRESS_REQUEST,
   USER_ADDRESS_SUCCESS,
+  FORGOT_PASSWORD_REQUEST,
+  FORGOT_PASSWORD_SUCCESS,
+  FORGOT_PASSWORD_FAIL,
+  RESET_PASSWORD_REQUEST,
+  RESET_PASSWORD_SUCCESS,
+  RESET_PASSWORD_FAIL,
 } from '../constants/userConstants';
 
 import { toast } from 'react-toastify';
@@ -74,9 +80,9 @@ export const loginUser = (formData) => async (dispatch) => {
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      // mode: 'cors',
-      // credentials: 'include',
-      // withCredentials: true,
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
     };
 
     const { data } = await axios.post(
@@ -274,6 +280,80 @@ export const saveAddress = (formData) => async (dispatch) => {
     toast.error(error);
   }
 };
+
+// FORGOT PASSWORD
+
+export const forgotPassword = (email) => async (dispatch) => {
+  try {
+    dispatch({ type: FORGOT_PASSWORD_REQUEST });
+
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   mode: 'cors',
+    //   credentials: 'include',
+    //   withCredentials: true,
+    // };
+
+    const { data } = await axios.post(
+      `${BACKEND_URL}/user/forgot-password`,
+      { email }
+      // config
+    );
+
+    dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: FORGOT_PASSWORD_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// RESET PASSWORD
+
+export const resetPassword =
+  (password, confirmPassword, resetToken) => async (dispatch) => {
+    try {
+      dispatch({ type: RESET_PASSWORD_REQUEST });
+
+      // const config = {
+      //   headers: {
+      //     Accept: 'application/json',
+      //     'Content-Type': 'application/json',
+      //   },
+      //   // mode: 'cors',
+      //   // credentials: 'include',
+      //   // withCredentials: true,
+      // };
+
+      const { data } = await axios.put(
+        `${BACKEND_URL}/user/reset-password/${resetToken}`,
+        { password, confirmPassword }
+        // config
+      );
+
+      dispatch({ type: RESET_PASSWORD_SUCCESS, payload: data });
+      toast.success('Password Reset Successfuly, Please Login.');
+    } catch (error) {
+      dispatch({
+        type: RESET_PASSWORD_FAIL,
+        payload:
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString(),
+      });
+      toast.error(error);
+    }
+  };
 
 // export const deleteUser = () => async (dispatch) => {
 //   try {

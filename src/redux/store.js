@@ -16,6 +16,7 @@ import {
   userAddressReducer,
   userProfileReducer,
   userReducer,
+  forgotPasswordReducer,
 } from './reducers/userReducer';
 import {
   productCategoryReducer,
@@ -63,6 +64,7 @@ const reducer = combineReducers({
   user: userReducer,
   userAction: userProfileReducer,
   userAddress: userAddressReducer,
+  forgotPassword: forgotPasswordReducer,
   products: productReducer,
   productCategories: productCategoryReducer,
   quickCategories: quickCategoryReducer,

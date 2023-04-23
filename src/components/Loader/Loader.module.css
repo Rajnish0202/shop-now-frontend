@@ -5,6 +5,7 @@
   display: grid;
   place-items: center;
   max-width: 100%;
+  position: fixed;
 }
 
 .spinner {
@@ -40,7 +41,7 @@
 .textSpinner > div {
   width: 20px;
   height: 20px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.719);
+  border-bottom: 1px solid rgba(255, 255, 255, 1);
 }
 
 @keyframes loadingRotate {

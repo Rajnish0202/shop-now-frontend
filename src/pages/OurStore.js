@@ -22,10 +22,10 @@ const OurStore = ({
   setBrand,
 }) => {
   const [grid, setGrid] = useState(3);
-  const [limit, setLimit] = useState(8);
+  const [limit, setLimit] = useState(20);
   const [stock, setStock] = useState('');
   const [priceFrom, setPriceFrom] = useState(0);
-  const [priceTo, setPriceTo] = useState(10000);
+  const [priceTo, setPriceTo] = useState(100000);
   const [rating, setRating] = useState(0);
   const [sortBy, setSortBy] = useState('');
   const [sizes, setSizes] = useState('');
@@ -518,7 +518,7 @@ const OurStore = ({
                   })}
               </div>
               <div className='load-more d-flex align-items-center justify-content-center gap-30'>
-                {limit > 8 && (
+                {limit > 20 && (
                   <button className='button' onClick={loadLessHandler}>
                     Load Less
                   </button>

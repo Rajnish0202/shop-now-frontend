@@ -527,13 +527,12 @@ const Home = ({ setCategory, setType, setBrand }) => {
                 return <SpecialProduct key={special?._id} special={special} />;
               })}
             <div className='d-flex align-items-center justify-content-center mt-3 gap-15'>
-              {specialLimit > 4 ||
-                (specialLimit >= 2 && (
-                  <button className='button' onClick={specialLessHandler}>
-                    Load Less
-                  </button>
-                ))}
-              {specialLimit < totalSpecial && (
+              {specialLimit > 4 && (
+                <button className='button' onClick={specialLessHandler}>
+                  Load Less
+                </button>
+              )}
+              {specialLimit <= totalSpecial && (
                 <button className='button' onClick={specialMoreHandler}>
                   Load More
                 </button>
