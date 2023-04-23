@@ -62,6 +62,7 @@ const ResetPassword = () => {
                       type='password'
                       className='form-control'
                       placeholder='New Password'
+                      value={password}
                       onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
@@ -70,6 +71,7 @@ const ResetPassword = () => {
                       type='password'
                       className='form-control'
                       placeholder='Confirm Password'
+                      value={confirmPassword}
                       onChange={(e) => setConfirmPassword(e.target.value)}
                     />
                   </div>
