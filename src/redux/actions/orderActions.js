@@ -1,12 +1,18 @@
 import axios from 'axios';
 import { BACKEND_URL } from '../../utils/backendUrl';
 import {
+  ALL_ORDERS_ADMIN_FAIL,
+  ALL_ORDERS_ADMIN_REQUEST,
+  ALL_ORDERS_ADMIN_SUCCESS,
   ALL_ORDERS_FAIL,
   ALL_ORDERS_REQUEST,
   ALL_ORDERS_SUCCESS,
   CREATE_ORDER_FAIL,
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
+  ORDER_DETAILS_ADMIN_FAIL,
+  ORDER_DETAILS_ADMIN_REQUEST,
+  ORDER_DETAILS_ADMIN_SUCCESS,
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
@@ -82,6 +88,48 @@ export const orderdetails = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ORDER_DETAILS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Admin
+
+export const allOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_ORDERS_ADMIN_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/orders`);
+
+    dispatch({ type: ALL_ORDERS_ADMIN_SUCCESS, payload: data.allOrders });
+  } catch (error) {
+    dispatch({
+      type: ALL_ORDERS_ADMIN_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const orderDetailsAdmin = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: ORDER_DETAILS_ADMIN_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/orders/${id}`);
+
+    dispatch({ type: ORDER_DETAILS_ADMIN_SUCCESS, payload: data.orderDetails });
+  } catch (error) {
+    dispatch({
+      type: ORDER_DETAILS_ADMIN_FAIL,
       payload:
         (error.response &&
           error.response.data &&

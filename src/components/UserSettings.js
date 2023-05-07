@@ -17,7 +17,7 @@ const UserSettings = ({ user }) => {
     <div className='user-settings'>
       <ul className='d-flex flex-column gap-10 mb-0 px-0 text-white'>
         {user?.role === 'admin' && (
-          <Link to='/dashboard' className='text-white'>
+          <Link to='/admin/dashboard' className='text-white'>
             <li className='d-flex align-items-center gap-10'>
               <MdDashboardCustomize size={25} />
               <p className='mb-0'>Dashboard</p>

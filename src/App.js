@@ -51,6 +51,20 @@ import Faq from './pages/Faq';
 import SizeCart from './pages/SizeCart';
 import { getAllFaqCategories } from './redux/actions/faqCategoryActions';
 import Invoice from './pages/User/Invoice';
+import Enquiries from './pages/Admin/Enquiries';
+import BlogList from './pages/Admin/BlogList';
+import BlogCategoryList from './pages/Admin/BlogCategoryList';
+import CouponList from './pages/Admin/CouponList';
+import ProductList from './pages/Admin/ProductList';
+import BrandList from './pages/Admin/BrandList';
+import ProductCategoryList from './pages/Admin/ProductCategoryList';
+import TypeList from './pages/Admin/TypeList';
+import ColorList from './pages/Admin/ColorList';
+import OrderList from './pages/Admin/OrderList';
+import Users from './pages/Admin/Users';
+import AddBlog from './pages/Admin/AddBlog';
+import EditProduct from './pages/Admin/EditProduct';
+import OrderDetailsAdmin from './pages/Admin/OrderDetailsAdmin';
 
 axios.defaults.withCredentials = true;
 
@@ -223,8 +237,25 @@ function App() {
           />
         </Route>
 
-        <Route path='/admin' element={<MainLayout />}>
+        <Route path='/admin/dashboard' element={<MainLayout />}>
           <Route index element={<Dashboard />} />
+          <Route path='enquiry' element={<Enquiries />} />
+          <Route path='blog-list' element={<BlogList />} />
+          <Route path='blog-category-list' element={<BlogCategoryList />} />
+          <Route path='coupons-list' element={<CouponList />} />
+          <Route path='product-list' element={<ProductList />} />
+          <Route path='edit-product/:productId' element={<EditProduct />} />
+          <Route path='brand-list' element={<BrandList />} />
+          <Route path='category-list' element={<ProductCategoryList />} />
+          <Route path='type-list' element={<TypeList />} />
+          <Route path='color-list' element={<ColorList />} />
+          <Route path='all-orders' element={<OrderList />} />
+          <Route
+            path='order-details/:orderId'
+            element={<OrderDetailsAdmin />}
+          />
+          <Route path='users' element={<Users />} />
+          <Route path='add-blog' element={<AddBlog />} />
         </Route>
       </Routes>
     </Router>

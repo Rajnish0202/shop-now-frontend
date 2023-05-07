@@ -391,71 +391,80 @@ const PlaceOrder = () => {
                       </p>
                     </div>
                   )}
-                  <div className='d-flex flex-column'>
-                    <div
-                      className='border-bottom border-top py-2 border-2'
-                      style={{ cursor: 'pointer' }}
-                      onClick={() => setShowCoupon(!showCoupon)}
-                    >
-                      <div className='fw-bold mb-0 d-flex align-items-center justify-content-between'>
-                        <p className='mb-0'>Apply Coupon</p>
-                        <p
-                          className='mb-0 text-black-50'
-                          style={{ fontSize: '12px' }}
-                        >
-                          Show
-                        </p>
-                      </div>
-                    </div>
-                    {showCoupon &&
-                      totalPrice &&
-                      totalPrice > 1000 &&
-                      coupons?.map((coupon) => {
-                        return (
-                          <div
-                            className='mb-2 border-bottom border-2'
-                            key={coupon?._id}
+                  {coupons?.filter((expire) => expire?.exipry >= Date.now())
+                    .length > 0 && (
+                    <div className='d-flex flex-column'>
+                      <div
+                        className='border-bottom border-top py-2 border-2'
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => setShowCoupon(!showCoupon)}
+                      >
+                        <div className='fw-bold mb-0 d-flex align-items-center justify-content-between'>
+                          <p className='mb-0'>Apply Coupon</p>
+                          <p
+                            className='mb-0 text-black-50'
+                            style={{ fontSize: '12px' }}
                           >
-                            <div
-                              className='border-bottom py-2 border-2'
-                              style={{ cursor: 'pointer' }}
-                              onClick={() => applyCouponHandler(coupon?._id)}
-                            >
-                              <p
-                                className='mb-1 fw-bold w-100 text-center'
-                                style={{ fontSize: '14px' }}
+                            Show
+                          </p>
+                        </div>
+                      </div>
+                      {showCoupon &&
+                        totalPrice &&
+                        totalPrice > 1000 &&
+                        coupons
+                          ?.filter((expire) => expire?.expiry >= Date.now())
+                          .map((coupon) => {
+                            return (
+                              <div
+                                className='mb-2 border-bottom border-2'
+                                key={coupon?._id}
                               >
-                                {coupon.name}
-                              </p>
-                              <p
-                                className='mb-0 d-flex align-items-center gap-10 fw-bold'
-                                style={{ fontSize: '12px' }}
-                              >
-                                Discount:
-                                <code className='text-success mb-0'>
-                                  {coupon.discount}%
-                                </code>
-                              </p>
-                              <p
-                                className='mb-0 d-flex align-items-center gap-10 fw-bold'
-                                style={{ fontSize: '12px' }}
-                              >
-                                Expiry:
-                                <code className='text-danger mb-0'>
-                                  {moment(coupon.expiry).format('DD MMMM YYYY')}
-                                </code>
-                              </p>
-                            </div>
-                            <button
-                              className='normal-btn text-danger py-2'
-                              onClick={() => setIsApplied(false)}
-                            >
-                              Remove
-                            </button>
-                          </div>
-                        );
-                      })}
-                  </div>
+                                <div
+                                  className='border-bottom py-2 border-2'
+                                  style={{ cursor: 'pointer' }}
+                                  onClick={() =>
+                                    applyCouponHandler(coupon?._id)
+                                  }
+                                >
+                                  <p
+                                    className='mb-1 fw-bold w-100 text-center'
+                                    style={{ fontSize: '14px' }}
+                                  >
+                                    {coupon.name}
+                                  </p>
+                                  <p
+                                    className='mb-0 d-flex align-items-center gap-10 fw-bold'
+                                    style={{ fontSize: '12px' }}
+                                  >
+                                    Discount:
+                                    <code className='text-success mb-0'>
+                                      {coupon.discount}%
+                                    </code>
+                                  </p>
+                                  <p
+                                    className='mb-0 d-flex align-items-center gap-10 fw-bold'
+                                    style={{ fontSize: '12px' }}
+                                  >
+                                    Expiry:
+                                    <code className='text-danger mb-0'>
+                                      {moment(coupon.expiry).format(
+                                        'DD MMMM YYYY'
+                                      )}
+                                    </code>
+                                  </p>
+                                </div>
+                                <button
+                                  className='normal-btn text-danger py-2'
+                                  onClick={() => setIsApplied(false)}
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                            );
+                          })}
+                    </div>
+                  )}
                 </div>
               </li>
               <li>

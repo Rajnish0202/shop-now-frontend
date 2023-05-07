@@ -12,7 +12,6 @@ import { UPDATE_CART_QUANTITY_RESET } from '../redux/constants/cartConstants';
 const CartCard = ({ product }) => {
   const [count, setCount] = useState(product?.count);
   const [productId, setProductId] = useState('');
-  console.log(count, productId);
 
   const { isUpdatedQty } = useSelector((state) => state.updateCart);
   const dispatch = useDispatch();

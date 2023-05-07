@@ -41,8 +41,10 @@ import {
   couponReducer,
 } from './reducers/couponReducer';
 import {
+  allAdminOrdersReducer,
   allOrdersReducer,
   newOrderReducer,
+  orderDetailsAdminReducer,
   orderDetailsReducer,
 } from './reducers/orderReducer';
 import {
@@ -100,6 +102,8 @@ const reducer = combineReducers({
   dislikeBlog: dislikeBlogReducer,
   faqs: allFaqReducer,
   faqCategories: allFaqCategoryReducer,
+  adminOrders: allAdminOrdersReducer,
+  adminOrderDetails: orderDetailsAdminReducer,
 });
 
 let initialState = {

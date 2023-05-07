@@ -1,5 +1,8 @@
 import { CLEAR_ERRORS } from '../constants/couponConstant';
 import {
+  ALL_ORDERS_ADMIN_FAIL,
+  ALL_ORDERS_ADMIN_REQUEST,
+  ALL_ORDERS_ADMIN_SUCCESS,
   ALL_ORDERS_FAIL,
   ALL_ORDERS_REQUEST,
   ALL_ORDERS_SUCCESS,
@@ -7,6 +10,9 @@ import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_RESET,
   CREATE_ORDER_SUCCESS,
+  ORDER_DETAILS_ADMIN_FAIL,
+  ORDER_DETAILS_ADMIN_REQUEST,
+  ORDER_DETAILS_ADMIN_SUCCESS,
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
@@ -97,6 +103,75 @@ export const orderDetailsReducer = (state = { order: {} }, action) => {
       };
 
     case ORDER_DETAILS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Admin
+
+export const allAdminOrdersReducer = (state = { adminOrders: [] }, action) => {
+  switch (action.type) {
+    case ALL_ORDERS_ADMIN_REQUEST:
+      return {
+        loading: true,
+        adminOrders: [],
+      };
+
+    case ALL_ORDERS_ADMIN_SUCCESS:
+      return {
+        loading: false,
+        adminOrders: action.payload,
+      };
+
+    case ALL_ORDERS_ADMIN_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const orderDetailsAdminReducer = (
+  state = { adminOrder: {} },
+  action
+) => {
+  switch (action.type) {
+    case ORDER_DETAILS_ADMIN_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case ORDER_DETAILS_ADMIN_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        adminOrder: action.payload,
+      };
+
+    case ORDER_DETAILS_ADMIN_FAIL:
       return {
         ...state,
         loading: false,

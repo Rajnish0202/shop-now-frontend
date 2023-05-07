@@ -17,3 +17,65 @@ input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 } */
+
+/* =======ADMIN PANEL START======= */
+
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.logo-admin {
+  background-color: #ffd333;
+  text-align: center;
+}
+
+.logo-admin h3 {
+  color: #fff;
+  padding: 10px;
+}
+
+.ant-layout-content {
+  overflow-y: scroll;
+  height: 85vh;
+  background-color: transparent !important;
+}
+
+.ant-layout-content::-webkit-scrollbar {
+  width: 0px;
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-layout-sider {
+  flex: 0 0 250px !important;
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px !important;
+}
+
+.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+}
+
+.ant-menu-inline-collapsed > .ant-menu-item {
+  padding-inline: calc(50% - 15px) !important;
+}
+
+.ant-table-thead .ant-table-cell:last-child {
+  text-align: center !important;
+}
+
+/* =======ADMIN PANEL ENDS======= */
