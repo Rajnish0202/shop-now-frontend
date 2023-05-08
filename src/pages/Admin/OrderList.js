@@ -3,7 +3,6 @@ import MetaData from '../../utils/MetaData';
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { capitalizeText } from '../../utils/Capitalized';
-import { shortenText } from '../../utils/ShortenText';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { BiDetail } from 'react-icons/bi';
@@ -22,37 +21,32 @@ const columns = [
     title: 'Order By',
     dataIndex: 'orderby',
     sorter: (a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
-      if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+      if (a.orderby.toLowerCase() < b.orderby.toLowerCase()) return -1;
+      if (a.orderby.toLowerCase() > b.orderby.toLowerCase()) return 1;
       return 0;
     },
   },
   {
     title: 'Product Count',
     dataIndex: 'count',
-    // sorter: (a, b) => {
-    //   if (a.category.toLowerCase() < b.category.toLowerCase()) return -1;
-    //   if (a.category.toLowerCase() > b.category.toLowerCase()) return 1;
-    //   return 0;
-    // },
   },
   {
     title: 'Payment',
     dataIndex: 'payment',
-    // sorter: (a, b) => {
-    //   if (a.brand.toLowerCase() < b.brand.toLowerCase()) return -1;
-    //   if (a.brand.toLowerCase() > b.brand.toLowerCase()) return 1;
-    //   return 0;
-    // },
+    sorter: (a, b) => {
+      if (a.payment.toLowerCase() < b.payment.toLowerCase()) return -1;
+      if (a.payment.toLowerCase() > b.payment.toLowerCase()) return 1;
+      return 0;
+    },
   },
   {
     title: 'Amount',
     dataIndex: 'total',
-    // sorter: (a, b) => {
-    //   if (a.type.toLowerCase() < b.type.toLowerCase()) return -1;
-    //   if (a.type.toLowerCase() > b.type.toLowerCase()) return 1;
-    //   return 0;
-    // },
+    sorter: (a, b) => {
+      if (a.total < b.total) return -1;
+      if (a.total > b.total) return 1;
+      return 0;
+    },
   },
   {
     title: 'Status',
@@ -75,8 +69,8 @@ const OrderList = () => {
   // Confirm alert
   const confirmDelete = (id) => {
     confirmAlert({
-      title: 'Delete Product',
-      message: 'Are you sure you want to delete this product.',
+      title: 'Delete Order',
+      message: 'Are you sure you want to delete this order.',
       buttons: [
         {
           label: 'Delete',
@@ -140,7 +134,13 @@ const OrderList = () => {
       <MetaData title='Orders' />
 
       <div>
-        <h3 className='mb-4'>Orders</h3>
+        <h3 className='mb-4'>
+          Orders (
+          {adminOrders.length > 9
+            ? adminOrders.length
+            : adminOrders.length?.toString().padStart(2, '0')}
+          )
+        </h3>
         {loading && (
           <div className='my-4'>
             <Spinner />

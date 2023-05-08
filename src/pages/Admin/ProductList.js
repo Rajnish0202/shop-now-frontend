@@ -2,15 +2,21 @@ import React, { useEffect } from 'react';
 import MetaData from '../../utils/MetaData';
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../../redux/actions/productActions';
+import {
+  clearErrors,
+  deleteProduct,
+  getProducts,
+} from '../../redux/actions/productActions';
 import { capitalizeText } from '../../utils/Capitalized';
 import { shortenText } from '../../utils/ShortenText';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Spinner } from '../../components/Loader/Loader';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { toast } from 'react-toastify';
+import { DELETE_PRODUCT_RESET } from '../../redux/constants/productConstants';
 
 const columns = [
   {
@@ -79,9 +85,15 @@ const columns = [
 const ProductList = () => {
   const dispatch = useDispatch();
   const { loading, products } = useSelector((state) => state.products);
+  const {
+    loading: deleteLoading,
+    isDeleted,
+    message,
+    error,
+  } = useSelector((state) => state.productActions);
 
   const deleteHandler = (id) => {
-    console.log(id);
+    dispatch(deleteProduct(id));
   };
 
   // Confirm alert
@@ -113,7 +125,7 @@ const ProductList = () => {
       type: capitalizeText(products[i]?.type?.title),
       price: `₹ ${products[i]?.price}`,
       action: (
-        <div className='d-flex align-items-center justify-content-between'>
+        <div className='d-flex align-items-center justify-content-center gap-4'>
           <Link
             to={`/admin/dashboard/edit-product/${products[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
@@ -124,7 +136,7 @@ const ProductList = () => {
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(products[i]?._id)}
           >
-            <MdDelete />
+            {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
         </div>
       ),
@@ -142,12 +154,37 @@ const ProductList = () => {
         [0, 100000],
         null,
         0,
-        null,
+        '+createdAt',
         null,
         null
       )
     );
-  }, [dispatch]);
+
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      toast.success(message);
+      dispatch({ type: DELETE_PRODUCT_RESET });
+      dispatch(
+        getProducts(
+          '',
+          0,
+          null,
+          null,
+          null,
+          [0, 100000],
+          null,
+          0,
+          '+createdAt',
+          null,
+          null
+        )
+      );
+    }
+  }, [dispatch, error, isDeleted, message]);
 
   return (
     <>

@@ -27,6 +27,16 @@ import {
   RESET_PASSWORD_REQUEST,
   RESET_PASSWORD_SUCCESS,
   RESET_PASSWORD_FAIL,
+  ALL_USERS_REQUEST,
+  ALL_USERS_SUCCESS,
+  ALL_USERS_FAIL,
+  USER_DETAILS_REQUEST,
+  USER_DETAILS_SUCCESS,
+  USER_DETAILS_FAIL,
+  DELETE_USER_REQUEST,
+  DELETE_USER_SUCCESS,
+  DELETE_USER_RESET,
+  DELETE_USER_FAIL,
 } from '../constants/userConstants';
 
 import { toast } from 'react-toastify';
@@ -355,44 +365,102 @@ export const resetPassword =
     }
   };
 
-// export const deleteUser = () => async (dispatch) => {
-//   try {
-//     dispatch({ type: USER_ADDRESS_REQUEST });
-
-//     const config = {
-//       headers: {
-//         Accept: 'application/json',
-//         'Content-Type': 'application/json',
-//       },
-//       mode: 'cors',
-//       credentials: 'include',
-//       withCredentials: true,
-//     };
-
-//     const { data } = await axios.put(
-//       `${BACKEND_URL}/user/address`,
-//       formData,
-//       config
-//     );
-
-//     dispatch({ type: USER_ADDRESS_SUCCESS, payload: data.address });
-//     localStorage.setItem('address', JSON.stringify(data.address.address));
-//     toast.success('Address Saved Successfully.');
-//   } catch (error) {
-//     dispatch({
-//       type: USER_ADDRESS_FAIL,
-//       payload:
-//         (error.response &&
-//           error.response.data &&
-//           error.response.data.message) ||
-//         error.message ||
-//         error.toString(),
-//     });
-//     toast.error(error);
-//   }
-// };
-
 // Clearing Errors
+
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
+};
+
+// Admin
+
+export const getAllUsers = () => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_USERS_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.get(`${BACKEND_URL}/user/all-users`, config);
+
+    dispatch({ type: ALL_USERS_SUCCESS, payload: data.getUsers });
+  } catch (error) {
+    dispatch({
+      type: ALL_USERS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+    toast.info(error);
+  }
+};
+
+export const getUserDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: USER_DETAILS_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.get(`${BACKEND_URL}/user/${id}`, config);
+
+    dispatch({ type: USER_DETAILS_SUCCESS, payload: data.getUser });
+  } catch (error) {
+    dispatch({
+      type: USER_DETAILS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+    toast.info(error);
+  }
+};
+
+export const deleteUser = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_USER_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.delete(`${BACKEND_URL}/user/${id}`, config);
+
+    dispatch({ type: DELETE_USER_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_USER_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
 };

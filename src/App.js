@@ -66,6 +66,8 @@ import AddBlog from './pages/Admin/AddBlog';
 import EditProduct from './pages/Admin/EditProduct';
 import OrderDetailsAdmin from './pages/Admin/OrderDetailsAdmin';
 
+import UserDetails from './pages/Admin/UserDetails';
+
 axios.defaults.withCredentials = true;
 
 function App() {
@@ -255,6 +257,7 @@ function App() {
             element={<OrderDetailsAdmin />}
           />
           <Route path='users' element={<Users />} />
+          <Route path='user-details/:userId' element={<UserDetails />} />
           <Route path='add-blog' element={<AddBlog />} />
         </Route>
       </Routes>

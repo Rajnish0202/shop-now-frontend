@@ -27,6 +27,9 @@ import {
   SPECIAL_PRODUCT_REQUEST,
   SPECIAL_PRODUCT_SUCCESS,
   SPECIAL_PRODUCT_FAIL,
+  DELETE_PRODUCT_REQUEST,
+  DELETE_PRODUCT_SUCCESS,
+  DELETE_PRODUCT_FAIL,
 } from '../constants/productConstants';
 
 export const getProducts =
@@ -635,4 +638,28 @@ export const getSpecialProducts = (limit) => async (dispatch) => {
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
+};
+
+// Admin
+
+// Delete Product
+
+export const deleteProduct = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_PRODUCT_REQUEST });
+
+    const { data } = await axios.delete(`${BACKEND_URL}/product/${id}`);
+
+    dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
 };

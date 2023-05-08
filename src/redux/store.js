@@ -5,6 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import {
   featuredProductReducer,
   popularProductReducer,
+  productActionsReducer,
   productDetailsReducer,
   productRatingsReducer,
   productReducer,
@@ -17,6 +18,9 @@ import {
   userProfileReducer,
   userReducer,
   forgotPasswordReducer,
+  allUsersReducer,
+  userDetailsReducer,
+  adminActionReducer,
 } from './reducers/userReducer';
 import {
   productCategoryReducer,
@@ -104,6 +108,10 @@ const reducer = combineReducers({
   faqCategories: allFaqCategoryReducer,
   adminOrders: allAdminOrdersReducer,
   adminOrderDetails: orderDetailsAdminReducer,
+  adminUsers: allUsersReducer,
+  adminUserDetails: userDetailsReducer,
+  adminActions: adminActionReducer,
+  productActions: productActionsReducer,
 });
 
 let initialState = {
