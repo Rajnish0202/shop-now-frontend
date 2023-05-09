@@ -23,16 +23,24 @@ import {
   adminActionReducer,
 } from './reducers/userReducer';
 import {
+  productCategoryActionsReducer,
   productCategoryReducer,
   productCountCategoryReducer,
   quickCategoryReducer,
 } from './reducers/productCategoryReducer';
-import { productBrandReducer } from './reducers/productBrandReducer';
 import {
+  brandActionsReducer,
+  productBrandReducer,
+} from './reducers/productBrandReducer';
+import {
+  productTypeActionsReducer,
   productTypeCountReducer,
   productTypeReducer,
 } from './reducers/productTypeReducer';
-import { productSizeReducer } from './reducers/productSizesRducer';
+import {
+  productSizeActionsReducer,
+  productSizeReducer,
+} from './reducers/productSizesRducer';
 import { productColorReducer } from './reducers/productColorReducer';
 import {
   addCartReducer,
@@ -41,6 +49,7 @@ import {
 } from './reducers/cartReducer';
 import {
   allCouponReducer,
+  couponActionsReducer,
   couponDetailsReducer,
   couponReducer,
 } from './reducers/couponReducer';
@@ -58,13 +67,18 @@ import {
 import { compareReducer } from './reducers/compareReducer';
 import {
   allBlogReducer,
+  blogActionsReducer,
   dislikeBlogReducer,
   likeBlogReducer,
   singleBlogReducer,
 } from './reducers/blogReducer';
-import { allBlogCategoryReducer } from './reducers/blogCategoryReducer';
+import {
+  allBlogCategoryReducer,
+  blogCategoryActionsReducer,
+} from './reducers/blogCategoryReducer';
 import { allFaqReducer } from './reducers/faqReducer';
 import { allFaqCategoryReducer } from './reducers/faqCategoryReducer';
+import { productColorActionsReducer } from './reducers/productColorReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -112,6 +126,14 @@ const reducer = combineReducers({
   adminUserDetails: userDetailsReducer,
   adminActions: adminActionReducer,
   productActions: productActionsReducer,
+  brandActions: brandActionsReducer,
+  productCategoryAction: productCategoryActionsReducer,
+  typeActions: productTypeActionsReducer,
+  colorActions: productColorActionsReducer,
+  sizeActions: productSizeActionsReducer,
+  blogActions: blogActionsReducer,
+  blogCategoryActions: blogCategoryActionsReducer,
+  couponActions: couponActionsReducer,
 });
 
 let initialState = {

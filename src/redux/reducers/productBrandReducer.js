@@ -3,6 +3,10 @@ import {
   ALL_BRAND_REQUEST,
   ALL_BRAND_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_BRAND_FAIL,
+  DELETE_BRAND_REQUEST,
+  DELETE_BRAND_RESET,
+  DELETE_BRAND_SUCCESS,
 } from '../constants/productBrand';
 
 export const productBrandReducer = (state = { productBrands: [] }, action) => {
@@ -24,6 +28,64 @@ export const productBrandReducer = (state = { productBrands: [] }, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Admin Actions
+
+export const brandActionsReducer = (state = {}, action) => {
+  switch (action.type) {
+    // case UPDATE_PRODUCT_REQUEST:
+    case DELETE_BRAND_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    // case UPDATE_PRODUCT_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     isUpdated: action.payload.success,
+    //     message: action.payload.message,
+    //   };
+
+    case DELETE_BRAND_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload.success,
+        message: action.payload.message,
+      };
+
+    // case UPDATE_PRODUCT_FAIL:
+    case DELETE_BRAND_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // case UPDATE_PRODUCT_RESET:
+    //   return {
+    //     ...state,
+    //     isUpdated: false,
+    //   };
+
+    case DELETE_BRAND_RESET:
+      return {
+        ...state,
+        isDeleted: false,
       };
 
     case CLEAR_ERRORS:

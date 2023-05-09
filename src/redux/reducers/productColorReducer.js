@@ -3,6 +3,10 @@ import {
   ALL_COLOR_REQUEST,
   ALL_COLOR_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_COLOR_FAIL,
+  DELETE_COLOR_REQUEST,
+  DELETE_COLOR_RESET,
+  DELETE_COLOR_SUCCESS,
 } from '../constants/productColorConstants';
 
 export const productColorReducer = (state = { colors: [] }, action) => {
@@ -24,6 +28,64 @@ export const productColorReducer = (state = { colors: [] }, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Admin Actions
+
+export const productColorActionsReducer = (state = {}, action) => {
+  switch (action.type) {
+    // case UPDATE_PRODUCT_REQUEST:
+    case DELETE_COLOR_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    // case UPDATE_PRODUCT_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     isUpdated: action.payload.success,
+    //     message: action.payload.message,
+    //   };
+
+    case DELETE_COLOR_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload.success,
+        message: action.payload.message,
+      };
+
+    // case UPDATE_PRODUCT_FAIL:
+    case DELETE_COLOR_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // case UPDATE_PRODUCT_RESET:
+    //   return {
+    //     ...state,
+    //     isUpdated: false,
+    //   };
+
+    case DELETE_COLOR_RESET:
+      return {
+        ...state,
+        isDeleted: false,
       };
 
     case CLEAR_ERRORS:

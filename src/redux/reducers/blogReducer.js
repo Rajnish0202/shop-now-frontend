@@ -14,6 +14,10 @@ import {
   DISLIKE_BLOG_SUCCESS,
   DISLIKE_BLOG_FAIL,
   DISLIKE_BLOG_RESET,
+  DELETE_BLOG_REQUEST,
+  DELETE_BLOG_SUCCESS,
+  DELETE_BLOG_FAIL,
+  DELETE_BLOG_RESET,
 } from '../constants/blogConstants.js';
 
 export const allBlogReducer = (state = { blogs: [] }, action) => {
@@ -147,6 +151,64 @@ export const dislikeBlogReducer = (state = {}, action) => {
       return {
         ...state,
         isDisliked: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Admin Actions
+
+export const blogActionsReducer = (state = {}, action) => {
+  switch (action.type) {
+    // case UPDATE_PRODUCT_REQUEST:
+    case DELETE_BLOG_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    // case UPDATE_PRODUCT_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     isUpdated: action.payload.success,
+    //     message: action.payload.message,
+    //   };
+
+    case DELETE_BLOG_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload.success,
+        message: action.payload.message,
+      };
+
+    // case UPDATE_PRODUCT_FAIL:
+    case DELETE_BLOG_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // case UPDATE_PRODUCT_RESET:
+    //   return {
+    //     ...state,
+    //     isUpdated: false,
+    //   };
+
+    case DELETE_BLOG_RESET:
+      return {
+        ...state,
+        isDeleted: false,
       };
 
     case CLEAR_ERRORS:

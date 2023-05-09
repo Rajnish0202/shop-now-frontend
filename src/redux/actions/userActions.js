@@ -35,7 +35,6 @@ import {
   USER_DETAILS_FAIL,
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
-  DELETE_USER_RESET,
   DELETE_USER_FAIL,
 } from '../constants/userConstants';
 

@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MetaData from '../../utils/MetaData';
 import { Table } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { capitalizeText } from '../../utils/Capitalized';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Spinner } from '../../components/Loader/Loader';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { toast } from 'react-toastify';
+import {
+  clearErrors,
+  deleteProductCategory,
+  getProductCategories,
+} from '../../redux/actions/productCategoryAction';
+import { DELETE_PRODUCT_CATEGORY_RESET } from '../../redux/constants/productCategory';
 
 const columns = [
   {
@@ -49,10 +56,16 @@ const ProductCategoryList = () => {
     (state) => state.productCategories
   );
 
-  console.log(productCategories);
+  const {
+    loading: deleteLoading,
+    isDeleted,
+    error,
+    message,
+  } = useSelector((state) => state.productCategoryAction);
+  const dispatch = useDispatch();
 
   const deleteHandler = (id) => {
-    console.log(id);
+    dispatch(deleteProductCategory(id));
   };
 
   // Confirm alert
@@ -99,12 +112,26 @@ const ProductCategoryList = () => {
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(productCategories[i]?._id)}
           >
-            <MdDelete />
+            {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
         </div>
       ),
     });
   }
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      toast.success(message);
+      dispatch({ type: DELETE_PRODUCT_CATEGORY_RESET });
+      dispatch(getProductCategories());
+    }
+  }, [dispatch, error, message, isDeleted]);
+
   return (
     <>
       <MetaData title='Product Category List' />

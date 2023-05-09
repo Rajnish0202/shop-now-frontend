@@ -14,6 +14,9 @@ import {
   DISLIKE_BLOG_REQUEST,
   DISLIKE_BLOG_SUCCESS,
   DISLIKE_BLOG_FAIL,
+  DELETE_BLOG_REQUEST,
+  DELETE_BLOG_SUCCESS,
+  DELETE_BLOG_FAIL,
 } from '../constants/blogConstants.js';
 
 export const getAllBlogs = (limit, category) => async (dispatch) => {
@@ -107,4 +110,25 @@ export const dislikeBlog = (blogId) => async (dispatch) => {
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
+};
+
+// ADMIN
+export const deleteBlog = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_BLOG_REQUEST });
+
+    const { data } = await axios.delete(`${BACKEND_URL}/blog/${id}`);
+
+    dispatch({ type: DELETE_BLOG_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_BLOG_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
 };

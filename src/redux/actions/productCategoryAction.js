@@ -8,6 +8,9 @@ import {
   ALL_PRODUCTCATEGORY_REQUEST,
   ALL_PRODUCTCATEGORY_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_PRODUCT_CATEGORY_FAIL,
+  DELETE_PRODUCT_CATEGORY_REQUEST,
+  DELETE_PRODUCT_CATEGORY_SUCCESS,
   QUICK_CATEGORY_FAIL,
   QUICK_CATEGORY_REQUEST,
   QUICK_CATEGORY_SUCCESS,
@@ -82,4 +85,27 @@ export const getQuickCategories = () => async (dispatch) => {
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
+};
+
+// ADMIN
+export const deleteProductCategory = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_PRODUCT_CATEGORY_REQUEST });
+
+    const { data } = await axios.delete(
+      `${BACKEND_URL}/product-category/${id}`
+    );
+
+    dispatch({ type: DELETE_PRODUCT_CATEGORY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_PRODUCT_CATEGORY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
 };

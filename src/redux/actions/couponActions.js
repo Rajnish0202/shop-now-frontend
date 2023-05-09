@@ -11,6 +11,9 @@ import {
   COUPON_DETAILS_FAIL,
   COUPON_DETAILS_REQUEST,
   COUPON_DETAILS_SUCCESS,
+  DELETE_COUPON_FAIL,
+  DELETE_COUPON_REQUEST,
+  DELETE_COUPON_SUCCESS,
 } from '../constants/couponConstant';
 
 export const getAllCoupons = () => async (dispatch) => {
@@ -79,4 +82,25 @@ export const applyCoupon = (coupon) => async (dispatch) => {
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
+};
+
+// ADMIN
+export const deleteCoupon = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_COUPON_REQUEST });
+
+    const { data } = await axios.delete(`${BACKEND_URL}/coupon/${id}`);
+
+    dispatch({ type: DELETE_COUPON_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_COUPON_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import MetaData from '../../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment';

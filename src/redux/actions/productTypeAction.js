@@ -8,6 +8,9 @@ import {
   ALL_TYPE_REQUEST,
   ALL_TYPE_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_TYPE_FAIL,
+  DELETE_TYPE_REQUEST,
+  DELETE_TYPE_SUCCESS,
 } from '../constants/productTypeConstants';
 
 export const getTypes = () => async (dispatch) => {
@@ -55,4 +58,25 @@ export const getAllTypesCount = (limit) => async (dispatch) => {
 // Clearing Errors
 export const clearErrors = () => async (dispatch) => {
   dispatch({ type: CLEAR_ERRORS });
+};
+
+// ADMIN
+export const deleteProductType = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: DELETE_TYPE_REQUEST });
+
+    const { data } = await axios.delete(`${BACKEND_URL}/product-type/${id}`);
+
+    dispatch({ type: DELETE_TYPE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: DELETE_TYPE_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
 };

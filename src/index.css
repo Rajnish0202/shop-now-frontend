@@ -78,4 +78,12 @@ input::-webkit-inner-spin-button {
   text-align: center !important;
 }
 
+.ant-table-thead .ant-table-cell:nth-last-child(-n + 2) {
+  text-align: center !important;
+}
+
+.size-list .ant-table-tbody .ant-table-cell {
+  text-align: center !important;
+}
+
 /* =======ADMIN PANEL ENDS======= */

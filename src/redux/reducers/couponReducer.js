@@ -10,6 +10,10 @@ import {
   COUPON_DETAILS_FAIL,
   COUPON_DETAILS_REQUEST,
   COUPON_DETAILS_SUCCESS,
+  DELETE_COUPON_FAIL,
+  DELETE_COUPON_REQUEST,
+  DELETE_COUPON_RESET,
+  DELETE_COUPON_SUCCESS,
 } from '../constants/couponConstant';
 
 export const allCouponReducer = (state = { coupons: [] }, action) => {
@@ -100,6 +104,64 @@ export const couponDetailsReducer = (state = { singleCoupon: {} }, action) => {
       return {
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Admin Actions
+
+export const couponActionsReducer = (state = {}, action) => {
+  switch (action.type) {
+    // case UPDATE_PRODUCT_REQUEST:
+    case DELETE_COUPON_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    // case UPDATE_PRODUCT_SUCCESS:
+    //   return {
+    //     ...state,
+    //     loading: false,
+    //     isUpdated: action.payload.success,
+    //     message: action.payload.message,
+    //   };
+
+    case DELETE_COUPON_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isDeleted: action.payload.success,
+        message: action.payload.message,
+      };
+
+    // case UPDATE_PRODUCT_FAIL:
+    case DELETE_COUPON_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    // case UPDATE_PRODUCT_RESET:
+    //   return {
+    //     ...state,
+    //     isUpdated: false,
+    //   };
+
+    case DELETE_COUPON_RESET:
+      return {
+        ...state,
+        isDeleted: false,
       };
 
     case CLEAR_ERRORS:

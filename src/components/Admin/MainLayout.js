@@ -11,14 +11,18 @@ import {
 import { SiBrandfolder } from 'react-icons/si';
 import { RiCoupon4Line, RiCouponLine } from 'react-icons/ri';
 import { CgViewList } from 'react-icons/cg';
-import { MdChecklist, MdOutlineCategory } from 'react-icons/md';
+import {
+  MdChecklist,
+  MdOutlineCategory,
+  MdOutlineFormatSize,
+} from 'react-icons/md';
 import { IoIosColorPalette, IoMdNotifications } from 'react-icons/io';
 import { HiClipboardList } from 'react-icons/hi';
 import { BsBorderStyle, BsSendCheck } from 'react-icons/bs';
 import { AiOutlineBgColors } from 'react-icons/ai';
 import { ImBlogger, ImBlogger2 } from 'react-icons/im';
 import { GoTasklist } from 'react-icons/go';
-import { BiDuplicate, BiListPlus } from 'react-icons/bi';
+import { BiDuplicate, BiFontSize, BiListPlus } from 'react-icons/bi';
 import { VscGroupByRefType, VscTypeHierarchySub } from 'react-icons/vsc';
 
 import { Button, Layout, Menu, theme } from 'antd';
@@ -107,6 +111,17 @@ const MainLayout = () => {
                   key: 'type-list',
                   icon: <VscTypeHierarchySub className='fs-4' />,
                   label: 'Type List',
+                },
+
+                {
+                  key: 'size',
+                  icon: <MdOutlineFormatSize className='fs-4' />,
+                  label: 'Product Size',
+                },
+                {
+                  key: 'size-list',
+                  icon: <BiFontSize className='fs-4' />,
+                  label: 'Size List',
                 },
 
                 {

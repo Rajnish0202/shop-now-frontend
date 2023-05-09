@@ -2,21 +2,19 @@ import React, { useEffect } from 'react';
 import MetaData from '../../utils/MetaData';
 import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { capitalizeText } from '../../utils/Capitalized';
-import { shortenText } from '../../utils/ShortenText';
+import { confirmAlert } from 'react-confirm-alert';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { Spinner, TextSpinner } from '../../components/Loader/Loader';
-import { confirmAlert } from 'react-confirm-alert';
-import 'react-confirm-alert/src/react-confirm-alert.css';
-import {
-  getBlogCategories,
-  deleteBlogCategory,
-  clearErrors,
-} from '../../redux/actions/blogCategoryActions';
 import { toast } from 'react-toastify';
-import { DELETE_BLOG_CATEGORY_RESET } from '../../redux/constants/blogCategoryConstants';
+
+import {
+  clearErrors,
+  deleteProductSize,
+  getSizes,
+} from '../../redux/actions/sizeAction';
+import { DELETE_SIZE_RESET } from '../../redux/constants/sizesConstants';
 
 const columns = [
   {
@@ -39,28 +37,26 @@ const columns = [
   },
 ];
 
-const BlogCategoryList = () => {
-  const dispatch = useDispatch();
-  const { loading, blogCategories } = useSelector(
-    (state) => state.blogCategory
-  );
+const SizeList = () => {
+  const { loading, productSizes } = useSelector((state) => state.productSizes);
 
   const {
     loading: deleteLoading,
     isDeleted,
     error,
     message,
-  } = useSelector((state) => state.blogCategoryActions);
+  } = useSelector((state) => state.sizeActions);
+  const dispatch = useDispatch();
 
   const deleteHandler = (id) => {
-    dispatch(deleteBlogCategory(id));
+    dispatch(deleteProductSize(id));
   };
 
   // Confirm alert
   const confirmDelete = (id) => {
     confirmAlert({
-      title: 'Delete Category',
-      message: 'Are you sure you want to delete this category.',
+      title: 'Delete Size',
+      message: 'Are you sure you want to delete this size.',
       buttons: [
         {
           label: 'Delete',
@@ -75,27 +71,23 @@ const BlogCategoryList = () => {
   };
 
   const data = [];
-  for (let i = 0; i < blogCategories.length; i++) {
+  for (let i = 0; i < productSizes?.length; i++) {
     data.push({
       srn: i + 1,
-      key: blogCategories[i]?._id,
-      title: (
-        <div style={{ textAlign: 'center' }}>
-          {capitalizeText(shortenText(blogCategories[i]?.title, 20))}
-        </div>
-      ),
+      key: productSizes[i]?._id,
+      title: productSizes[i]?.title,
 
       action: (
         <div className='d-flex align-items-center justify-content-center gap-4'>
           <Link
-            to={`/admin/dashboard/edit-product/${blogCategories[i]?._id}`}
+            to={`/admin/dashboard/edit-product/${productSizes[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
           >
             <FaEdit />
           </Link>
           <button
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
-            onClick={() => confirmDelete(blogCategories[i]?._id)}
+            onClick={() => confirmDelete(productSizes[i]?._id)}
           >
             {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
@@ -112,21 +104,20 @@ const BlogCategoryList = () => {
 
     if (isDeleted) {
       toast.success(message);
-      dispatch({ type: DELETE_BLOG_CATEGORY_RESET });
-      // dispatch(getBlogCategories());
+      dispatch({ type: DELETE_SIZE_RESET });
+      dispatch(getSizes());
     }
-    dispatch(getBlogCategories());
-  }, [dispatch, error, isDeleted, message]);
+  }, [dispatch, error, message, isDeleted]);
 
   return (
     <>
-      <MetaData title='Blog Category List' />
-      <div>
+      <MetaData title='Size List' />
+      <div className='size-list'>
         <h3 className='mb-4'>
-          Blog Category List (
-          {blogCategories.length > 9
-            ? blogCategories.length
-            : blogCategories.length?.toString().padStart(2, '0')}
+          Type List (
+          {productSizes?.length > 9
+            ? productSizes?.length
+            : productSizes?.length?.toString().padStart(2, '0')}
           )
         </h3>
         {loading && (
@@ -142,4 +133,4 @@ const BlogCategoryList = () => {
   );
 };
 
-export default BlogCategoryList;
+export default SizeList;

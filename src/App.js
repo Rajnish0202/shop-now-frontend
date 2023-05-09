@@ -59,6 +59,7 @@ import ProductList from './pages/Admin/ProductList';
 import BrandList from './pages/Admin/BrandList';
 import ProductCategoryList from './pages/Admin/ProductCategoryList';
 import TypeList from './pages/Admin/TypeList';
+import SizeList from './pages/Admin/SizeList';
 import ColorList from './pages/Admin/ColorList';
 import OrderList from './pages/Admin/OrderList';
 import Users from './pages/Admin/Users';
@@ -250,6 +251,7 @@ function App() {
           <Route path='brand-list' element={<BrandList />} />
           <Route path='category-list' element={<ProductCategoryList />} />
           <Route path='type-list' element={<TypeList />} />
+          <Route path='size-list' element={<SizeList />} />
           <Route path='color-list' element={<ColorList />} />
           <Route path='all-orders' element={<OrderList />} />
           <Route

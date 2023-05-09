@@ -5,11 +5,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Spinner } from '../../components/Loader/Loader';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { getAllCoupons } from '../../redux/actions/couponActions';
+import {
+  clearErrors,
+  deleteCoupon,
+  getAllCoupons,
+} from '../../redux/actions/couponActions';
 import moment from 'moment';
+import { DELETE_COUPON_RESET } from '../../redux/constants/couponConstant';
+import { toast } from 'react-toastify';
 
 const columns = [
   {
@@ -54,8 +60,15 @@ const CouponList = () => {
   const dispatch = useDispatch();
   const { loading, coupons } = useSelector((state) => state.allCoupon);
 
+  const {
+    loading: deleteLoading,
+    isDeleted,
+    error,
+    message,
+  } = useSelector((state) => state.couponActions);
+
   const deleteHandler = (id) => {
-    console.log(id);
+    dispatch(deleteCoupon(id));
   };
 
   // Confirm alert
@@ -83,7 +96,11 @@ const CouponList = () => {
       key: coupons[i]?._id,
       title: coupons[i]?.name,
       discount: coupons[i]?.discount,
-      expire: `${moment(coupons[i].expiry).format('DD MMMM YYYY hh:mm:ss')}`,
+      expire: (
+        <div style={{ textAlign: 'center' }}>
+          {`${moment(coupons[i].expiry).format('DD MMMM YYYY hh:mm:ss a')}`}
+        </div>
+      ),
       action: (
         <div className='d-flex align-items-center justify-content-center gap-4'>
           <Link
@@ -96,7 +113,7 @@ const CouponList = () => {
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(coupons[i]?._id)}
           >
-            <MdDelete />
+            {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
         </div>
       ),
@@ -104,8 +121,18 @@ const CouponList = () => {
   }
 
   useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      toast.success(message);
+      dispatch({ type: DELETE_COUPON_RESET });
+      // dispatch(getBlogCategories());
+    }
     dispatch(getAllCoupons());
-  }, [dispatch]);
+  }, [dispatch, error, isDeleted, message]);
 
   return (
     <>

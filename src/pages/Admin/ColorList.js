@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MetaData from '../../utils/MetaData';
 import { Table } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { capitalizeText } from '../../utils/Capitalized';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Spinner } from '../../components/Loader/Loader';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { toast } from 'react-toastify';
+import {
+  deleteProductColor,
+  getAllColors,
+} from '../../redux/actions/productColorAction';
+import { clearErrors } from '../../redux/actions/productTypeAction';
+import { DELETE_COLOR_RESET } from '../../redux/constants/productColorConstants';
 
 const columns = [
   {
@@ -47,8 +54,16 @@ const columns = [
 const ColorList = () => {
   const { loading, colors } = useSelector((state) => state.productColors);
 
+  const {
+    loading: deleteLoading,
+    isDeleted,
+    error,
+    message,
+  } = useSelector((state) => state.colorActions);
+  const dispatch = useDispatch();
+
   const deleteHandler = (id) => {
-    console.log(id);
+    dispatch(deleteProductColor(id));
   };
 
   // Confirm alert
@@ -101,12 +116,26 @@ const ColorList = () => {
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(colors[i]?._id)}
           >
-            <MdDelete />
+            {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
         </div>
       ),
     });
   }
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      toast.success(message);
+      dispatch({ type: DELETE_COLOR_RESET });
+      dispatch(getAllColors());
+    }
+  }, [dispatch, error, message, isDeleted]);
+
   return (
     <>
       <MetaData title='Color List' />

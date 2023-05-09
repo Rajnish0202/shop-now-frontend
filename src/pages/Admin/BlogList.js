@@ -7,10 +7,12 @@ import { shortenText } from '../../utils/ShortenText';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Spinner } from '../../components/Loader/Loader';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { getAllBlogs } from '../../redux/actions/blogActions';
+import { clearErrors, getAllBlogs ,deleteBlog} from '../../redux/actions/blogActions';
+import { toast } from 'react-toastify';
+import { DELETE_BLOG_RESET } from '../../redux/constants/blogConstants';
 
 const columns = [
   {
@@ -46,8 +48,15 @@ const BlogList = () => {
   const dispatch = useDispatch();
   const { loading, blogs } = useSelector((state) => state.allBlogs);
 
+  const {
+    loading: deleteLoading,
+    isDeleted,
+    error,
+    message,
+  } = useSelector((state) => state.blogActions);
+
   const deleteHandler = (id) => {
-    console.log(id);
+    dispatch(deleteBlog(id))
   };
 
   // Confirm alert
@@ -74,7 +83,11 @@ const BlogList = () => {
       srn: i + 1,
       key: blogs?.allBlog[i]?._id,
       title: capitalizeText(shortenText(blogs?.allBlog[i]?.title, 20)),
-      category: capitalizeText(blogs?.allBlog[i]?.category?.title),
+      category: (
+        <div style={{ textAlign: 'center' }}>
+          {capitalizeText(blogs?.allBlog[i]?.category?.title)}
+        </div>
+      ),
 
       action: (
         <div className='d-flex align-items-center justify-content-center gap-4'>
@@ -88,7 +101,7 @@ const BlogList = () => {
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(blogs?.allBlog[i]?._id)}
           >
-            <MdDelete />
+            {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
         </div>
       ),
@@ -96,8 +109,19 @@ const BlogList = () => {
   }
 
   useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      toast.success(message);
+      dispatch({ type: DELETE_BLOG_RESET });
+      // dispatch(getAllBlogs(0, null));
+    }
+
     dispatch(getAllBlogs(0, null));
-  }, [dispatch]);
+  }, [dispatch, error, isDeleted, message]);
 
   return (
     <>

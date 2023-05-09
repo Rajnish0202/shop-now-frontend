@@ -1,14 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MetaData from '../../utils/MetaData';
 import { Table } from 'antd';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { confirmAlert } from 'react-confirm-alert';
 import { shortenText } from '../../utils/ShortenText';
 import { capitalizeText } from '../../utils/Capitalized';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
-import { Spinner } from '../../components/Loader/Loader';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
+import { toast } from 'react-toastify';
+import {
+  clearErrors,
+  deleteProductType,
+  getTypes,
+} from '../../redux/actions/productTypeAction';
+import { DELETE_TYPE_RESET } from '../../redux/constants/productTypeConstants';
 
 const columns = [
   {
@@ -47,8 +54,16 @@ const columns = [
 const TypeList = () => {
   const { loading, types } = useSelector((state) => state.productType);
 
+  const {
+    loading: deleteLoading,
+    isDeleted,
+    error,
+    message,
+  } = useSelector((state) => state.typeActions);
+  const dispatch = useDispatch();
+
   const deleteHandler = (id) => {
-    console.log(id);
+    dispatch(deleteProductType(id));
   };
 
   // Confirm alert
@@ -101,12 +116,26 @@ const TypeList = () => {
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(types[i]?._id)}
           >
-            <MdDelete />
+            {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>
         </div>
       ),
     });
   }
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      toast.success(message);
+      dispatch({ type: DELETE_TYPE_RESET });
+      dispatch(getTypes());
+    }
+  }, [dispatch, error, message, isDeleted]);
+
   return (
     <>
       <MetaData title='Type List' />
