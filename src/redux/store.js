@@ -27,21 +27,28 @@ import {
   productCategoryReducer,
   productCountCategoryReducer,
   quickCategoryReducer,
+  createProductCategoryReducer,
 } from './reducers/productCategoryReducer';
 import {
   brandActionsReducer,
   productBrandReducer,
+  createBrandReducer,
 } from './reducers/productBrandReducer';
 import {
+  createTypeReducer,
   productTypeActionsReducer,
   productTypeCountReducer,
   productTypeReducer,
 } from './reducers/productTypeReducer';
 import {
+  createSizeReducer,
   productSizeActionsReducer,
   productSizeReducer,
 } from './reducers/productSizesRducer';
-import { productColorReducer } from './reducers/productColorReducer';
+import {
+  createColorReducer,
+  productColorReducer,
+} from './reducers/productColorReducer';
 import {
   addCartReducer,
   cartReducer,
@@ -52,6 +59,7 @@ import {
   couponActionsReducer,
   couponDetailsReducer,
   couponReducer,
+  createCouponReducer,
 } from './reducers/couponReducer';
 import {
   allAdminOrdersReducer,
@@ -68,6 +76,7 @@ import { compareReducer } from './reducers/compareReducer';
 import {
   allBlogReducer,
   blogActionsReducer,
+  createBlogReducer,
   dislikeBlogReducer,
   likeBlogReducer,
   singleBlogReducer,
@@ -75,6 +84,7 @@ import {
 import {
   allBlogCategoryReducer,
   blogCategoryActionsReducer,
+  createBlogCategoryReducer,
 } from './reducers/blogCategoryReducer';
 import { allFaqReducer } from './reducers/faqReducer';
 import { allFaqCategoryReducer } from './reducers/faqCategoryReducer';
@@ -134,6 +144,14 @@ const reducer = combineReducers({
   blogActions: blogActionsReducer,
   blogCategoryActions: blogCategoryActionsReducer,
   couponActions: couponActionsReducer,
+  newBlog: createBlogReducer,
+  newBlogCategory: createBlogCategoryReducer,
+  newColor: createColorReducer,
+  newSize: createSizeReducer,
+  newType: createTypeReducer,
+  newProductCategory: createProductCategoryReducer,
+  newBrand: createBrandReducer,
+  newCoupon: createCouponReducer,
 });
 
 let initialState = {

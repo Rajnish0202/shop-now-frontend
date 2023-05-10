@@ -13,6 +13,10 @@ import {
   QUICK_CATEGORY_FAIL,
   QUICK_CATEGORY_REQUEST,
   QUICK_CATEGORY_SUCCESS,
+  CREATE_PRODUCT_CATEGORY_REQUEST,
+  CREATE_PRODUCT_CATEGORY_SUCCESS,
+  CREATE_PRODUCT_CATEGORY_FAIL,
+  CREATE_PRODUCT_CATEGORY_RESET,
 } from '../constants/productCategory';
 
 export const productCategoryReducer = (
@@ -122,6 +126,7 @@ export const quickCategoryReducer = (
 
 // Admin Actions
 
+// Delete Product Category
 export const productCategoryActionsReducer = (state = {}, action) => {
   switch (action.type) {
     // case UPDATE_PRODUCT_REQUEST:
@@ -165,6 +170,49 @@ export const productCategoryActionsReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create New Product Category
+export const createProductCategoryReducer = (
+  state = { newProductCategory: {} },
+  action
+) => {
+  switch (action.type) {
+    case CREATE_PRODUCT_CATEGORY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case CREATE_PRODUCT_CATEGORY_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        newProductCategory: action.payload.category,
+      };
+
+    case CREATE_PRODUCT_CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_PRODUCT_CATEGORY_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

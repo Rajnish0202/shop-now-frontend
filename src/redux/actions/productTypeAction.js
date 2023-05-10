@@ -8,6 +8,9 @@ import {
   ALL_TYPE_REQUEST,
   ALL_TYPE_SUCCESS,
   CLEAR_ERRORS,
+  CREATE_TYPE_FAIL,
+  CREATE_TYPE_REQUEST,
+  CREATE_TYPE_SUCCESS,
   DELETE_TYPE_FAIL,
   DELETE_TYPE_REQUEST,
   DELETE_TYPE_SUCCESS,
@@ -71,6 +74,29 @@ export const deleteProductType = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_TYPE_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Create New Type
+export const createType = (title) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_TYPE_REQUEST });
+
+    const { data } = await axios.post(`${BACKEND_URL}/product-type`, {
+      title,
+    });
+
+    dispatch({ type: CREATE_TYPE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: CREATE_TYPE_FAIL,
       payload:
         (error.response &&
           error.response.data &&

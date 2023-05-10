@@ -68,6 +68,14 @@ import EditProduct from './pages/Admin/EditProduct';
 import OrderDetailsAdmin from './pages/Admin/OrderDetailsAdmin';
 
 import UserDetails from './pages/Admin/UserDetails';
+import AddBlogCategory from './pages/Admin/AddBlogCategory';
+import AddColor from './pages/Admin/AddColor';
+import AddSize from './pages/Admin/AddSize';
+import AddType from './pages/Admin/AddType';
+import AddProductCategory from './pages/Admin/AddProductCategory';
+import AddBrand from './pages/Admin/AddBrand';
+import AddProduct from './pages/Admin/AddProduct';
+import AddCoupon from './pages/Admin/AddCoupon';
 
 axios.defaults.withCredentials = true;
 
@@ -261,6 +269,14 @@ function App() {
           <Route path='users' element={<Users />} />
           <Route path='user-details/:userId' element={<UserDetails />} />
           <Route path='add-blog' element={<AddBlog />} />
+          <Route path='all-blog-category' element={<AddBlogCategory />} />
+          <Route path='add-color' element={<AddColor />} />
+          <Route path='add-size' element={<AddSize />} />
+          <Route path='add-type' element={<AddType />} />
+          <Route path='add-category' element={<AddProductCategory />} />
+          <Route path='add-brand' element={<AddBrand />} />
+          <Route path='add-product' element={<AddProduct />} />
+          <Route path='add-coupons' element={<AddCoupon />} />
         </Route>
       </Routes>
     </Router>

@@ -14,6 +14,9 @@ import {
   QUICK_CATEGORY_FAIL,
   QUICK_CATEGORY_REQUEST,
   QUICK_CATEGORY_SUCCESS,
+  CREATE_PRODUCT_CATEGORY_REQUEST,
+  CREATE_PRODUCT_CATEGORY_SUCCESS,
+  CREATE_PRODUCT_CATEGORY_FAIL,
 } from '../constants/productCategory';
 
 export const getProductCategories = () => async (dispatch) => {
@@ -88,6 +91,8 @@ export const clearErrors = () => async (dispatch) => {
 };
 
 // ADMIN
+
+// Delete Product Category
 export const deleteProductCategory = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_PRODUCT_CATEGORY_REQUEST });
@@ -100,6 +105,29 @@ export const deleteProductCategory = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_PRODUCT_CATEGORY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Create New Product Category
+export const createProductCategory = (title) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_PRODUCT_CATEGORY_REQUEST });
+
+    const { data } = await axios.post(`${BACKEND_URL}/product-category`, {
+      title,
+    });
+
+    dispatch({ type: CREATE_PRODUCT_CATEGORY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: CREATE_PRODUCT_CATEGORY_FAIL,
       payload:
         (error.response &&
           error.response.data &&

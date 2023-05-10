@@ -3,6 +3,10 @@ import {
   ALL_BLOGS_CATEGORY_REQUEST,
   ALL_BLOGS_CATEGORY_SUCCESS,
   CLEAR_ERRORS,
+  CREATE_BLOG_CATEGORY_FAIL,
+  CREATE_BLOG_CATEGORY_REQUEST,
+  CREATE_BLOG_CATEGORY_RESET,
+  CREATE_BLOG_CATEGORY_SUCCESS,
   DELETE_BLOG_CATEGORY_FAIL,
   DELETE_BLOG_CATEGORY_REQUEST,
   DELETE_BLOG_CATEGORY_RESET,
@@ -45,6 +49,7 @@ export const allBlogCategoryReducer = (
 
 // Admin Actions
 
+// Delete Blog Category
 export const blogCategoryActionsReducer = (state = {}, action) => {
   switch (action.type) {
     // case UPDATE_PRODUCT_REQUEST:
@@ -88,6 +93,49 @@ export const blogCategoryActionsReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create New Blog Category
+export const createBlogCategoryReducer = (
+  state = { blogCategory: {} },
+  action
+) => {
+  switch (action.type) {
+    case CREATE_BLOG_CATEGORY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case CREATE_BLOG_CATEGORY_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        blogCategory: action.payload.category,
+      };
+
+    case CREATE_BLOG_CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_BLOG_CATEGORY_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

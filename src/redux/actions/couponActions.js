@@ -11,6 +11,9 @@ import {
   COUPON_DETAILS_FAIL,
   COUPON_DETAILS_REQUEST,
   COUPON_DETAILS_SUCCESS,
+  CREATE_COUPON_FAIL,
+  CREATE_COUPON_REQUEST,
+  CREATE_COUPON_SUCCESS,
   DELETE_COUPON_FAIL,
   DELETE_COUPON_REQUEST,
   DELETE_COUPON_SUCCESS,
@@ -85,6 +88,8 @@ export const clearErrors = () => async (dispatch) => {
 };
 
 // ADMIN
+
+// Delete and Update Coupon
 export const deleteCoupon = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_COUPON_REQUEST });
@@ -95,6 +100,31 @@ export const deleteCoupon = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_COUPON_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Create New Coupon
+export const createCoupon = (name, discount, expiry) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_COUPON_REQUEST });
+
+    const { data } = await axios.post(`${BACKEND_URL}/coupon`, {
+      name,
+      discount,
+      expiry,
+    });
+
+    dispatch({ type: CREATE_COUPON_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: CREATE_COUPON_FAIL,
       payload:
         (error.response &&
           error.response.data &&

@@ -1,3 +1,6 @@
+import { DELETE_COUPON_FAIL } from '../constants/couponConstant';
+import { DELETE_COUPON_RESET } from '../constants/couponConstant';
+import { DELETE_COUPON_SUCCESS } from '../constants/couponConstant';
 import {
   ALL_COUPON_FAIL,
   ALL_COUPON_REQUEST,
@@ -10,10 +13,11 @@ import {
   COUPON_DETAILS_FAIL,
   COUPON_DETAILS_REQUEST,
   COUPON_DETAILS_SUCCESS,
-  DELETE_COUPON_FAIL,
+  CREATE_COUPON_FAIL,
+  CREATE_COUPON_REQUEST,
+  CREATE_COUPON_RESET,
+  CREATE_COUPON_SUCCESS,
   DELETE_COUPON_REQUEST,
-  DELETE_COUPON_RESET,
-  DELETE_COUPON_SUCCESS,
 } from '../constants/couponConstant';
 
 export const allCouponReducer = (state = { coupons: [] }, action) => {
@@ -119,6 +123,7 @@ export const couponDetailsReducer = (state = { singleCoupon: {} }, action) => {
 
 // Admin Actions
 
+// DELETE AND UPDATE COUPON
 export const couponActionsReducer = (state = {}, action) => {
   switch (action.type) {
     // case UPDATE_PRODUCT_REQUEST:
@@ -162,6 +167,46 @@ export const couponActionsReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create New Coupon
+export const createCouponReducer = (state = { coupon: {} }, action) => {
+  switch (action.type) {
+    case CREATE_COUPON_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case CREATE_COUPON_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        coupon: action.payload.newCoupon,
+      };
+
+    case CREATE_COUPON_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_COUPON_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

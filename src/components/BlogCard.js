@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { shortenText } from '../utils/ShortenText';
+import DOMPurify from 'dompurify';
 
 const BlogCard = ({ blog }) => {
   const location = useLocation();
@@ -28,7 +29,12 @@ const BlogCard = ({ blog }) => {
             </p>
           </div>
           <h5 className='title'>{blog?.title}</h5>
-          <p className='desc'>{shortenText(blog?.description, 200)}</p>
+          <div
+            className='desc mb-2'
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(shortenText(blog?.description, 200)),
+            }}
+          ></div>
           <Link to={`/blogs/${blog?._id}`} className='button'>
             Read More
           </Link>

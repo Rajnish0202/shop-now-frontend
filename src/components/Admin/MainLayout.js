@@ -28,10 +28,13 @@ import { VscGroupByRefType, VscTypeHierarchySub } from 'react-icons/vsc';
 import { Button, Layout, Menu, theme } from 'antd';
 import { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
+
+  const { user } = useSelector((state) => state.user);
 
   const {
     token: { colorBgContainer },
@@ -39,7 +42,11 @@ const MainLayout = () => {
   return (
     <Layout>
       <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className='logo-admin'>
+        <div
+          className='logo-admin'
+          onClick={() => navigate('/')}
+          style={{ cursor: 'pointer' }}
+        >
           {!collapsed ? (
             <h3>Shop-Now</h3>
           ) : (
@@ -81,7 +88,7 @@ const MainLayout = () => {
                 },
 
                 {
-                  key: 'brand',
+                  key: 'add-brand',
                   icon: <SiBrandfolder className='fs-4' />,
                   label: 'Product Brand',
                 },
@@ -92,7 +99,7 @@ const MainLayout = () => {
                 },
 
                 {
-                  key: 'category',
+                  key: 'add-category',
                   icon: <BiDuplicate className='fs-4' />,
                   label: 'Product Category',
                 },
@@ -103,7 +110,7 @@ const MainLayout = () => {
                 },
 
                 {
-                  key: 'type',
+                  key: 'add-type',
                   icon: <VscGroupByRefType className='fs-4' />,
                   label: 'Product Type',
                 },
@@ -114,7 +121,7 @@ const MainLayout = () => {
                 },
 
                 {
-                  key: 'size',
+                  key: 'add-size',
                   icon: <MdOutlineFormatSize className='fs-4' />,
                   label: 'Product Size',
                 },
@@ -125,7 +132,7 @@ const MainLayout = () => {
                 },
 
                 {
-                  key: 'color',
+                  key: 'add-color',
                   icon: <IoIosColorPalette className='fs-4' />,
                   label: 'Product Color',
                 },
@@ -158,7 +165,7 @@ const MainLayout = () => {
                 },
 
                 {
-                  key: 'blog-category',
+                  key: 'all-blog-category',
                   icon: <MdOutlineCategory className='fs-4' />,
                   label: 'Blog Category',
                 },
@@ -234,8 +241,10 @@ const MainLayout = () => {
                 />
               </div>
               <div>
-                <h5 className='mb-0'>Rajnish</h5>
-                <p className='mb-0'>rajnish.0202kumar@gmail.com</p>
+                <h5 className='mb-0 text-capitalize'>
+                  {user?.firstname} {user?.lastname}
+                </h5>
+                <p className='mb-0'>{user?.email}</p>
               </div>
             </div>
           </div>

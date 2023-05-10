@@ -18,6 +18,10 @@ import {
   DELETE_BLOG_SUCCESS,
   DELETE_BLOG_FAIL,
   DELETE_BLOG_RESET,
+  CREATE_BLOG_REQUEST,
+  CREATE_BLOG_SUCCESS,
+  CREATE_BLOG_FAIL,
+  CREATE_BLOG_RESET,
 } from '../constants/blogConstants.js';
 
 export const allBlogReducer = (state = { blogs: [] }, action) => {
@@ -166,6 +170,7 @@ export const dislikeBlogReducer = (state = {}, action) => {
 
 // Admin Actions
 
+// Delete Blog
 export const blogActionsReducer = (state = {}, action) => {
   switch (action.type) {
     // case UPDATE_PRODUCT_REQUEST:
@@ -209,6 +214,46 @@ export const blogActionsReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create New Blog
+export const createBlogReducer = (state = { blog: {} }, action) => {
+  switch (action.type) {
+    case CREATE_BLOG_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case CREATE_BLOG_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        blog: action.payload.newBlog,
+      };
+
+    case CREATE_BLOG_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_BLOG_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

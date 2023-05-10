@@ -8,6 +8,9 @@ import {
   DELETE_BRAND_FAIL,
   DELETE_BRAND_REQUEST,
   DELETE_BRAND_SUCCESS,
+  CREATE_BRAND_REQUEST,
+  CREATE_BRAND_SUCCESS,
+  CREATE_BRAND_FAIL,
 } from '../constants/productBrand';
 
 export const getBrands = () => async (dispatch) => {
@@ -36,6 +39,8 @@ export const clearErrors = () => async (dispatch) => {
 };
 
 // ADMIN
+
+// Delete Brand
 export const deleteProductBrand = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_BRAND_REQUEST });
@@ -46,6 +51,29 @@ export const deleteProductBrand = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_BRAND_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Create New Product Brand
+export const createBrand = (title) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_BRAND_REQUEST });
+
+    const { data } = await axios.post(`${BACKEND_URL}/brand`, {
+      title,
+    });
+
+    dispatch({ type: CREATE_BRAND_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: CREATE_BRAND_FAIL,
       payload:
         (error.response &&
           error.response.data &&

@@ -4,6 +4,9 @@ import {
   ALL_BLOGS_CATEGORY_REQUEST,
   ALL_BLOGS_CATEGORY_SUCCESS,
   CLEAR_ERRORS,
+  CREATE_BLOG_CATEGORY_FAIL,
+  CREATE_BLOG_CATEGORY_REQUEST,
+  CREATE_BLOG_CATEGORY_SUCCESS,
   DELETE_BLOG_CATEGORY_FAIL,
   DELETE_BLOG_CATEGORY_REQUEST,
   DELETE_BLOG_CATEGORY_SUCCESS,
@@ -36,6 +39,8 @@ export const clearErrors = () => async (dispatch) => {
 };
 
 // ADMIN
+
+// Delete Blog Category
 export const deleteBlogCategory = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_BLOG_CATEGORY_REQUEST });
@@ -46,6 +51,29 @@ export const deleteBlogCategory = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_BLOG_CATEGORY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Create New Blog Category
+export const createBlogCategory = (title) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_BLOG_CATEGORY_REQUEST });
+
+    const { data } = await axios.post(`${BACKEND_URL}/blog-category`, {
+      title,
+    });
+
+    dispatch({ type: CREATE_BLOG_CATEGORY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: CREATE_BLOG_CATEGORY_FAIL,
       payload:
         (error.response &&
           error.response.data &&

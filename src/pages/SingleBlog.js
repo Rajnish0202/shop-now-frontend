@@ -19,6 +19,7 @@ import {
   DISLIKE_BLOG_RESET,
   LIKE_BLOG_RESET,
 } from '../redux/constants/blogConstants';
+import DOMPurify from 'dompurify';
 
 const SingleBlog = () => {
   const { id } = useParams();
@@ -100,7 +101,12 @@ const SingleBlog = () => {
                     />
                   );
                 })}
-                <p className='mb-0'>{blog?.description}</p>
+                <div
+                  className='desc mb-2'
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(blog?.description),
+                  }}
+                ></div>
                 <div className='d-flex align-items-center gap-30'>
                   <code>{moment(blog?.createdAt).format('DD MMMM YYYY')}</code>
                   <code className='text-capitalize'>{blog?.author}</code>

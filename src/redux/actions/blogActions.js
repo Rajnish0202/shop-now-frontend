@@ -17,6 +17,9 @@ import {
   DELETE_BLOG_REQUEST,
   DELETE_BLOG_SUCCESS,
   DELETE_BLOG_FAIL,
+  CREATE_BLOG_REQUEST,
+  CREATE_BLOG_SUCCESS,
+  CREATE_BLOG_FAIL,
 } from '../constants/blogConstants.js';
 
 export const getAllBlogs = (limit, category) => async (dispatch) => {
@@ -113,6 +116,8 @@ export const clearErrors = () => async (dispatch) => {
 };
 
 // ADMIN
+
+// Delete Blog
 export const deleteBlog = (id) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_BLOG_REQUEST });
@@ -132,3 +137,29 @@ export const deleteBlog = (id) => async (dispatch) => {
     });
   }
 };
+
+// Create New Blog
+export const createBlog =
+  (title, category, description) => async (dispatch) => {
+    try {
+      dispatch({ type: CREATE_BLOG_REQUEST });
+
+      const { data } = await axios.post(`${BACKEND_URL}/blog`, {
+        title,
+        category,
+        description,
+      });
+
+      dispatch({ type: CREATE_BLOG_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({
+        type: CREATE_BLOG_FAIL,
+        payload:
+          (error.response &&
+            error.response.data &&
+            error.response.data.message) ||
+          error.message ||
+          error.toString(),
+      });
+    }
+  };

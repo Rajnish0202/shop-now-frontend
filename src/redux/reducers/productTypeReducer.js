@@ -6,6 +6,10 @@ import {
   ALL_TYPE_REQUEST,
   ALL_TYPE_SUCCESS,
   CLEAR_ERRORS,
+  CREATE_TYPE_FAIL,
+  CREATE_TYPE_REQUEST,
+  CREATE_TYPE_RESET,
+  CREATE_TYPE_SUCCESS,
   DELETE_TYPE_FAIL,
   DELETE_TYPE_REQUEST,
   DELETE_TYPE_RESET,
@@ -77,6 +81,7 @@ export const productTypeCountReducer = (state = { countTypes: [] }, action) => {
 
 // Admin Actions
 
+// DELETE TYPE
 export const productTypeActionsReducer = (state = {}, action) => {
   switch (action.type) {
     // case UPDATE_PRODUCT_REQUEST:
@@ -120,6 +125,46 @@ export const productTypeActionsReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create New Product Type
+export const createTypeReducer = (state = { newType: {} }, action) => {
+  switch (action.type) {
+    case CREATE_TYPE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case CREATE_TYPE_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        newType: action.payload.type,
+      };
+
+    case CREATE_TYPE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_TYPE_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

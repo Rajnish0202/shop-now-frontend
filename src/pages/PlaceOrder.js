@@ -153,6 +153,10 @@ const PlaceOrder = () => {
     }
   };
 
+  const couponsList = coupons.filter(
+    (coupon) => Date.parse(coupon?.expiry) >= Date.now()
+  );
+
   const placeOrderHandler = () => {
     dispatch(
       createOrder(
@@ -391,8 +395,7 @@ const PlaceOrder = () => {
                       </p>
                     </div>
                   )}
-                  {coupons?.filter((expire) => expire?.exipry >= Date.now())
-                    .length > 0 && (
+                  {couponsList?.length >= 1 && (
                     <div className='d-flex flex-column'>
                       <div
                         className='border-bottom border-top py-2 border-2'
@@ -412,57 +415,53 @@ const PlaceOrder = () => {
                       {showCoupon &&
                         totalPrice &&
                         totalPrice > 1000 &&
-                        coupons
-                          ?.filter((expire) => expire?.expiry >= Date.now())
-                          .map((coupon) => {
-                            return (
+                        couponsList.map((coupon) => {
+                          return (
+                            <div
+                              className='mb-2 border-bottom border-2'
+                              key={coupon?._id}
+                            >
                               <div
-                                className='mb-2 border-bottom border-2'
-                                key={coupon?._id}
+                                className='border-bottom py-2 border-2'
+                                style={{ cursor: 'pointer' }}
+                                onClick={() => applyCouponHandler(coupon?._id)}
                               >
-                                <div
-                                  className='border-bottom py-2 border-2'
-                                  style={{ cursor: 'pointer' }}
-                                  onClick={() =>
-                                    applyCouponHandler(coupon?._id)
-                                  }
+                                <p
+                                  className='mb-1 fw-bold w-100 text-center'
+                                  style={{ fontSize: '14px' }}
                                 >
-                                  <p
-                                    className='mb-1 fw-bold w-100 text-center'
-                                    style={{ fontSize: '14px' }}
-                                  >
-                                    {coupon.name}
-                                  </p>
-                                  <p
-                                    className='mb-0 d-flex align-items-center gap-10 fw-bold'
-                                    style={{ fontSize: '12px' }}
-                                  >
-                                    Discount:
-                                    <code className='text-success mb-0'>
-                                      {coupon.discount}%
-                                    </code>
-                                  </p>
-                                  <p
-                                    className='mb-0 d-flex align-items-center gap-10 fw-bold'
-                                    style={{ fontSize: '12px' }}
-                                  >
-                                    Expiry:
-                                    <code className='text-danger mb-0'>
-                                      {moment(coupon.expiry).format(
-                                        'DD MMMM YYYY'
-                                      )}
-                                    </code>
-                                  </p>
-                                </div>
-                                <button
-                                  className='normal-btn text-danger py-2'
-                                  onClick={() => setIsApplied(false)}
+                                  {coupon.name}
+                                </p>
+                                <p
+                                  className='mb-0 d-flex align-items-center gap-10 fw-bold'
+                                  style={{ fontSize: '12px' }}
                                 >
-                                  Remove
-                                </button>
+                                  Discount:
+                                  <code className='text-success mb-0'>
+                                    {coupon.discount}%
+                                  </code>
+                                </p>
+                                <p
+                                  className='mb-0 d-flex align-items-center gap-10 fw-bold'
+                                  style={{ fontSize: '12px' }}
+                                >
+                                  Expiry:
+                                  <code className='text-danger mb-0'>
+                                    {moment(coupon.expiry).format(
+                                      'DD MMMM YYYY'
+                                    )}
+                                  </code>
+                                </p>
                               </div>
-                            );
-                          })}
+                              <button
+                                className='normal-btn text-danger py-2'
+                                onClick={() => setIsApplied(false)}
+                              >
+                                Remove
+                              </button>
+                            </div>
+                          );
+                        })}
                     </div>
                   )}
                 </div>

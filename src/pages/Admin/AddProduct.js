@@ -11,7 +11,7 @@ import { clearErrors, createBlog } from '../../redux/actions/blogActions';
 import { CREATE_BLOG_RESET } from '../../redux/constants/blogConstants';
 import { useNavigate } from 'react-router-dom';
 
-const AddBlog = () => {
+const AddProduct = () => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState();
   const [desc, setDesc] = useState('');
@@ -107,8 +107,8 @@ const AddBlog = () => {
                 theme='snow'
                 value={desc}
                 onChange={setDesc}
-                modules={AddBlog.modules}
-                formats={AddBlog.formats}
+                modules={AddProduct.modules}
+                formats={AddProduct.formats}
                 className='w-100'
                 placeholder='Enter Description...'
                 name='description'
@@ -137,7 +137,7 @@ const AddBlog = () => {
   );
 };
 
-AddBlog.modules = {
+AddProduct.modules = {
   toolbar: [
     [{ header: 1 }, { header: 2 }],
     [{ font: [] }],
@@ -157,7 +157,7 @@ AddBlog.modules = {
   ],
 };
 
-AddBlog.formats = [
+AddProduct.formats = [
   'header',
   'font',
   'size',
@@ -178,4 +178,4 @@ AddBlog.formats = [
   'align',
 ];
 
-export default AddBlog;
+export default AddProduct;
