@@ -3,6 +3,10 @@ import {
   ALL_PRODUCT_REQUEST,
   ALL_PRODUCT_SUCCESS,
   CLEAR_ERRORS,
+  CREATE_PRODUCT_FAIL,
+  CREATE_PRODUCT_REQUEST,
+  CREATE_PRODUCT_RESET,
+  CREATE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_RESET,
@@ -319,6 +323,7 @@ export const specialProductReducer = (
 
 // Admin Actions
 
+// Delete and Update Product
 export const productActionsReducer = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_PRODUCT_REQUEST:
@@ -362,6 +367,46 @@ export const productActionsReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Create New Product
+export const createProductReducer = (state = { newProduct: {} }, action) => {
+  switch (action.type) {
+    case CREATE_PRODUCT_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case CREATE_PRODUCT_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        newProduct: action.payload.newProduct,
+      };
+
+    case CREATE_PRODUCT_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case CREATE_PRODUCT_RESET:
+      return {
+        ...state,
+        success: false,
       };
 
     case CLEAR_ERRORS:

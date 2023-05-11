@@ -86,4 +86,11 @@ input::-webkit-inner-spin-button {
   text-align: center !important;
 }
 
+.form-check {
+  display: flex;
+  align-items: center;
+  /* justify-content: center; */
+  gap: 10px;
+}
+
 /* =======ADMIN PANEL ENDS======= */

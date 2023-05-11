@@ -1550,4 +1550,22 @@ footer .input-group-text {
   cursor: pointer;
 }
 
+.product_check {
+  padding: 0.375rem 2.25rem 0.375rem 0.75rem;
+  background: #fff;
+  font-size: 1rem;
+  height: calc(3.5rem + 2px);
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.product_check label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.product_check .form-check-input {
+  margin-top: none;
+}
+
 /* =======ADMIN PANEL ENDS======= */

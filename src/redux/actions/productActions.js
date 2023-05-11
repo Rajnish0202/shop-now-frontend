@@ -30,6 +30,9 @@ import {
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
+  CREATE_PRODUCT_FAIL,
+  CREATE_PRODUCT_SUCCESS,
+  CREATE_PRODUCT_REQUEST,
 } from '../constants/productConstants';
 
 export const getProducts =
@@ -642,7 +645,7 @@ export const clearErrors = () => async (dispatch) => {
 
 // Admin
 
-// Delete Product
+// Delete And Update Product
 
 export const deleteProduct = (id) => async (dispatch) => {
   try {
@@ -654,6 +657,42 @@ export const deleteProduct = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Create new Product
+
+export const createProduct = (productData) => async (dispatch) => {
+  try {
+    dispatch({ type: CREATE_PRODUCT_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.post(
+      `${BACKEND_URL}/product/`,
+      productData,
+      config
+    );
+
+    dispatch({ type: CREATE_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: CREATE_PRODUCT_FAIL,
       payload:
         (error.response &&
           error.response.data &&

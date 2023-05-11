@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 
 import { composeWithDevTools } from 'redux-devtools-extension';
 import {
+  createProductReducer,
   featuredProductReducer,
   popularProductReducer,
   productActionsReducer,
@@ -152,6 +153,7 @@ const reducer = combineReducers({
   newProductCategory: createProductCategoryReducer,
   newBrand: createBrandReducer,
   newCoupon: createCouponReducer,
+  newProduct: createProductReducer,
 });
 
 let initialState = {
