@@ -1,5 +1,6 @@
 import React from 'react';
 import { BsCheck } from 'react-icons/bs';
+import { capitalizeText } from '../utils/Capitalized';
 
 const Color = ({ colors, setColor, color }) => {
   return (
@@ -14,6 +15,7 @@ const Color = ({ colors, setColor, color }) => {
                 cursor: 'pointer',
                 opacity: `${color === curColor?._id ? '1' : '0.6'}`,
               }}
+              title={capitalizeText(curColor?.title)}
               onClick={() => setColor(curColor?._id)}
             >
               {color === curColor?._id ? (

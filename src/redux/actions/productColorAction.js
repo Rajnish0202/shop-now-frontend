@@ -13,7 +13,7 @@ import {
   CREATE_COLOR_FAIL,
 } from '../constants/productColorConstants';
 
-export const getAllColors = () => async (dispatch) => {
+export const getAllColors = (createdAt) => async (dispatch) => {
   try {
     dispatch({ type: ALL_COLOR_REQUEST });
 

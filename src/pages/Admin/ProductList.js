@@ -27,8 +27,16 @@ const columns = [
     title: 'Title',
     dataIndex: 'title',
     sorter: (a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
-      if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+      if (
+        a.title.props.children.toLowerCase() <
+        b.title.props.children.toLowerCase()
+      )
+        return -1;
+      if (
+        a.title.props.children.toLowerCase() >
+        b.title.props.children.toLowerCase()
+      )
+        return 1;
       return 0;
     },
   },
@@ -119,7 +127,11 @@ const ProductList = () => {
     data1.push({
       srn: i + 1,
       key: products[i]?._id,
-      title: shortenText(products[i]?.title, 20),
+      title: (
+        <Link to={`/product/${products[i]?.slug}`} className='text-link'>
+          {shortenText(products[i]?.title, 20)}
+        </Link>
+      ),
       category: capitalizeText(products[i]?.category?.title),
       brand: capitalizeText(products[i]?.brand?.title),
       type: capitalizeText(products[i]?.type?.title),
@@ -154,7 +166,7 @@ const ProductList = () => {
         [0, 100000],
         null,
         0,
-        '+createdAt',
+        '-createdAt',
         null,
         null
       )

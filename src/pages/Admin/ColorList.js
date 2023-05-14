@@ -132,8 +132,8 @@ const ColorList = () => {
     if (isDeleted) {
       toast.success(message);
       dispatch({ type: DELETE_COLOR_RESET });
-      dispatch(getAllColors());
     }
+    dispatch(getAllColors());
   }, [dispatch, error, message, isDeleted]);
 
   return (

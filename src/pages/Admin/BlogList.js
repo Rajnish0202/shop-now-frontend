@@ -10,7 +10,11 @@ import { MdDelete } from 'react-icons/md';
 import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { clearErrors, getAllBlogs ,deleteBlog} from '../../redux/actions/blogActions';
+import {
+  clearErrors,
+  getAllBlogs,
+  deleteBlog,
+} from '../../redux/actions/blogActions';
 import { toast } from 'react-toastify';
 import { DELETE_BLOG_RESET } from '../../redux/constants/blogConstants';
 
@@ -23,17 +27,33 @@ const columns = [
     title: 'Title',
     dataIndex: 'title',
     sorter: (a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
-      if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
-      return 0;
+      if (
+        a.title.props.children.toLowerCase() <
+        b.title.props.children.toLowerCase()
+      )
+        return -1;
+      if (
+        a.title.props.children.toLowerCase() >
+        b.title.props.children.toLowerCase()
+      )
+        return 1;
+      // return 0;
     },
   },
   {
     title: 'Category',
     dataIndex: 'category',
     sorter: (a, b) => {
-      if (a.category.toLowerCase() < b.category.toLowerCase()) return -1;
-      if (a.category.toLowerCase() > b.category.toLowerCase()) return 1;
+      if (
+        a.category.props.children.toLowerCase() <
+        b.category.props.children.toLowerCase()
+      )
+        return -1;
+      if (
+        a.category.props.children.toLowerCase() >
+        b.category.props.children.toLowerCase()
+      )
+        return 1;
       return 0;
     },
   },
@@ -56,7 +76,7 @@ const BlogList = () => {
   } = useSelector((state) => state.blogActions);
 
   const deleteHandler = (id) => {
-    dispatch(deleteBlog(id))
+    dispatch(deleteBlog(id));
   };
 
   // Confirm alert
@@ -82,7 +102,12 @@ const BlogList = () => {
     data.push({
       srn: i + 1,
       key: blogs?.allBlog[i]?._id,
-      title: capitalizeText(shortenText(blogs?.allBlog[i]?.title, 20)),
+
+      title: (
+        <Link to={`/blogs/${blogs?.allBlog[i]?._id}`} className='text-link'>
+          {capitalizeText(shortenText(blogs?.allBlog[i]?.title, 20))}
+        </Link>
+      ),
       category: (
         <div style={{ textAlign: 'center' }}>
           {capitalizeText(blogs?.allBlog[i]?.category?.title)}

@@ -34,20 +34,20 @@ const columns = [
   {
     title: 'Discount',
     dataIndex: 'discount',
-    // sorter: (a, b) => {
-    //   if (a.category.toLowerCase() < b.category.toLowerCase()) return -1;
-    //   if (a.category.toLowerCase() > b.category.toLowerCase()) return 1;
-    //   return 0;
-    // },
+    sorter: (a, b) => {
+      if (a.discount < b.discount) return -1;
+      if (a.discount > b.discount) return 1;
+      return 0;
+    },
   },
   {
     title: 'Expire',
     dataIndex: 'expire',
-    // sorter: (a, b) => {
-    //   if (a.brand.toLowerCase() < b.brand.toLowerCase()) return -1;
-    //   if (a.brand.toLowerCase() > b.brand.toLowerCase()) return 1;
-    //   return 0;
-    // },
+    sorter: (a, b) => {
+      if (a.expire.props.children < b.expire.props.children) return -1;
+      if (a.expire.props.children > b.expire.props.children) return 1;
+      return 0;
+    },
   },
 
   {

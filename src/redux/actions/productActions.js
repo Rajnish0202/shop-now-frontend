@@ -684,10 +684,12 @@ export const createProduct = (productData) => async (dispatch) => {
     };
 
     const { data } = await axios.post(
-      `${BACKEND_URL}/product/`,
+      `${BACKEND_URL}/product`,
       productData,
       config
     );
+
+    console.log(data);
 
     dispatch({ type: CREATE_PRODUCT_SUCCESS, payload: data });
   } catch (error) {

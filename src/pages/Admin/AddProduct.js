@@ -20,6 +20,11 @@ const AddProduct = () => {
   const [desc, setDesc] = useState('');
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
+  const [isSpecial, setIsSpecial] = useState(false);
+  const [offer, setOffer] = useState('');
+  const [specialTime, setSpecialTime] = useState('');
+
+  let special = {};
 
   const dispatch = useDispatch();
   const { loading, productCategories } = useSelector(
@@ -64,6 +69,11 @@ const AddProduct = () => {
     );
   };
 
+  const specialHandler = (e) => {
+    const { checked } = e.currentTarget;
+    setIsSpecial(checked ? true : false);
+  };
+
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
@@ -80,6 +90,12 @@ const AddProduct = () => {
       return toast.error('Please Fill All Fields.');
     }
 
+    special = {
+      isSpecial,
+      offer,
+      specialTime,
+    };
+
     const productData = new FormData();
 
     productData.set('title', title);
@@ -87,10 +103,22 @@ const AddProduct = () => {
     productData.set('price', price);
     productData.set('category', category);
     productData.set('quantity', quantity);
-    color.forEach((item) => productData.set('color[]', color));
+    for (let i = 0; i < color.length; i++) {
+      productData.append('color[]', color[i]);
+    }
     productData.set('brand', brand);
     productData.set('type', type);
-    productData.set('size', size);
+    for (let j = 0; j < size.length; j++) {
+      productData.append('sizes[]', size[j]);
+    }
+
+    let keyName;
+    for (let key in special) {
+      if (special.hasOwnProperty(key)) {
+        keyName = ['special', '[', key, ']'].join('');
+        productData.append(keyName, special[key]);
+      }
+    }
 
     dispatch(createProduct(productData));
   };
@@ -144,7 +172,7 @@ const AddProduct = () => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
-              <label htmlFor='floatingInput'>Enter Product Title</label>
+              <label htmlFor='floatingInput'>Enter Product Title*</label>
             </div>
             <div className='form-floating mb-3 w-100'>
               <input
@@ -157,7 +185,7 @@ const AddProduct = () => {
                 min={1}
                 onChange={(e) => setPrice(e.target.value)}
               />
-              <label htmlFor='floatingInput'>Enter Product Price (₹)</label>
+              <label htmlFor='floatingInput'>Enter Product Price* (₹)</label>
             </div>
             <div className='form-floating mb-3 w-100'>
               <input
@@ -170,7 +198,7 @@ const AddProduct = () => {
                 min={1}
                 onChange={(e) => setQuantity(e.target.value)}
               />
-              <label htmlFor='floatingInput'>Enter Product Quantity</label>
+              <label htmlFor='floatingInput'>Enter Product Quantity*</label>
             </div>
             <div className='form-floating mb-3 w-100'>
               {loading && <TextSpinner />}
@@ -192,7 +220,7 @@ const AddProduct = () => {
                     );
                   })}
               </select>
-              <label htmlFor='floatingSelect'>Category</label>
+              <label htmlFor='floatingSelect'>Category*</label>
             </div>
             <div className='form-floating mb-3 w-100'>
               {loadingType && <TextSpinner />}
@@ -214,7 +242,7 @@ const AddProduct = () => {
                     );
                   })}
               </select>
-              <label htmlFor='floatingSelect'>Type</label>
+              <label htmlFor='floatingSelect'>Type*</label>
             </div>
             <div className='form-floating mb-3 w-100'>
               {loadingBrand && <TextSpinner />}
@@ -236,61 +264,126 @@ const AddProduct = () => {
                     );
                   })}
               </select>
-              <label htmlFor='floatingSelect'>Brand</label>
+              <label htmlFor='floatingSelect'>Brand*</label>
             </div>
-            <div className='product_check d-flex align-items-center justify-content-between mb-3 flex-wrap'>
-              {loadingSize && <TextSpinner />}
-              {productSizes &&
-                productSizes?.map((size) => {
-                  return (
-                    <div className='form-check' key={size?._id}>
-                      <input
-                        className='form-check-input'
-                        type='checkbox'
-                        id='check1'
-                        name={size?.title}
-                        value={size?._id}
-                        onClick={handleSize}
-                      />
-                      <label className='form-check-label'>{size?.title}</label>
-                    </div>
-                  );
-                })}
+            <div className='form-floating' id='floatingSize'>
+              <label
+                htmlFor='floatingSize'
+                style={{
+                  top: '-12px',
+                  fontSize: '14px',
+                }}
+              >
+                Select Size
+              </label>
+              <div className='product_check d-flex align-items-center justify-content-between my-3 flex-wrap py-4'>
+                {loadingSize && <TextSpinner />}
+                {productSizes &&
+                  productSizes?.map((size) => {
+                    return (
+                      <div className='form-check mt-2' key={size?._id}>
+                        <input
+                          className='form-check-input'
+                          type='checkbox'
+                          id='check1'
+                          name={size?.title}
+                          value={size?._id}
+                          onClick={handleSize}
+                        />
+                        <label className='form-check-label'>
+                          {size?.title}
+                        </label>
+                      </div>
+                    );
+                  })}
+              </div>
+            </div>
+
+            <div className='form-floating' id='floatingColor'>
+              <label
+                html='floatingColor'
+                className='custom_label'
+                style={{
+                  top: '-12px',
+                  fontSize: '14px',
+                }}
+              >
+                Select Color*
+              </label>
+              <div className='product_check d-flex align-items-center mb-3 flex-wrap product_color gap-3 py-4'>
+                {loadingColor && <TextSpinner />}
+                {colors &&
+                  colors?.map((color) => {
+                    return (
+                      <div className='form-check mt-2' key={color?._id}>
+                        <input
+                          className='form-check-input'
+                          type='checkbox'
+                          id='check2'
+                          name={color?.title}
+                          value={color?._id}
+                          onClick={handleColor}
+                        />
+                        <label
+                          title={capitalizeText(color?.title)}
+                          className='form-check-label'
+                          style={{
+                            background: `${color?.hex}`,
+                            height: '1.5rem',
+                            width: '1.5rem',
+                            borderRadius: '100%',
+                            border: `${
+                              color?.hex.includes('#fff')
+                                ? '1px solid #000'
+                                : 'none'
+                            }`,
+                          }}
+                        ></label>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
 
             <div className='product_check d-flex align-items-center justify-content-between mb-3 flex-wrap'>
-              {loadingColor && <TextSpinner />}
-              {colors &&
-                colors?.map((color) => {
-                  return (
-                    <div className='form-check' key={color?._id}>
-                      <input
-                        className='form-check-input'
-                        type='checkbox'
-                        id='check2'
-                        name={color?.title}
-                        value={color?._id}
-                        onClick={handleColor}
-                      />
-                      <label
-                        title={capitalizeText(color?.title)}
-                        className='form-check-label'
-                        style={{
-                          background: `${color?.hex}`,
-                          height: '1.5rem',
-                          width: '1.5rem',
-                          borderRadius: '100%',
-                          border: `${
-                            color?.hex.includes('#fff')
-                              ? '1px solid #000'
-                              : 'none'
-                          }`,
-                        }}
-                      ></label>
-                    </div>
-                  );
-                })}
+              <div className='form-check'>
+                <input
+                  className='form-check-input'
+                  type='checkbox'
+                  id='check3'
+                  onClick={specialHandler}
+                />
+                <label className='form-check-label'>Add Special</label>
+              </div>
             </div>
+
+            {isSpecial && (
+              <>
+                <div className='form-floating mb-3 w-100'>
+                  <input
+                    type='number'
+                    className='form-control form-border w-100'
+                    id='floatingInput'
+                    name='offer'
+                    value={offer}
+                    min={1}
+                    onChange={(e) => setOffer(e.target.value)}
+                  />
+                  <label htmlFor='floatingInput'>Enter Offer </label>
+                </div>
+                <div className='form-floating mb-3 w-100'>
+                  <input
+                    type='datetime-local'
+                    className='form-control form-border w-100'
+                    id='floatingInput'
+                    name='specialTime'
+                    value={specialTime}
+                    onChange={(e) => setSpecialTime(e.target.value)}
+                  />
+                  <label htmlFor='floatingInput'>Enter Offer Time </label>
+                </div>
+              </>
+            )}
 
             <div className='mb-3 w-100'>
               <ReactQuill
@@ -300,7 +393,7 @@ const AddProduct = () => {
                 modules={AddProduct.modules}
                 formats={AddProduct.formats}
                 className='w-100'
-                placeholder='Enter Description...'
+                placeholder='Enter Description*...'
                 name='description'
               />
             </div>

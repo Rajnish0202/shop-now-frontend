@@ -269,17 +269,17 @@ const SingleProduct = () => {
                       smallImage: {
                         alt: imageUrl
                           ? imageUrl
-                          : product?.images && product?.images?.[0].url,
+                          : product?.images && product?.images?.[0]?.url,
                         isFluidWidth: true,
                         src: imageUrl
                           ? imageUrl
-                          : product?.images && product?.images?.[0].url,
+                          : product?.images && product?.images?.[0]?.url,
                       },
 
                       largeImage: {
                         src: imageUrl
                           ? imageUrl
-                          : product?.images && product?.images?.[0].url,
+                          : product?.images && product?.images?.[0]?.url,
                         width: 800,
                         height: 1000,
                         sizes:
@@ -400,10 +400,10 @@ const SingleProduct = () => {
                     <h6 className='product-heading'>Availabilty :</h6>
                     <p
                       className={`product-data fw-bold ${
-                        product?.quantity > 1 ? 'text-success' : 'text-danger'
+                        product?.quantity >= 1 ? 'text-success' : 'text-danger'
                       }`}
                     >
-                      {product?.quantity > 1 ? 'In Stock' : 'Out Of Stock'}
+                      {product?.quantity >= 1 ? 'In Stock' : 'Out Of Stock'}
                     </p>
                   </div>
                   {product?.sizes?.length > 0 && (

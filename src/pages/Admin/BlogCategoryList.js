@@ -27,8 +27,16 @@ const columns = [
     title: 'Title',
     dataIndex: 'title',
     sorter: (a, b) => {
-      if (a.title.toLowerCase() < b.title.toLowerCase()) return -1;
-      if (a.title.toLowerCase() > b.title.toLowerCase()) return 1;
+      if (
+        a.title.props.children.toLowerCase() <
+        b.title.props.children.toLowerCase()
+      )
+        return -1;
+      if (
+        a.title.props.children.toLowerCase() >
+        b.title.props.children.toLowerCase()
+      )
+        return 1;
       return 0;
     },
   },
