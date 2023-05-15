@@ -7,6 +7,7 @@ import { shortenText } from '../../utils/ShortenText';
 import { capitalizeText } from '../../utils/Capitalized';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
+import { BsCloudUpload } from 'react-icons/bs';
 import { MdDelete } from 'react-icons/md';
 import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { toast } from 'react-toastify';
@@ -107,14 +108,23 @@ const TypeList = () => {
       action: (
         <div className='d-flex align-items-center justify-content-center gap-4'>
           <Link
+            to={`/admin/dashboard/upload-image/type/${types[i]?._id}`}
+            className='btn btn-success d-flex align-items-center justify-content-center fs-5'
+            title='Upload Images'
+          >
+            <BsCloudUpload />
+          </Link>
+          <Link
             to={`/admin/dashboard/edit-product/${types[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
+            title='Update Type'
           >
             <FaEdit />
           </Link>
           <button
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(types[i]?._id)}
+            title='Delete Type'
           >
             {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>

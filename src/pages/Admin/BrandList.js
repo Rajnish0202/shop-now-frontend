@@ -9,6 +9,7 @@ import { MdDelete } from 'react-icons/md';
 import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import { BsCloudUpload } from 'react-icons/bs';
 
 import { toast } from 'react-toastify';
 import {
@@ -96,14 +97,23 @@ const BrandList = () => {
       action: (
         <div className='d-flex align-items-center gap-4 justify-content-center'>
           <Link
+            to={`/admin/dashboard/upload-image/brand/${productBrands[i]?._id}`}
+            className='btn btn-success d-flex align-items-center justify-content-center fs-5'
+            title='Upload Images'
+          >
+            <BsCloudUpload />
+          </Link>
+          <Link
             to={`/admin/dashboard/edit-product/${productBrands[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
+            title='Update Brand'
           >
             <FaEdit />
           </Link>
           <button
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(productBrands[i]?._id)}
+            title='Delete Brand'
           >
             {deleteLoading ? <TextSpinner /> : <MdDelete />}
           </button>

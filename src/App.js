@@ -76,6 +76,7 @@ import AddProductCategory from './pages/Admin/AddProductCategory';
 import AddBrand from './pages/Admin/AddBrand';
 import AddProduct from './pages/Admin/AddProduct';
 import AddCoupon from './pages/Admin/AddCoupon';
+import UploadImage from './pages/Admin/UploadImage';
 
 axios.defaults.withCredentials = true;
 
@@ -277,6 +278,7 @@ function App() {
           <Route path='add-brand' element={<AddBrand />} />
           <Route path='add-product' element={<AddProduct />} />
           <Route path='add-coupons' element={<AddCoupon />} />
+          <Route path='upload-image/:page/:id' element={<UploadImage />} />
         </Route>
       </Routes>
     </Router>

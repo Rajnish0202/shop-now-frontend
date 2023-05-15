@@ -89,10 +89,10 @@ const SingleProduct = () => {
 
   const imageHandler = (image, i) => {
     setImageUrl(image);
-    refs.current[i].classList.add('activeImage');
+    refs?.current[i]?.classList?.add('activeImage');
     for (let j = 0; j < product?.images?.length; j++) {
       if (i !== j) {
-        refs.current[j].classList.remove('activeImage');
+        refs?.current[j]?.classList?.remove('activeImage');
       }
     }
   };

@@ -90,6 +90,7 @@ import {
 import { allFaqReducer } from './reducers/faqReducer';
 import { allFaqCategoryReducer } from './reducers/faqCategoryReducer';
 import { productColorActionsReducer } from './reducers/productColorReducer';
+import { uploadImageReducer } from './reducers/uploadImageReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -154,6 +155,7 @@ const reducer = combineReducers({
   newBrand: createBrandReducer,
   newCoupon: createCouponReducer,
   newProduct: createProductReducer,
+  uploadImages: uploadImageReducer,
 });
 
 let initialState = {
