@@ -138,8 +138,8 @@ const ProductCategoryList = () => {
     if (isDeleted) {
       toast.success(message);
       dispatch({ type: DELETE_PRODUCT_CATEGORY_RESET });
-      dispatch(getProductCategories());
     }
+    dispatch(getProductCategories());
   }, [dispatch, error, message, isDeleted]);
 
   return (

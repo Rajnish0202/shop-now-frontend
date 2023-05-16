@@ -77,7 +77,7 @@ const BrandList = () => {
   };
 
   const data = [];
-  for (let i = 0; i < productBrands.length; i++) {
+  for (let i = 0; i < productBrands?.length; i++) {
     data.push({
       srn: i + 1,
       key: productBrands[i]?._id,
@@ -131,8 +131,8 @@ const BrandList = () => {
     if (isDeleted) {
       toast.success(message);
       dispatch({ type: DELETE_BRAND_RESET });
-      dispatch(getBrands());
     }
+    dispatch(getBrands());
   }, [dispatch, error, message, isDeleted]);
 
   return (
@@ -141,9 +141,9 @@ const BrandList = () => {
       <div>
         <h3 className='mb-4'>
           Brand List (
-          {productBrands.length > 9
-            ? productBrands.length
-            : productBrands.length?.toString().padStart(2, '0')}
+          {productBrands?.length > 9
+            ? productBrands?.length
+            : productBrands?.length?.toString().padStart(2, '0')}
           )
         </h3>
         {loading && (

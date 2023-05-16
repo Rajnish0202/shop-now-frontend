@@ -99,4 +99,9 @@ input::-webkit-inner-spin-button {
   gap: 10px;
 }
 
+.btn:disabled {
+  pointer-events: visible;
+  cursor: not-allowed !important;
+}
+
 /* =======ADMIN PANEL ENDS======= */

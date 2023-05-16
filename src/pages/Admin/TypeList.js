@@ -142,8 +142,8 @@ const TypeList = () => {
     if (isDeleted) {
       toast.success(message);
       dispatch({ type: DELETE_TYPE_RESET });
-      dispatch(getTypes());
     }
+    dispatch(getTypes());
   }, [dispatch, error, message, isDeleted]);
 
   return (
