@@ -11,6 +11,9 @@ import {
   CREATE_BRAND_SUCCESS,
   CREATE_BRAND_FAIL,
   CREATE_BRAND_RESET,
+  SINGLE_BRAND_REQUEST,
+  SINGLE_BRAND_SUCCESS,
+  SINGLE_BRAND_FAIL,
 } from '../constants/productBrand';
 
 export const productBrandReducer = (state = { productBrands: [] }, action) => {
@@ -131,6 +134,40 @@ export const createBrandReducer = (state = { newBrand: {} }, action) => {
       return {
         ...state,
         success: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Single Brand Details
+export const brandDetailsReducer = (state = { brand: {} }, action) => {
+  switch (action.type) {
+    case SINGLE_BRAND_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case SINGLE_BRAND_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        brand: action.payload.brand,
+      };
+
+    case SINGLE_BRAND_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

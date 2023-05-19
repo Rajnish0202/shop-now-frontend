@@ -17,6 +17,9 @@ import {
   DELETE_COUPON_FAIL,
   DELETE_COUPON_REQUEST,
   DELETE_COUPON_SUCCESS,
+  UPDATE_COUPON_FAIL,
+  UPDATE_COUPON_REQUEST,
+  UPDATE_COUPON_SUCCESS,
 } from '../constants/couponConstant';
 
 export const getAllCoupons = () => async (dispatch) => {
@@ -100,6 +103,40 @@ export const deleteCoupon = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_COUPON_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const updateCoupon = (id, formData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_COUPON_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.put(
+      `${BACKEND_URL}/coupon/${id}`,
+      formData,
+      config
+    );
+
+    dispatch({ type: UPDATE_COUPON_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_COUPON_FAIL,
       payload:
         (error.response &&
           error.response.data &&

@@ -29,24 +29,29 @@ import {
   productCountCategoryReducer,
   quickCategoryReducer,
   createProductCategoryReducer,
+  productCategoryDetailsReducer,
 } from './reducers/productCategoryReducer';
 import {
   brandActionsReducer,
   productBrandReducer,
   createBrandReducer,
+  brandDetailsReducer,
 } from './reducers/productBrandReducer';
 import {
   createTypeReducer,
   productTypeActionsReducer,
   productTypeCountReducer,
   productTypeReducer,
+  typeDetailsReducer,
 } from './reducers/productTypeReducer';
 import {
   createSizeReducer,
   productSizeActionsReducer,
   productSizeReducer,
+  sizeDetailsReducer,
 } from './reducers/productSizesRducer';
 import {
+  colorDetailsReducer,
   createColorReducer,
   productColorReducer,
 } from './reducers/productColorReducer';
@@ -85,12 +90,14 @@ import {
 import {
   allBlogCategoryReducer,
   blogCategoryActionsReducer,
+  blogCategoryDetailsReducer,
   createBlogCategoryReducer,
 } from './reducers/blogCategoryReducer';
 import { allFaqReducer } from './reducers/faqReducer';
 import { allFaqCategoryReducer } from './reducers/faqCategoryReducer';
 import { productColorActionsReducer } from './reducers/productColorReducer';
 import { uploadImageReducer } from './reducers/uploadImageReducer';
+import { updateReducer } from './reducers/updateReducer';
 
 const reducer = combineReducers({
   user: userReducer,
@@ -156,6 +163,13 @@ const reducer = combineReducers({
   newCoupon: createCouponReducer,
   newProduct: createProductReducer,
   uploadImages: uploadImageReducer,
+  blogCategoryDetails: blogCategoryDetailsReducer,
+  updateAction: updateReducer,
+  brandDetails: brandDetailsReducer,
+  typeDetails: typeDetailsReducer,
+  colorDetails: colorDetailsReducer,
+  sizeDetails: sizeDetailsReducer,
+  productCategoryDetails: productCategoryDetailsReducer,
 });
 
 let initialState = {

@@ -11,6 +11,9 @@ import {
   DELETE_SIZE_REQUEST,
   DELETE_SIZE_RESET,
   DELETE_SIZE_SUCCESS,
+  SINGLE_SIZES_FAIL,
+  SINGLE_SIZES_REQUEST,
+  SINGLE_SIZES_SUCCESS,
 } from '../constants/sizesConstants';
 
 export const productSizeReducer = (state = { brands: [] }, action) => {
@@ -131,6 +134,40 @@ export const createSizeReducer = (state = { newSize: {} }, action) => {
       return {
         ...state,
         success: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Single Color Details
+export const sizeDetailsReducer = (state = { size: {} }, action) => {
+  switch (action.type) {
+    case SINGLE_SIZES_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case SINGLE_SIZES_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        size: action.payload.size,
+      };
+
+    case SINGLE_SIZES_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

@@ -2,6 +2,9 @@ import {
   ALL_BLOGS_CATEGORY_FAIL,
   ALL_BLOGS_CATEGORY_REQUEST,
   ALL_BLOGS_CATEGORY_SUCCESS,
+  BLOGS_CATEGORY_DETAILS_FAIL,
+  BLOGS_CATEGORY_DETAILS_REQUEST,
+  BLOGS_CATEGORY_DETAILS_SUCCESS,
   CLEAR_ERRORS,
   CREATE_BLOG_CATEGORY_FAIL,
   CREATE_BLOG_CATEGORY_REQUEST,
@@ -136,6 +139,44 @@ export const createBlogCategoryReducer = (
       return {
         ...state,
         success: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Blog Category Details
+
+export const blogCategoryDetailsReducer = (
+  state = { category: {} },
+  action
+) => {
+  switch (action.type) {
+    case BLOGS_CATEGORY_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case BLOGS_CATEGORY_DETAILS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        category: action.payload.category,
+      };
+
+    case BLOGS_CATEGORY_DETAILS_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

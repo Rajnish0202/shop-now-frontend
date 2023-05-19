@@ -115,7 +115,7 @@ const TypeList = () => {
             <BsCloudUpload />
           </Link>
           <Link
-            to={`/admin/dashboard/edit-product/${types[i]?._id}`}
+            to={`/admin/dashboard/edit/product-type/${types[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
             title='Update Type'
           >

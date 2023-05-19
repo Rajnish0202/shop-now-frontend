@@ -11,6 +11,9 @@ import {
   DELETE_SIZE_FAIL,
   DELETE_SIZE_REQUEST,
   DELETE_SIZE_SUCCESS,
+  SINGLE_SIZES_FAIL,
+  SINGLE_SIZES_REQUEST,
+  SINGLE_SIZES_SUCCESS,
 } from '../constants/sizesConstants';
 
 export const getSizes = () => async (dispatch) => {
@@ -23,6 +26,28 @@ export const getSizes = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_SIZES_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Get Single Size Details
+
+export const getSizeDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: SINGLE_SIZES_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/product-size/${id}`);
+
+    dispatch({ type: SINGLE_SIZES_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: SINGLE_SIZES_FAIL,
       payload:
         (error.response &&
           error.response.data &&

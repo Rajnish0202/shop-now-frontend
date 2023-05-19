@@ -124,7 +124,7 @@ const ProductList = () => {
   };
 
   const data1 = [];
-  for (let i = 0; i < products.length; i++) {
+  for (let i = 0; i < products?.length; i++) {
     data1.push({
       srn: i + 1,
       key: products[i]?._id,
@@ -147,7 +147,7 @@ const ProductList = () => {
             <BsCloudUpload />
           </Link>
           <Link
-            to={`/admin/dashboard/edit-product/${products[i]?._id}`}
+            to={`/admin/dashboard/edit-product/${products[i]?.slug}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
             title='Update Product'
           >
@@ -214,9 +214,9 @@ const ProductList = () => {
       <div>
         <h3 className='mb-4'>
           Product List (
-          {products.length > 9
-            ? products.length
-            : products.length?.toString().padStart(2, '0')}
+          {products?.length > 9
+            ? products?.length
+            : products?.length?.toString().padStart(2, '0')}
           )
         </h3>
         {loading && (

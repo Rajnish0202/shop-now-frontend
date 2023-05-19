@@ -14,6 +14,9 @@ import {
   DELETE_TYPE_REQUEST,
   DELETE_TYPE_RESET,
   DELETE_TYPE_SUCCESS,
+  SINGLE_TYPE_FAIL,
+  SINGLE_TYPE_REQUEST,
+  SINGLE_TYPE_SUCCESS,
 } from '../constants/productTypeConstants';
 
 export const productTypeReducer = (state = { types: [] }, action) => {
@@ -165,6 +168,40 @@ export const createTypeReducer = (state = { newType: {} }, action) => {
       return {
         ...state,
         success: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Single Color Details
+export const typeDetailsReducer = (state = { type: {} }, action) => {
+  switch (action.type) {
+    case SINGLE_TYPE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case SINGLE_TYPE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        type: action.payload.type,
+      };
+
+    case SINGLE_TYPE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

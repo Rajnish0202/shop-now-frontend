@@ -92,7 +92,7 @@ const ProductCategoryList = () => {
     data.push({
       srn: i + 1,
       key: productCategories[i]?._id,
-      title: capitalizeText(productCategories[i]?.slug),
+      title: capitalizeText(productCategories[i]?.title),
       slug: productCategories[i]?.slug,
       image: (
         <img
@@ -111,7 +111,7 @@ const ProductCategoryList = () => {
             <BsCloudUpload />
           </Link>
           <Link
-            to={`/admin/dashboard/edit-product/${productCategories[i]?._id}`}
+            to={`/admin/dashboard/edit/product-category/${productCategories[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
             title='Update Category'
           >

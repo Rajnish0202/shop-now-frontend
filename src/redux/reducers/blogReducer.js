@@ -22,6 +22,10 @@ import {
   CREATE_BLOG_SUCCESS,
   CREATE_BLOG_FAIL,
   CREATE_BLOG_RESET,
+  UPDATE_BLOG_REQUEST,
+  UPDATE_BLOG_SUCCESS,
+  UPDATE_BLOG_FAIL,
+  UPDATE_BLOG_RESET,
 } from '../constants/blogConstants.js';
 
 export const allBlogReducer = (state = { blogs: [] }, action) => {
@@ -173,20 +177,19 @@ export const dislikeBlogReducer = (state = {}, action) => {
 // Delete Blog
 export const blogActionsReducer = (state = {}, action) => {
   switch (action.type) {
-    // case UPDATE_PRODUCT_REQUEST:
+    case UPDATE_BLOG_REQUEST:
     case DELETE_BLOG_REQUEST:
       return {
         ...state,
         loading: true,
       };
 
-    // case UPDATE_PRODUCT_SUCCESS:
-    //   return {
-    //     ...state,
-    //     loading: false,
-    //     isUpdated: action.payload.success,
-    //     message: action.payload.message,
-    //   };
+    case UPDATE_BLOG_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdated: action.payload.success,
+      };
 
     case DELETE_BLOG_SUCCESS:
       return {
@@ -196,7 +199,7 @@ export const blogActionsReducer = (state = {}, action) => {
         message: action.payload.message,
       };
 
-    // case UPDATE_PRODUCT_FAIL:
+    case UPDATE_BLOG_FAIL:
     case DELETE_BLOG_FAIL:
       return {
         ...state,
@@ -204,11 +207,11 @@ export const blogActionsReducer = (state = {}, action) => {
         error: action.payload,
       };
 
-    // case UPDATE_PRODUCT_RESET:
-    //   return {
-    //     ...state,
-    //     isUpdated: false,
-    //   };
+    case UPDATE_BLOG_RESET:
+      return {
+        ...state,
+        isUpdated: false,
+      };
 
     case DELETE_BLOG_RESET:
       return {

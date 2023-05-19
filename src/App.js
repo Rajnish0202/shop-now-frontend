@@ -64,7 +64,6 @@ import ColorList from './pages/Admin/ColorList';
 import OrderList from './pages/Admin/OrderList';
 import Users from './pages/Admin/Users';
 import AddBlog from './pages/Admin/AddBlog';
-import EditProduct from './pages/Admin/EditProduct';
 import OrderDetailsAdmin from './pages/Admin/OrderDetailsAdmin';
 
 import UserDetails from './pages/Admin/UserDetails';
@@ -77,6 +76,11 @@ import AddBrand from './pages/Admin/AddBrand';
 import AddProduct from './pages/Admin/AddProduct';
 import AddCoupon from './pages/Admin/AddCoupon';
 import UploadImage from './pages/Admin/UploadImage';
+import UpdateProduct from './pages/Admin/UpdateProduct';
+import UpdateBlog from './pages/Admin/UpdateBlog';
+import UpdateOther from './pages/Admin/UpdateOther';
+import UpdateColor from './pages/Admin/UpdateColor';
+import UpdateCoupon from './pages/Admin/UpdateCoupon';
 
 axios.defaults.withCredentials = true;
 
@@ -256,7 +260,6 @@ function App() {
           <Route path='blog-category-list' element={<BlogCategoryList />} />
           <Route path='coupons-list' element={<CouponList />} />
           <Route path='product-list' element={<ProductList />} />
-          <Route path='edit-product/:productId' element={<EditProduct />} />
           <Route path='brand-list' element={<BrandList />} />
           <Route path='category-list' element={<ProductCategoryList />} />
           <Route path='type-list' element={<TypeList />} />
@@ -279,6 +282,11 @@ function App() {
           <Route path='add-product' element={<AddProduct />} />
           <Route path='add-coupons' element={<AddCoupon />} />
           <Route path='upload-image/:page/:id' element={<UploadImage />} />
+          <Route path='edit-product/:slug' element={<UpdateProduct />} />
+          <Route path='edit-blog/:id' element={<UpdateBlog />} />
+          <Route path='edit/:page/:id' element={<UpdateOther />} />
+          <Route path='edit-color/:id' element={<UpdateColor />} />
+          <Route path='edit-coupon/:id' element={<UpdateCoupon />} />
         </Route>
       </Routes>
     </Router>

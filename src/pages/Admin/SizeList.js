@@ -80,7 +80,7 @@ const SizeList = () => {
       action: (
         <div className='d-flex align-items-center justify-content-center gap-4'>
           <Link
-            to={`/admin/dashboard/edit-product/${productSizes[i]?._id}`}
+            to={`/admin/dashboard/edit/product-size/${productSizes[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
           >
             <FaEdit />
@@ -105,8 +105,8 @@ const SizeList = () => {
     if (isDeleted) {
       toast.success(message);
       dispatch({ type: DELETE_SIZE_RESET });
-      dispatch(getSizes());
     }
+    dispatch(getSizes());
   }, [dispatch, error, message, isDeleted]);
 
   return (

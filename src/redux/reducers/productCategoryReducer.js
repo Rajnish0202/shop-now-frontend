@@ -17,6 +17,9 @@ import {
   CREATE_PRODUCT_CATEGORY_SUCCESS,
   CREATE_PRODUCT_CATEGORY_FAIL,
   CREATE_PRODUCT_CATEGORY_RESET,
+  SINGLE_PRODUCT_CATEGORY_REQUEST,
+  SINGLE_PRODUCT_CATEGORY_SUCCESS,
+  SINGLE_PRODUCT_CATEGORY_FAIL,
 } from '../constants/productCategory';
 
 export const productCategoryReducer = (
@@ -213,6 +216,43 @@ export const createProductCategoryReducer = (
       return {
         ...state,
         success: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+// Single Product Category Details
+export const productCategoryDetailsReducer = (
+  state = { category: {} },
+  action
+) => {
+  switch (action.type) {
+    case SINGLE_PRODUCT_CATEGORY_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case SINGLE_PRODUCT_CATEGORY_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        category: action.payload.category,
+      };
+
+    case SINGLE_PRODUCT_CATEGORY_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

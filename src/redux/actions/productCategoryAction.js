@@ -17,6 +17,9 @@ import {
   CREATE_PRODUCT_CATEGORY_REQUEST,
   CREATE_PRODUCT_CATEGORY_SUCCESS,
   CREATE_PRODUCT_CATEGORY_FAIL,
+  SINGLE_PRODUCT_CATEGORY_REQUEST,
+  SINGLE_PRODUCT_CATEGORY_SUCCESS,
+  SINGLE_PRODUCT_CATEGORY_FAIL,
 } from '../constants/productCategory';
 
 export const getProductCategories = () => async (dispatch) => {
@@ -128,6 +131,28 @@ export const createProductCategory = (title) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_PRODUCT_CATEGORY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Get Single Product Category Details
+
+export const getProductCategoryDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: SINGLE_PRODUCT_CATEGORY_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/product-category/${id}`);
+
+    dispatch({ type: SINGLE_PRODUCT_CATEGORY_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: SINGLE_PRODUCT_CATEGORY_FAIL,
       payload:
         (error.response &&
           error.response.data &&

@@ -20,6 +20,9 @@ import {
   CREATE_BLOG_REQUEST,
   CREATE_BLOG_SUCCESS,
   CREATE_BLOG_FAIL,
+  UPDATE_BLOG_REQUEST,
+  UPDATE_BLOG_SUCCESS,
+  UPDATE_BLOG_FAIL,
 } from '../constants/blogConstants.js';
 
 export const getAllBlogs = (limit, category) => async (dispatch) => {
@@ -128,6 +131,41 @@ export const deleteBlog = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_BLOG_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Update Blog
+export const updateBlog = (id, blogData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_BLOG_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.put(
+      `${BACKEND_URL}/blog/${id}`,
+      blogData,
+      config
+    );
+
+    dispatch({ type: UPDATE_BLOG_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_BLOG_FAIL,
       payload:
         (error.response &&
           error.response.data &&

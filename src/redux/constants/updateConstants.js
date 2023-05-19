@@ -1,0 +1,6 @@
+export const UPDATE_REQUEST = 'UPDATE_REQUEST';
+export const UPDATE_SUCCESS = 'UPDATE_SUCCESS';
+export const UPDATE_FAIL = 'UPDATE_FAIL';
+export const UPDATE_RESET = 'UPDATE_RESET';
+
+export const CLEAR_ERRORS = 'CLEAR_ERRORS';

@@ -3,6 +3,9 @@ import {
   ALL_BLOGS_CATEGORY_FAIL,
   ALL_BLOGS_CATEGORY_REQUEST,
   ALL_BLOGS_CATEGORY_SUCCESS,
+  BLOGS_CATEGORY_DETAILS_FAIL,
+  BLOGS_CATEGORY_DETAILS_REQUEST,
+  BLOGS_CATEGORY_DETAILS_SUCCESS,
   CLEAR_ERRORS,
   CREATE_BLOG_CATEGORY_FAIL,
   CREATE_BLOG_CATEGORY_REQUEST,
@@ -74,6 +77,28 @@ export const createBlogCategory = (title) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_BLOG_CATEGORY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Get Single Blog Category
+
+export const getBlogCategoryDetails = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: BLOGS_CATEGORY_DETAILS_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/blog-category/${id}`);
+
+    dispatch({ type: BLOGS_CATEGORY_DETAILS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: BLOGS_CATEGORY_DETAILS_FAIL,
       payload:
         (error.response &&
           error.response.data &&

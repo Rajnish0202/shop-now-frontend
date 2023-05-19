@@ -96,7 +96,7 @@ const BlogCategoryList = () => {
       action: (
         <div className='d-flex align-items-center justify-content-center gap-4'>
           <Link
-            to={`/admin/dashboard/edit-product/${blogCategories[i]?._id}`}
+            to={`/admin/dashboard/edit/blog-category/${blogCategories[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
           >
             <FaEdit />
