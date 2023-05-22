@@ -675,10 +675,11 @@ footer .input-group-text {
   cursor: pointer;
 }
 
-.form-check-input:checked {
+.form-check-input:checked,
+.form-check-input.checked {
   outline: none;
   border: none;
-  background-color: var(--color-febd69);
+  background-color: var(--color-febd69) !important;
 }
 
 .form-check-input:focus {
@@ -1119,6 +1120,12 @@ footer .input-group-text {
 .description-wrapper p {
   font-size: 14px;
   color: var(--color-777777);
+}
+
+.description-wrapper .desc h1,
+.description-wrapper .desc h2,
+.description-wrapper .desc p {
+  margin-bottom: 0 !important;
 }
 
 .review-inner-wrapper {

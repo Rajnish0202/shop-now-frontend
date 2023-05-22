@@ -35,6 +35,7 @@ import {
 import { addItemsToCompare } from '../redux/actions/compareAction';
 import { RATING_PRODUCT_RESET } from '../redux/constants/productConstants';
 import { allUserOrders } from '../redux/actions/orderActions';
+import DOMPurify from 'dompurify';
 
 const SingleProduct = () => {
   const { loading, error, product } = useSelector(
@@ -561,7 +562,12 @@ const SingleProduct = () => {
             <div className='col-12'>
               <h4>Description</h4>
               <div className=' bg-white p-3' style={{ borderRadius: '10px' }}>
-                <p className='mb-0'>{product?.description}</p>
+                <div
+                  className='desc dom'
+                  dangerouslySetInnerHTML={{
+                    __html: DOMPurify.sanitize(product?.description),
+                  }}
+                ></div>
               </div>
             </div>
           </div>

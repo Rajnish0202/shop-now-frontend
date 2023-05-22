@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { addWishlist } from '../redux/actions/wishlistAction';
 import { addItemsToCompare } from '../redux/actions/compareAction';
 import { toast } from 'react-toastify';
+import DOMPurify from 'dompurify';
 
 const ProductCard = ({ grid, product }) => {
   const location = useLocation();
@@ -57,15 +58,18 @@ const ProductCard = ({ grid, product }) => {
             starDimension='20px'
             starSpacing='2px'
           />
-          <p
-            className={`description mb-0 ${
+          <div
+            className={`description mb-0 desc ${
               grid === 12 || grid === 6 ? 'd-block' : 'd-none'
             }`}
-          >
-            {grid === 6 || grid === 12
-              ? shortenText(product?.description, 450)
-              : product?.description}
-          </p>
+            dangerouslySetInnerHTML={{
+              __html: DOMPurify.sanitize(
+                grid === 6 || grid === 12
+                  ? shortenText(product?.description, 450)
+                  : product?.description
+              ),
+            }}
+          ></div>
           {product?.special?.offer && (
             <div
               className={`d-flex align-items-center price ${

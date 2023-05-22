@@ -7,7 +7,14 @@ import { capitalizeText } from '../../utils/Capitalized';
 import { TextSpinner } from '../../components/Loader/Loader';
 import { toast } from 'react-toastify';
 import { useNavigate, useParams } from 'react-router-dom';
-import { productDetails } from '../../redux/actions/productActions';
+import {
+  productDetails,
+  updateProduct,
+  clearErrors,
+} from '../../redux/actions/productActions';
+
+import { UPDATE_PRODUCT_RESET } from '../../redux/constants/productConstants';
+
 import moment from 'moment';
 
 const UpdateProduct = () => {
@@ -53,8 +60,8 @@ const UpdateProduct = () => {
   const {
     loading: loadingProduct,
     error,
-    success,
-  } = useSelector((state) => state.newProduct);
+    isUpdated,
+  } = useSelector((state) => state.productActions);
 
   const navigate = useNavigate();
 
@@ -87,10 +94,6 @@ const UpdateProduct = () => {
   const formSubmitHandler = (e) => {
     e.preventDefault();
 
-    console.log(!size.length >= 1 || !product?.sizes?.length >= 1);
-    console.log(!size.length >= 1);
-    console.log(product?.sizes?.length >= 1);
-
     if (
       !title ||
       !price ||
@@ -107,8 +110,14 @@ const UpdateProduct = () => {
       return toast.error('Please Select Size');
     }
 
-    if (isSpecial) {
+    if (isSpecial && !offer && specialTime === undefined) {
       return toast.error('Please Fill Offer and Special Time');
+    } else if (isSpecial && !offer && specialTime) {
+      return toast.error('Please Fill Offer');
+    } else if (isSpecial && offer && specialTime === undefined) {
+      return toast.error('Please Fill Special Time');
+    } else if (isSpecial && offer && Date.parse(specialTime) <= Date.now()) {
+      return toast.error('Special Time must be greater than Now.');
     }
 
     special = {
@@ -141,7 +150,7 @@ const UpdateProduct = () => {
       }
     }
 
-    console.log(...productData);
+    dispatch(updateProduct(product?._id, productData));
   };
 
   const formClearHandler = () => {
@@ -156,7 +165,7 @@ const UpdateProduct = () => {
     setSize([]);
     setIsSpecial(false);
     setSpecialTime('');
-    setOffer('');
+    setOffer(0);
   };
 
   useEffect(() => {
@@ -173,29 +182,24 @@ const UpdateProduct = () => {
       setOffer(product?.special?.offer);
       setOffer(product?.special?.offer);
       setSpecialTime(product?.special?.specialTime);
-      if (product?.special?.isSpecial) {
-        document.getElementById('check3').checked = product?.special?.isSpecial;
-      } else {
-        document.getElementById('check3').checked = product?.special?.isSpecial;
-      }
     }
 
-    // if (error) {
-    //   toast.error(error);
-    //   dispatch(clearErrors());
-    // }
+    if (error) {
+      toast.error(error);
+      dispatch(clearErrors());
+    }
 
-    // if (success) {
-    //   toast.success('Product Created Successfully.');
-    //   navigate('/admin/dashboard/product-list');
-    //   dispatch({ type: CREATE_PRODUCT_RESET });
-    // }
+    if (isUpdated) {
+      toast.success('Product Created Successfully.');
+      navigate('/admin/dashboard/product-list');
+      dispatch({ type: UPDATE_PRODUCT_RESET });
+    }
 
     // dispatch(getProductCategories());
   }, [
     dispatch,
     error,
-    success,
+    isUpdated,
     navigate,
     slug,
     product?.title,
@@ -241,7 +245,7 @@ const UpdateProduct = () => {
                 id='floatingInput'
                 placeholder='Product Price'
                 name='price'
-                value={price}
+                value={price || ''}
                 min={1}
                 onChange={(e) => setPrice(e.target.value)}
               />
@@ -254,7 +258,7 @@ const UpdateProduct = () => {
                 id='floatingInput'
                 placeholder='Product Quantity'
                 name='quantity'
-                value={quantity}
+                value={quantity || ''}
                 min={1}
                 onChange={(e) => setQuantity(e.target.value)}
               />
@@ -404,7 +408,7 @@ const UpdateProduct = () => {
                             id='check1'
                             name={size?.title}
                             value={size?._id}
-                            onClick={handleSize}
+                            onChange={handleSize}
                           />
                           <label className='form-check-label'>
                             {size?.title}
@@ -486,7 +490,7 @@ const UpdateProduct = () => {
                           id='check2'
                           name={color?.title}
                           value={color?._id}
-                          onClick={handleColor}
+                          onChange={handleColor}
                         />
                         <label
                           title={capitalizeText(color?.title)}
@@ -515,7 +519,8 @@ const UpdateProduct = () => {
                   className='form-check-input'
                   type='checkbox'
                   id='check3'
-                  onClick={specialHandler}
+                  onChange={specialHandler}
+                  checked={isSpecial}
                 />
                 <label className='form-check-label'>Update Special</label>
               </div>
@@ -529,7 +534,7 @@ const UpdateProduct = () => {
                     className='form-control form-border w-100'
                     id='floatingInput'
                     name='offer'
-                    value={offer}
+                    value={offer || ''}
                     min={1}
                     onChange={(e) => setOffer(e.target.value)}
                   />
@@ -544,9 +549,11 @@ const UpdateProduct = () => {
                         type='text'
                         className='form-control form-border w-100'
                         id='floatingInput'
-                        value={moment(product?.special?.specialTime).format(
-                          'DD MMMM YYYY hh:mm:ss a'
-                        )}
+                        value={
+                          moment(product?.special?.specialTime).format(
+                            'DD MMMM YYYY hh:mm:ss a'
+                          ) || ''
+                        }
                         readOnly
                       />
                       <label htmlFor='floatingInput'>
@@ -572,7 +579,7 @@ const UpdateProduct = () => {
             <div className='mb-3 w-100'>
               <ReactQuill
                 theme='snow'
-                value={desc}
+                value={desc || ''}
                 onChange={setDesc}
                 modules={UpdateProduct.modules}
                 formats={UpdateProduct.formats}

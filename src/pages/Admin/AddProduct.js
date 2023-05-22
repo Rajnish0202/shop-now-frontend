@@ -78,16 +78,28 @@ const AddProduct = () => {
     e.preventDefault();
 
     if (
-      !title &&
-      !category &&
-      !desc &&
-      !brand &&
-      !type &&
-      !color &&
-      !price &&
+      !title ||
+      !category ||
+      !desc ||
+      !brand ||
+      !type ||
+      !color.length >= 1 ||
+      !price ||
       !quantity
     ) {
       return toast.error('Please Fill All Fields.');
+    }
+
+    console.log(Date.parse(specialTime), Date.now());
+
+    if (isSpecial && !offer && !specialTime) {
+      return toast.error('Please Fill Offer and Special Time');
+    } else if (isSpecial && !offer && specialTime) {
+      return toast.error('Please Fill Offer');
+    } else if (isSpecial && offer && !specialTime) {
+      return toast.error('Please Fill Special Time');
+    } else if (isSpecial && offer && Date.parse(specialTime) <= Date.now()) {
+      return toast.error('Special Time must be greater than Now.');
     }
 
     special = {

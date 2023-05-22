@@ -30,6 +30,9 @@ import {
   DELETE_PRODUCT_REQUEST,
   DELETE_PRODUCT_SUCCESS,
   DELETE_PRODUCT_FAIL,
+  UPDATE_PRODUCT_REQUEST,
+  UPDATE_PRODUCT_SUCCESS,
+  UPDATE_PRODUCT_FAIL,
   CREATE_PRODUCT_FAIL,
   CREATE_PRODUCT_SUCCESS,
   CREATE_PRODUCT_REQUEST,
@@ -695,6 +698,42 @@ export const createProduct = (productData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: CREATE_PRODUCT_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Update  Product
+
+export const updateProduct = (id, productData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_PRODUCT_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.put(
+      `${BACKEND_URL}/product/${id}`,
+      productData,
+      config
+    );
+
+    dispatch({ type: UPDATE_PRODUCT_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_PRODUCT_FAIL,
       payload:
         (error.response &&
           error.response.data &&

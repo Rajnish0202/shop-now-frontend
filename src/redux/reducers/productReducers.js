@@ -338,7 +338,6 @@ export const productActionsReducer = (state = {}, action) => {
         ...state,
         loading: false,
         isUpdated: action.payload.success,
-        message: action.payload.message,
       };
 
     case DELETE_PRODUCT_SUCCESS:
