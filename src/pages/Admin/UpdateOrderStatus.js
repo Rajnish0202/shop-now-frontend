@@ -48,7 +48,6 @@ const UpdateOrderStatus = () => {
     const statusData = new FormData();
     statusData.set('status', choose);
 
-    console.log(...statusData);
     dispatch(updateOrderStatus(id, statusData));
   };
 
