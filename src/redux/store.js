@@ -73,6 +73,7 @@ import {
   newOrderReducer,
   orderDetailsAdminReducer,
   orderDetailsReducer,
+  updateStatusReducer,
 } from './reducers/orderReducer';
 import {
   allWishlistReducer,
@@ -170,6 +171,7 @@ const reducer = combineReducers({
   colorDetails: colorDetailsReducer,
   sizeDetails: sizeDetailsReducer,
   productCategoryDetails: productCategoryDetailsReducer,
+  orderStatus: updateStatusReducer,
 });
 
 let initialState = {

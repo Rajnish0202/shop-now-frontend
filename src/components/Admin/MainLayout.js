@@ -15,13 +15,16 @@ import {
   MdChecklist,
   MdOutlineCategory,
   MdOutlineFormatSize,
+  MdPendingActions,
 } from 'react-icons/md';
 import { IoIosColorPalette, IoMdNotifications } from 'react-icons/io';
 import { HiClipboardList } from 'react-icons/hi';
 import { BsBorderStyle, BsSendCheck } from 'react-icons/bs';
-import { AiOutlineBgColors } from 'react-icons/ai';
+import { AiOutlineBgColors, AiOutlineDeliveredProcedure } from 'react-icons/ai';
 import { ImBlogger, ImBlogger2 } from 'react-icons/im';
 import { GoTasklist } from 'react-icons/go';
+import { GiDeliveryDrone } from 'react-icons/gi';
+import { FaShippingFast } from 'react-icons/fa';
 import { BiDuplicate, BiFontSize, BiListPlus } from 'react-icons/bi';
 import { VscGroupByRefType, VscTypeHierarchySub } from 'react-icons/vsc';
 
@@ -144,9 +147,36 @@ const MainLayout = () => {
               ],
             },
             {
-              key: 'all-orders',
+              key: 'orders',
               icon: <BsBorderStyle className='fs-4' />,
               label: 'Orders',
+              children: [
+                {
+                  key: 'all_orders',
+                  icon: <BsBorderStyle className='fs-4' />,
+                  label: 'All Orders',
+                },
+                {
+                  key: 'pending_orders',
+                  icon: <MdPendingActions className='fs-4' />,
+                  label: 'Pending Order',
+                },
+                {
+                  key: 'shipped_orders',
+                  icon: <FaShippingFast className='fs-4' />,
+                  label: 'Shipped Order',
+                },
+                {
+                  key: 'out_for_delivery_orders',
+                  icon: <GiDeliveryDrone className='fs-4' />,
+                  label: 'Out For Delivery',
+                },
+                {
+                  key: 'delivered_orders',
+                  icon: <AiOutlineDeliveredProcedure className='fs-4' />,
+                  label: 'Delivered Order',
+                },
+              ],
             },
             {
               key: 'blogs',

@@ -4,13 +4,13 @@ import { Table } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { capitalizeText } from '../../utils/Capitalized';
 import { Link } from 'react-router-dom';
-import { FaEdit } from 'react-icons/fa';
+// import { FaEdit } from 'react-icons/fa';
 import { BiDetail } from 'react-icons/bi';
 // import { MdDelete } from 'react-icons/md';
 import { Spinner } from '../../components/Loader/Loader';
 // import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
-import { allOrders } from '../../redux/actions/orderActions';
+import { deliveredOrders } from '../../redux/actions/orderActions';
 
 const columns = [
   {
@@ -58,7 +58,7 @@ const columns = [
   },
 ];
 
-const OrderList = () => {
+const DeliveredOrderList = () => {
   const dispatch = useDispatch();
   const { loading, adminOrders } = useSelector((state) => state.adminOrders);
 
@@ -85,7 +85,7 @@ const OrderList = () => {
   // };
 
   const data1 = [];
-  for (let i = 0; i < adminOrders.length; i++) {
+  for (let i = 0; i < adminOrders?.length; i++) {
     data1.push({
       srn: i + 1,
       key: adminOrders[i]?._id,
@@ -93,7 +93,7 @@ const OrderList = () => {
         adminOrders[i]?.orderby?.firstname
       )} ${capitalizeText(adminOrders[i]?.orderby?.lastname)}`,
       count: adminOrders[i]?.products?.length,
-      payment: capitalizeText(adminOrders[i]?.paymentIntent?.method),
+      payment: adminOrders[i]?.paymentIntent?.method,
       total: `₹ ${
         adminOrders[i]?.totalAfterDiscount
           ? adminOrders[i]?.totalAfterDiscount
@@ -109,12 +109,12 @@ const OrderList = () => {
             <BiDetail />
           </Link>
 
-          <Link
-            to={`/admin/dashboard/update-status/allorders/${adminOrders[i]?._id}`}
+          {/* <Link
+            to={`/admin/dashboard/update-status/${adminOrders[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
           >
             <FaEdit />
-          </Link>
+          </Link> */}
           {/* <button
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(adminOrders[i]?._id)}
@@ -127,7 +127,7 @@ const OrderList = () => {
   }
 
   useEffect(() => {
-    dispatch(allOrders());
+    dispatch(deliveredOrders());
   }, [dispatch]);
   return (
     <>
@@ -138,9 +138,9 @@ const OrderList = () => {
           Orders (
           {adminOrders?.length === 0
             ? '00'
-            : adminOrders.length > 9
-            ? adminOrders.length
-            : adminOrders.length?.toString().padStart(2, '0')}
+            : adminOrders?.length > 9
+            ? adminOrders?.length
+            : adminOrders?.length?.toString().padStart(2, '0')}
           )
         </h3>
         {loading && (
@@ -156,4 +156,4 @@ const OrderList = () => {
   );
 };
 
-export default OrderList;
+export default DeliveredOrderList;

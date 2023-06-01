@@ -10,12 +10,28 @@ import {
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_RESET,
   CREATE_ORDER_SUCCESS,
+  DELIVERED_ORDERS_FAIL,
+  DELIVERED_ORDERS_REQUEST,
+  DELIVERED_ORDERS_SUCCESS,
   ORDER_DETAILS_ADMIN_FAIL,
   ORDER_DETAILS_ADMIN_REQUEST,
   ORDER_DETAILS_ADMIN_SUCCESS,
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
+  OUT_FOR_DELIVERY_FAIL,
+  OUT_FOR_DELIVERY_REQUEST,
+  OUT_FOR_DELIVERY_SUCCESS,
+  PENDING_ORDERS_FAIL,
+  PENDING_ORDERS_REQUEST,
+  PENDING_ORDERS_SUCCESS,
+  SHIPPED_ORDERS_FAIL,
+  SHIPPED_ORDERS_REQUEST,
+  SHIPPED_ORDERS_SUCCESS,
+  UPDATE_ORDER_STATUS_FAIL,
+  UPDATE_ORDER_STATUS_REQUEST,
+  UPDATE_ORDER_STATUS_RESET,
+  UPDATE_ORDER_STATUS_SUCCESS,
 } from '../constants/orderConstants';
 
 export const newOrderReducer = (state = {}, action) => {
@@ -125,18 +141,30 @@ export const orderDetailsReducer = (state = { order: {} }, action) => {
 export const allAdminOrdersReducer = (state = { adminOrders: [] }, action) => {
   switch (action.type) {
     case ALL_ORDERS_ADMIN_REQUEST:
+    case PENDING_ORDERS_REQUEST:
+    case SHIPPED_ORDERS_REQUEST:
+    case DELIVERED_ORDERS_REQUEST:
+    case OUT_FOR_DELIVERY_REQUEST:
       return {
         loading: true,
         adminOrders: [],
       };
 
     case ALL_ORDERS_ADMIN_SUCCESS:
+    case PENDING_ORDERS_SUCCESS:
+    case SHIPPED_ORDERS_SUCCESS:
+    case DELIVERED_ORDERS_SUCCESS:
+    case OUT_FOR_DELIVERY_SUCCESS:
       return {
         loading: false,
         adminOrders: action.payload,
       };
 
     case ALL_ORDERS_ADMIN_FAIL:
+    case PENDING_ORDERS_FAIL:
+    case SHIPPED_ORDERS_FAIL:
+    case DELIVERED_ORDERS_FAIL:
+    case OUT_FOR_DELIVERY_FAIL:
       return {
         loading: false,
         error: action.payload,
@@ -176,6 +204,43 @@ export const orderDetailsAdminReducer = (
         ...state,
         loading: false,
         error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const updateStatusReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_ORDER_STATUS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_ORDER_STATUS_SUCCESS:
+      return {
+        loading: false,
+        statusUpdated: action.payload.success,
+      };
+
+    case UPDATE_ORDER_STATUS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case UPDATE_ORDER_STATUS_RESET:
+      return {
+        ...state,
+        statusUpdated: false,
       };
 
     case CLEAR_ERRORS:

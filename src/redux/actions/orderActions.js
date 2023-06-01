@@ -7,15 +7,31 @@ import {
   ALL_ORDERS_FAIL,
   ALL_ORDERS_REQUEST,
   ALL_ORDERS_SUCCESS,
+  CLEAR_ERRORS,
   CREATE_ORDER_FAIL,
   CREATE_ORDER_REQUEST,
   CREATE_ORDER_SUCCESS,
+  DELIVERED_ORDERS_FAIL,
+  DELIVERED_ORDERS_REQUEST,
+  DELIVERED_ORDERS_SUCCESS,
   ORDER_DETAILS_ADMIN_FAIL,
   ORDER_DETAILS_ADMIN_REQUEST,
   ORDER_DETAILS_ADMIN_SUCCESS,
   ORDER_DETAILS_FAIL,
   ORDER_DETAILS_REQUEST,
   ORDER_DETAILS_SUCCESS,
+  OUT_FOR_DELIVERY_FAIL,
+  OUT_FOR_DELIVERY_REQUEST,
+  OUT_FOR_DELIVERY_SUCCESS,
+  PENDING_ORDERS_FAIL,
+  PENDING_ORDERS_REQUEST,
+  PENDING_ORDERS_SUCCESS,
+  SHIPPED_ORDERS_FAIL,
+  SHIPPED_ORDERS_REQUEST,
+  SHIPPED_ORDERS_SUCCESS,
+  UPDATE_ORDER_STATUS_FAIL,
+  UPDATE_ORDER_STATUS_REQUEST,
+  UPDATE_ORDER_STATUS_SUCCESS,
 } from '../constants/orderConstants';
 
 export const createOrder =
@@ -138,4 +154,126 @@ export const orderDetailsAdmin = (id) => async (dispatch) => {
         error.toString(),
     });
   }
+};
+
+export const pendingOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: PENDING_ORDERS_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/orders/pending`);
+
+    dispatch({ type: PENDING_ORDERS_SUCCESS, payload: data.pendingOrders });
+  } catch (error) {
+    dispatch({
+      type: PENDING_ORDERS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const shippedOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: SHIPPED_ORDERS_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/orders/shipped`);
+
+    dispatch({ type: SHIPPED_ORDERS_SUCCESS, payload: data.shippedOrders });
+  } catch (error) {
+    dispatch({
+      type: SHIPPED_ORDERS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const outForDeliveryOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: OUT_FOR_DELIVERY_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/orders/out-for-delivery`);
+
+    dispatch({
+      type: OUT_FOR_DELIVERY_SUCCESS,
+      payload: data.outForDeliveryOrders,
+    });
+  } catch (error) {
+    dispatch({
+      type: OUT_FOR_DELIVERY_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const deliveredOrders = () => async (dispatch) => {
+  try {
+    dispatch({ type: DELIVERED_ORDERS_REQUEST });
+
+    const { data } = await axios.get(`${BACKEND_URL}/orders/delivered`);
+
+    dispatch({ type: DELIVERED_ORDERS_SUCCESS, payload: data.deliveredOrders });
+  } catch (error) {
+    dispatch({
+      type: DELIVERED_ORDERS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const updateOrderStatus = (id, statusData) => async (dispatch) => {
+  try {
+    dispatch({ type: UPDATE_ORDER_STATUS_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.put(
+      `${BACKEND_URL}/orders/update-order/${id}`,
+      statusData,
+      config
+    );
+
+    dispatch({ type: UPDATE_ORDER_STATUS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_ORDER_STATUS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+// Clearing Errors
+export const clearErrors = () => async (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
 };

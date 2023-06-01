@@ -81,6 +81,11 @@ import UpdateBlog from './pages/Admin/UpdateBlog';
 import UpdateOther from './pages/Admin/UpdateOther';
 import UpdateColor from './pages/Admin/UpdateColor';
 import UpdateCoupon from './pages/Admin/UpdateCoupon';
+import PendingOrderList from './pages/Admin/PendingOrderList';
+import ShippedOrderList from './pages/Admin/ShippedOrderList';
+import DeliveredOrderList from './pages/Admin/DeliveredOrderList';
+import OutForDeliveredList from './pages/Admin/OutForDeliveredList';
+import UpdateOrderStatus from './pages/Admin/UpdateOrderStatus';
 
 axios.defaults.withCredentials = true;
 
@@ -265,7 +270,14 @@ function App() {
           <Route path='type-list' element={<TypeList />} />
           <Route path='size-list' element={<SizeList />} />
           <Route path='color-list' element={<ColorList />} />
-          <Route path='all-orders' element={<OrderList />} />
+          <Route path='all_orders' element={<OrderList />} />
+          <Route path='pending_orders' element={<PendingOrderList />} />
+          <Route path='shipped_orders' element={<ShippedOrderList />} />
+          <Route path='delivered_orders' element={<DeliveredOrderList />} />
+          <Route
+            path='out_for_delivery_orders'
+            element={<OutForDeliveredList />}
+          />
           <Route
             path='order-details/:orderId'
             element={<OrderDetailsAdmin />}
@@ -287,6 +299,10 @@ function App() {
           <Route path='edit/:page/:id' element={<UpdateOther />} />
           <Route path='edit-color/:id' element={<UpdateColor />} />
           <Route path='edit-coupon/:id' element={<UpdateCoupon />} />
+          <Route
+            path='update-status/:page/:id'
+            element={<UpdateOrderStatus />}
+          />
         </Route>
       </Routes>
     </Router>

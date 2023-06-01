@@ -100,10 +100,19 @@ const OrderDetailsAdmin = () => {
                 <div className='d-flex align-items-center gap-10 mb-2'>
                   <h5 className='fw-bolder mb-0 fs-5'>Payment Status :</h5>
                   <p
-                    className='mb-0 text-success fs-6'
+                    className='mb-0 text-success fs-6 text-capitalize'
                     style={{ fontWeight: '500' }}
                   >
                     {adminOrder?.paymentIntent?.status}
+                  </p>
+                </div>
+                <div className='d-flex align-items-center gap-10 mb-2'>
+                  <h5 className='fw-bolder mb-0 fs-5'>Order Status :</h5>
+                  <p
+                    className='mb-0 text-success fs-6'
+                    style={{ fontWeight: '500' }}
+                  >
+                    {adminOrder?.orderStatus}
                   </p>
                 </div>
                 <div className='d-flex align-items-center gap-10 mb-2'>
@@ -121,12 +130,17 @@ const OrderDetailsAdmin = () => {
                     className='mb-0 text-success fs-6'
                     style={{ fontWeight: '500' }}
                   >
-                    {moment(adminOrder?.paymentIntent?.created).format(
-                      'DD MMMM YYYY hh:mm:ss a'
-                    )}
+                    {adminOrder?.updatedAt >= adminOrder?.createdAt
+                      ? moment(adminOrder?.updatedAt).format(
+                          'DD MMMM YYYY hh:mm:ss a'
+                        )
+                      : moment(adminOrder?.paymentIntent?.created).format(
+                          'DD MMMM YYYY hh:mm:ss a'
+                        )}
                   </p>
                 </div>
               </div>
+
               <div
                 className='p-4'
                 style={{
@@ -305,14 +319,6 @@ const OrderDetailsAdmin = () => {
                   </div>
                 </li>
               </ul>
-              <div className='d-flex align-items-center justify-content-center'>
-                <Link
-                  to={`/admin/dashboard/edit-product/${adminOrder?._id}`}
-                  className='btn btn-primary'
-                >
-                  Edit Order
-                </Link>
-              </div>
             </div>
           </div>
         )}
