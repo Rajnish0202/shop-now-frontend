@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import React from 'react';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import { IoCall, IoHome, IoInformationCircle, IoMail } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 

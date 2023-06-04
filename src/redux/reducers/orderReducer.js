@@ -13,6 +13,9 @@ import {
   DELIVERED_ORDERS_FAIL,
   DELIVERED_ORDERS_REQUEST,
   DELIVERED_ORDERS_SUCCESS,
+  GET_MONTLY_ORDER_INCOME_FAIL,
+  GET_MONTLY_ORDER_INCOME_REQUEST,
+  GET_MONTLY_ORDER_INCOME_SUCCESS,
   ORDER_DETAILS_ADMIN_FAIL,
   ORDER_DETAILS_ADMIN_REQUEST,
   ORDER_DETAILS_ADMIN_SUCCESS,
@@ -32,6 +35,9 @@ import {
   UPDATE_ORDER_STATUS_REQUEST,
   UPDATE_ORDER_STATUS_RESET,
   UPDATE_ORDER_STATUS_SUCCESS,
+  GET_YEARLY_ORDER_REQUEST,
+  GET_YEARLY_ORDER_SUCCESS,
+  GET_YEARLY_ORDER_FAIL,
 } from '../constants/orderConstants';
 
 export const newOrderReducer = (state = {}, action) => {
@@ -241,6 +247,74 @@ export const updateStatusReducer = (state = {}, action) => {
       return {
         ...state,
         statusUpdated: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const getMonthlyOrdersIncomeReducer = (
+  state = { monthlyIncome: [] },
+  action
+) => {
+  switch (action.type) {
+    case GET_MONTLY_ORDER_INCOME_REQUEST:
+      return {
+        loading: true,
+        monthlyIncome: [],
+      };
+
+    case GET_MONTLY_ORDER_INCOME_SUCCESS:
+      return {
+        loading: false,
+        monthlyIncome: action.payload,
+      };
+
+    case GET_MONTLY_ORDER_INCOME_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const getYearlyOrdersIncomeReducer = (
+  state = { yearlyIncome: {} },
+  action
+) => {
+  switch (action.type) {
+    case GET_YEARLY_ORDER_REQUEST:
+      return {
+        loading: true,
+        yearlyIncome: {},
+      };
+
+    case GET_YEARLY_ORDER_SUCCESS:
+      return {
+        loading: false,
+        yearlyIncome: action.payload,
+      };
+
+    case GET_YEARLY_ORDER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
       };
 
     case CLEAR_ERRORS:

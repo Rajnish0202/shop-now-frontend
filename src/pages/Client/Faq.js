@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllFaqs } from '../redux/actions/faqActions';
-import MetaData from '../utils/MetaData';
-import BreadCrumb from '../components/BreadCrumb';
-import { Spinner } from '../components/Loader/Loader';
+import { getAllFaqs } from '../../redux/actions/faqActions';
+import MetaData from '../../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import { Spinner } from '../../components/Loader/Loader';
 
 const Faq = () => {
   const [limit, setLimit] = useState(5);

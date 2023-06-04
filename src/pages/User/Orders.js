@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { MdOutlineLaunch } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import BreadCrumb from '../../components/BreadCrumb';
@@ -7,6 +6,50 @@ import { Spinner } from '../../components/Loader/Loader';
 import { allUserOrders } from '../../redux/actions/orderActions';
 import MetaData from '../../utils/MetaData';
 import { shortenText } from '../../utils/ShortenText';
+import { capitalizeText } from '../../utils/Capitalized';
+import { BiDetail } from 'react-icons/bi';
+import { Table } from 'antd';
+
+const columns = [
+  {
+    title: 'SNo.',
+    dataIndex: 'srn',
+  },
+  {
+    title: 'Product List',
+    dataIndex: 'productList',
+  },
+  {
+    title: 'Product Count',
+    dataIndex: 'count',
+  },
+  {
+    title: 'Payment',
+    dataIndex: 'payment',
+    sorter: (a, b) => {
+      if (a.payment.toLowerCase() < b.payment.toLowerCase()) return -1;
+      if (a.payment.toLowerCase() > b.payment.toLowerCase()) return 1;
+      return 0;
+    },
+  },
+  {
+    title: 'Amount',
+    dataIndex: 'total',
+    sorter: (a, b) => {
+      if (a.total < b.total) return -1;
+      if (a.total > b.total) return 1;
+      return 0;
+    },
+  },
+  {
+    title: 'Status',
+    dataIndex: 'status',
+  },
+  {
+    title: 'Action',
+    dataIndex: 'action',
+  },
+];
 
 const Orders = () => {
   const { loading, orders } = useSelector((state) => state.allOrders);
@@ -14,6 +57,47 @@ const Orders = () => {
   const dispatch = useDispatch();
 
   const userName = `${user.firstname}${user.lastname}`;
+
+  const data1 = [];
+  for (let i = 0; i < orders.length; i++) {
+    data1.push({
+      srn: i + 1,
+      key: orders[i]?._id,
+      productList: (
+        <ul className='mb-0'>
+          {orders[i]?.products?.map((item) => {
+            return (
+              <li
+                className='mb-0'
+                style={{ listStyle: 'outside' }}
+                key={item?.product?._id}
+              >
+                {shortenText(item?.product?.title, 35)}
+              </li>
+            );
+          })}
+        </ul>
+      ),
+      count: orders[i]?.products?.length,
+      payment: orders[i]?.paymentIntent?.method === 'Stripe' ? 'Online' : 'COD',
+      total: `₹ ${
+        orders[i]?.totalAfterDiscount
+          ? orders[i]?.totalAfterDiscount
+          : orders[i]?.cartTotal
+      }`,
+      status: orders[i]?.orderStatus,
+      action: (
+        <div className='d-flex align-items-center justify-content-center gap-2'>
+          <Link
+            to={`/user-orders/${orders[i]?._id}`}
+            className='btn btn-primary d-flex align-items-center justify-content-center fs-5'
+          >
+            <BiDetail />
+          </Link>
+        </div>
+      ),
+    });
+  }
 
   useEffect(() => {
     dispatch(allUserOrders());
@@ -24,47 +108,14 @@ const Orders = () => {
       <MetaData title='My Orders' />
       <BreadCrumb title='My Orders' />
       <div className='home-wrapper-2 p-4'>
-        <h3 className='text-center'>{userName}'s Orders List</h3>
+        <h3 className='text-center'>
+          {capitalizeText(userName)}'s Orders List
+        </h3>
         {loading ? (
           <Spinner />
         ) : (
           <div className='col-12 px-4'>
-            <div className='d-flex align-items-center justify-content-between mt-4 pb-2 border-bottom border-secondary '>
-              <p className='fw-bold fs-6 mb-0 w-100 text-center'>OrderId</p>
-              <p className='fw-bold fs-6 mb-0 w-100 text-center'>Status</p>
-              <p className='fw-bold fs-6 mb-0 w-100 text-center'>Payment</p>
-              <p className='fw-bold fs-6 mb-0 w-100 text-center'>Item Qty</p>
-              <p className='fw-bold fs-6 mb-0 w-100 text-center'>Amount</p>
-              <p className='fw-bold fs-6 mb-0 w-100 text-center'>Action</p>
-            </div>
-            {orders &&
-              orders.map((item) => (
-                <div
-                  className='d-flex align-items-center justify-content-between py-2 border-bottom border-secondary '
-                  key={item?._id}
-                >
-                  <p title={item?._id} className='mb-0 w-100 text-start'>
-                    {shortenText(item?._id, 15)}
-                  </p>
-                  <p className='mb-0 w-100 text-center'>{item?.orderStatus}</p>
-                  <p className='mb-0 w-100 text-center'>
-                    {item?.paymentIntent?.method === 'Stripe'
-                      ? 'Online Pay'
-                      : 'COD'}
-                  </p>
-                  <p className='mb-0 w-100 text-center'>
-                    {item?.products?.length}
-                  </p>
-                  <p className='mb-0 w-100 text-center'>
-                    ₹{item?.paymentIntent?.amount}
-                  </p>
-                  <p className='mb-0 w-100 text-center'>
-                    <Link to={`/user-orders/${item?._id}`}>
-                      <MdOutlineLaunch size={25} />
-                    </Link>
-                  </p>
-                </div>
-              ))}
+            <Table columns={columns} dataSource={data1} />
           </div>
         )}
       </div>

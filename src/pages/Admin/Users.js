@@ -9,7 +9,7 @@ import {
 } from '../../redux/actions/userActions';
 import { Link } from 'react-router-dom';
 import { BiDetail } from 'react-icons/bi';
-// import { FaEdit } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 import { confirmAlert } from 'react-confirm-alert';
 import { Spinner, TextSpinner } from '../../components/Loader/Loader';
@@ -111,12 +111,12 @@ const Users = () => {
             <BiDetail />
           </Link>
 
-          {/* <Link
-            to={`/admin/dashboard/edit-user/${users[i]?._id}`}
+          <Link
+            to={`/admin/dashboard/update-user-role/${users[i]?._id}`}
             className='btn btn-success d-flex align-items-center justify-content-center fs-5'
           >
             <FaEdit />
-          </Link> */}
+          </Link>
           <button
             className='btn btn-danger d-flex align-items-center justify-content-center fs-5'
             onClick={() => confirmDelete(users[i]?._id)}

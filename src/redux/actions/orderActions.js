@@ -14,6 +14,12 @@ import {
   DELIVERED_ORDERS_FAIL,
   DELIVERED_ORDERS_REQUEST,
   DELIVERED_ORDERS_SUCCESS,
+  GET_YEARLY_ORDER_FAIL,
+  GET_MONTLY_ORDER_INCOME_FAIL,
+  GET_MONTLY_ORDER_INCOME_REQUEST,
+  GET_MONTLY_ORDER_INCOME_SUCCESS,
+  GET_YEARLY_ORDER_REQUEST,
+  GET_YEARLY_ORDER_SUCCESS,
   ORDER_DETAILS_ADMIN_FAIL,
   ORDER_DETAILS_ADMIN_REQUEST,
   ORDER_DETAILS_ADMIN_SUCCESS,
@@ -263,6 +269,72 @@ export const updateOrderStatus = (id, statusData) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: UPDATE_ORDER_STATUS_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const getYearlyIncome = () => async (dispatch) => {
+  try {
+    dispatch({ type: GET_YEARLY_ORDER_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/orders/yearlyorders`,
+      config
+    );
+
+    dispatch({ type: GET_YEARLY_ORDER_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: GET_YEARLY_ORDER_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const getMonthWiseOrderIncome = () => async (dispatch) => {
+  try {
+    dispatch({ type: GET_MONTLY_ORDER_INCOME_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.get(
+      `${BACKEND_URL}/orders/monthwiseincome`,
+      config
+    );
+
+    dispatch({ type: GET_MONTLY_ORDER_INCOME_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: GET_MONTLY_ORDER_INCOME_FAIL,
       payload:
         (error.response &&
           error.response.data &&

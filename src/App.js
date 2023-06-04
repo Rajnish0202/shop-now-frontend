@@ -4,24 +4,19 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import Layout from './components/Layout';
-import Home from './pages/Home';
-import About from './pages/About';
-import Contact from './pages/Contact';
-import OurStore from './pages/OurStore';
-import Blogs from './pages/Blogs';
-import Compare from './pages/Compare';
-import Wishlist from './pages/Wishlist';
-import Login from './pages/Login';
-import Signup from './pages/Signup';
-import ForgotPassword from './pages/ForgotPassword';
-import ResetPassword from './pages/ResetPassword';
-import SingleBlog from './pages/SingleBlog';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import RefundPolicy from './pages/RefundPolicy';
-import ShippingPolicy from './pages/ShippingPolicy';
-import TermsAndCondition from './pages/TermsAndCondition';
-import SingleProduct from './pages/SingleProduct';
-import Cart from './pages/Cart';
+import Home from './pages/Client/Home';
+import OurStore from './pages/Client/OurStore';
+import Wishlist from './pages/Client/Wishlist';
+import Login from './pages/Client/Login';
+import Signup from './pages/Client/Signup';
+import ForgotPassword from './pages/Client/ForgotPassword';
+import ResetPassword from './pages/Client/ResetPassword';
+import SingleBlog from './pages/Client/SingleBlog';
+import PrivacyPolicy from './pages/Client/PrivacyPolicy';
+import RefundPolicy from './pages/Client/RefundPolicy';
+import ShippingPolicy from './pages/Client/ShippingPolicy';
+import TermsAndCondition from './pages/Client/TermsAndCondition';
+import SingleProduct from './pages/Client/SingleProduct';
 import Dashboard from './pages/Admin/Dashboard';
 import MainLayout from './components/Admin/MainLayout';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,16 +34,15 @@ import Profile from './pages/User/Profile';
 import Orders from './pages/User/Orders';
 import EditProfile from './pages/User/EditProfile';
 import { userCart } from './redux/actions/cartAction';
-import Shipping from './pages/Shipping';
-import PaymentMethod from './pages/PaymentMethod';
-import PlaceOrder from './pages/PlaceOrder';
-import OrderSuccess from './pages/OrderSuccess';
+import Shipping from './pages/Client/Shipping';
+import PaymentMethod from './pages/Client/PaymentMethod';
+import PlaceOrder from './pages/Client/PlaceOrder';
+import OrderSuccess from './pages/Client/OrderSuccess';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { BACKEND_URL } from './utils/backendUrl';
 import OrderDetails from './pages/User/OrderDetails';
-import Faq from './pages/Faq';
-import SizeCart from './pages/SizeCart';
+import SizeCart from './pages/Client/SizeCart';
 import { getAllFaqCategories } from './redux/actions/faqCategoryActions';
 import Invoice from './pages/User/Invoice';
 import Enquiries from './pages/Admin/Enquiries';
@@ -86,6 +80,13 @@ import ShippedOrderList from './pages/Admin/ShippedOrderList';
 import DeliveredOrderList from './pages/Admin/DeliveredOrderList';
 import OutForDeliveredList from './pages/Admin/OutForDeliveredList';
 import UpdateOrderStatus from './pages/Admin/UpdateOrderStatus';
+import Blogs from './pages/Client/Blogs';
+import About from './pages/Client/About';
+import Contact from './pages/Client/Contact';
+import Cart from './pages/Client/Cart';
+import Compare from './pages/Client/Compare';
+import Faq from './pages/Client/Faq';
+import UpdateUserRole from './pages/Admin/UpdateUserRole';
 
 axios.defaults.withCredentials = true;
 
@@ -303,6 +304,7 @@ function App() {
             path='update-status/:page/:id'
             element={<UpdateOrderStatus />}
           />
+          <Route path='update-user-role/:id' element={<UpdateUserRole />} />
         </Route>
       </Routes>
     </Router>

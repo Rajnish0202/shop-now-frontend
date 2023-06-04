@@ -8,13 +8,13 @@ import {
 } from 'react-icons/md';
 import { GiEarthAmerica } from 'react-icons/gi';
 
-import BreadCrumb from '../components/BreadCrumb';
-import CheckoutWizard from '../components/CheckoutWizard/CheckoutWizard';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import CheckoutWizard from '../../components/CheckoutWizard/CheckoutWizard';
+import MetaData from '../../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { saveShippingInfo } from '../redux/actions/cartAction';
+import { saveShippingInfo } from '../../redux/actions/cartAction';
 import { Country, State } from 'country-state-city';
 
 const Shipping = () => {

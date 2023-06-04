@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Marquee from 'react-fast-marquee';
-import BlogCard from '../components/BlogCard';
-import ProductCard from '../components/ProductCard';
-import SpecialProduct from '../components/SpecialProduct';
-import MetaData from '../utils/MetaData';
-import services from '../utils/Data';
+import BlogCard from '../../components/BlogCard';
+import ProductCard from '../../components/ProductCard';
+import SpecialProduct from '../../components/SpecialProduct';
+import MetaData from '../../utils/MetaData';
+import services from '../../utils/Data';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   clearErrors,
   getFeaturedProducts,
   getPopularProducts,
   getSpecialProducts,
-} from '../redux/actions/productActions';
+} from '../../redux/actions/productActions';
 import { toast } from 'react-toastify';
-import { Spinner } from '../components/Loader/Loader';
-import { getProductCountCategories } from '../redux/actions/productCategoryAction';
-import { getAllTypesCount } from '../redux/actions/productTypeAction';
-import { getBrands } from '../redux/actions/brandAction';
-import { getAllBlogs } from '../redux/actions/blogActions';
+import { Spinner } from '../../components/Loader/Loader';
+import { getProductCountCategories } from '../../redux/actions/productCategoryAction';
+import { getAllTypesCount } from '../../redux/actions/productTypeAction';
+import { getBrands } from '../../redux/actions/brandAction';
+import { getAllBlogs } from '../../redux/actions/blogActions';
 
 const Home = ({ setCategory, setType, setBrand }) => {
   const [limit, setLimit] = useState(4);

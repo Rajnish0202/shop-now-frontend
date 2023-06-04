@@ -1,9 +1,9 @@
 import React from 'react';
-import BreadCrumb from '../components/BreadCrumb';
-import CompareCard from '../components/CompareCard';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import CompareCard from '../../components/CompareCard';
+import MetaData from '../../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
-import { removeItemsFromCompare } from '../redux/actions/compareAction';
+import { removeItemsFromCompare } from '../../redux/actions/compareAction';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 

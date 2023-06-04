@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import StarRatings from 'react-star-ratings';
-import BreadCrumb from '../components/BreadCrumb';
-import ProductCard from '../components/ProductCard';
-import MetaData from '../utils/MetaData';
-import Color from '../components/Color';
+import BreadCrumb from '../../components/BreadCrumb';
+import ProductCard from '../../components/ProductCard';
+import MetaData from '../../utils/MetaData';
+import Color from '../../components/Color';
 import ReactImageMagnify from 'react-image-magnify';
 import {
   BsFillBarChartLineFill,
@@ -21,20 +21,23 @@ import {
   getRelatedProducts,
   productDetails,
   productRatings,
-} from '../redux/actions/productActions';
-import { shortenText } from '../utils/ShortenText';
-import { capitalizeText } from '../utils/Capitalized';
-import Loader, { Spinner, TextSpinner } from '../components/Loader/Loader';
-import { addItemsToCart, userCart } from '../redux/actions/cartAction';
-import { ADD_TO_CART_RESET } from '../redux/constants/cartConstants';
-import { addWishlist, removeWishlist } from '../redux/actions/wishlistAction';
+} from '../../redux/actions/productActions';
+import { shortenText } from '../../utils/ShortenText';
+import { capitalizeText } from '../../utils/Capitalized';
+import Loader, { Spinner, TextSpinner } from '../../components/Loader/Loader';
+import { addItemsToCart, userCart } from '../../redux/actions/cartAction';
+import { ADD_TO_CART_RESET } from '../../redux/constants/cartConstants';
+import {
+  addWishlist,
+  removeWishlist,
+} from '../../redux/actions/wishlistAction';
 import {
   ADD_WISHLIST_RESET,
   REMOVE_WISHLIST_RESET,
-} from '../redux/constants/wishlistConstants';
-import { addItemsToCompare } from '../redux/actions/compareAction';
-import { RATING_PRODUCT_RESET } from '../redux/constants/productConstants';
-import { allUserOrders } from '../redux/actions/orderActions';
+} from '../../redux/constants/wishlistConstants';
+import { addItemsToCompare } from '../../redux/actions/compareAction';
+import { RATING_PRODUCT_RESET } from '../../redux/constants/productConstants';
+import { allUserOrders } from '../../redux/actions/orderActions';
 import DOMPurify from 'dompurify';
 
 const SingleProduct = () => {

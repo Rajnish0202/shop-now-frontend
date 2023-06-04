@@ -22,6 +22,7 @@ import {
   allUsersReducer,
   userDetailsReducer,
   adminActionReducer,
+  userRoleReducer,
 } from './reducers/userReducer';
 import {
   productCategoryActionsReducer,
@@ -70,10 +71,12 @@ import {
 import {
   allAdminOrdersReducer,
   allOrdersReducer,
+  getMonthlyOrdersIncomeReducer,
   newOrderReducer,
   orderDetailsAdminReducer,
   orderDetailsReducer,
   updateStatusReducer,
+  getYearlyOrdersIncomeReducer,
 } from './reducers/orderReducer';
 import {
   allWishlistReducer,
@@ -145,6 +148,7 @@ const reducer = combineReducers({
   adminUsers: allUsersReducer,
   adminUserDetails: userDetailsReducer,
   adminActions: adminActionReducer,
+  useRoleActions: userRoleReducer,
   productActions: productActionsReducer,
   brandActions: brandActionsReducer,
   productCategoryAction: productCategoryActionsReducer,
@@ -172,6 +176,8 @@ const reducer = combineReducers({
   sizeDetails: sizeDetailsReducer,
   productCategoryDetails: productCategoryDetailsReducer,
   orderStatus: updateStatusReducer,
+  monthlyIncome: getMonthlyOrdersIncomeReducer,
+  yearlyIncome: getYearlyOrdersIncomeReducer,
 });
 
 let initialState = {

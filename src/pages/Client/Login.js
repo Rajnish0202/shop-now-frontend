@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../redux/actions/userActions';
+import { loginUser } from '../../redux/actions/userActions';
 import { toast } from 'react-toastify';
-import { validateEmail } from '../utils/validateEmail';
-import Loader from '../components/Loader/Loader';
+import { validateEmail } from '../../utils/validateEmail';
+import Loader from '../../components/Loader/Loader';
 
 const Login = () => {
   const [email, setEmail] = useState('');

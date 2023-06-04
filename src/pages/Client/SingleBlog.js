@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import { HiOutlineArrowLongLeft } from 'react-icons/hi2';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -9,8 +9,8 @@ import {
   dislikeBlog,
   getSingleBlog,
   likeBlog,
-} from '../redux/actions/blogActions';
-import { Spinner, TextSpinner } from '../components/Loader/Loader';
+} from '../../redux/actions/blogActions';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
 import moment from 'moment';
 import { FaEye } from 'react-icons/fa';
 import { SlLike, SlDislike } from 'react-icons/sl';
@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import {
   DISLIKE_BLOG_RESET,
   LIKE_BLOG_RESET,
-} from '../redux/constants/blogConstants';
+} from '../../redux/constants/blogConstants';
 import DOMPurify from 'dompurify';
 
 const SingleBlog = () => {

@@ -36,6 +36,9 @@ import {
   DELETE_USER_REQUEST,
   DELETE_USER_SUCCESS,
   DELETE_USER_FAIL,
+  UPDATE_USER_ROLE_REQUEST,
+  UPDATE_USER_ROLE_SUCCESS,
+  UPDATE_USER_ROLE_FAIL,
 } from '../constants/userConstants';
 
 import { toast } from 'react-toastify';
@@ -454,6 +457,41 @@ export const deleteUser = (id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: DELETE_USER_FAIL,
+      payload:
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString(),
+    });
+  }
+};
+
+export const setUserRole = (id, formData) => async (dispatch) => {
+  console.log(id);
+  try {
+    dispatch({ type: UPDATE_USER_ROLE_REQUEST });
+
+    const config = {
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      mode: 'cors',
+      credentials: 'include',
+      withCredentials: true,
+    };
+
+    const { data } = await axios.put(
+      `${BACKEND_URL}/user/update-role-user/${id}`,
+      formData,
+      config
+    );
+
+    dispatch({ type: UPDATE_USER_ROLE_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: UPDATE_USER_ROLE_FAIL,
       payload:
         (error.response &&
           error.response.data &&

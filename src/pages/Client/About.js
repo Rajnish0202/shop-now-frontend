@@ -1,7 +1,7 @@
 import React from 'react';
-import MetaData from '../utils/MetaData';
-import BreadCrumb from '../components/BreadCrumb';
+import BreadCrumb from '../../components/BreadCrumb';
 import { Link } from 'react-router-dom';
+import MetaData from '../../utils/MetaData';
 
 const About = () => {
   return (

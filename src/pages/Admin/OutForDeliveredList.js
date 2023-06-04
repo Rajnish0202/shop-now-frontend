@@ -49,6 +49,24 @@ const columns = [
     },
   },
   {
+    title: 'Tax Price',
+    dataIndex: 'tax',
+    sorter: (a, b) => {
+      if (a.tax < b.tax) return -1;
+      if (a.tax > b.tax) return 1;
+      return 0;
+    },
+  },
+  {
+    title: 'Shipping Price',
+    dataIndex: 'shipping',
+    sorter: (a, b) => {
+      if (a.shipping < b.shipping) return -1;
+      if (a.shipping > b.shipping) return 1;
+      return 0;
+    },
+  },
+  {
     title: 'Status',
     dataIndex: 'status',
   },
@@ -93,13 +111,15 @@ const OutForDeliveredList = () => {
         adminOrders[i]?.orderby?.firstname
       )} ${capitalizeText(adminOrders[i]?.orderby?.lastname)}`,
       count: adminOrders[i]?.products?.length,
-      payment: adminOrders[i]?.paymentIntent?.method,
-      total: `₹ ${
-        adminOrders[i]?.totalAfterDiscount
-          ? adminOrders[i]?.totalAfterDiscount
-          : adminOrders[i]?.cartTotal
-      }`,
-      status: adminOrders[i]?.orderStatus,
+      payment:
+        adminOrders[i]?.paymentIntent?.method === 'Stripe' ? 'Online' : 'COD',
+      total: `₹ ${adminOrders[i]?.paymentIntent?.amount}`,
+      tax: `₹ ${adminOrders[i]?.paymentIntent?.taxPrice}`,
+      shipping: `₹ ${adminOrders[i]?.paymentIntent?.shippingPrice}`,
+      status:
+        adminOrders[i]?.orderStatus === 'Out For Delivery'
+          ? 'OFD'
+          : adminOrders[i]?.orderStatus,
       action: (
         <div className='d-flex align-items-center justify-content-center gap-2'>
           <Link
@@ -131,11 +151,11 @@ const OutForDeliveredList = () => {
   }, [dispatch]);
   return (
     <>
-      <MetaData title='Orders' />
+      <MetaData title='Out For Delivery Orders' />
 
       <div>
         <h3 className='mb-4'>
-          Orders (
+          Out For Delivery Orders (
           {adminOrders?.length === 0
             ? '00'
             : adminOrders?.length > 9

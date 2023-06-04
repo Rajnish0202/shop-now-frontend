@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import BreadCrumb from '../components/BreadCrumb';
-import { Spinner } from '../components/Loader/Loader';
-import WishCard from '../components/WishCard';
-import { clearErrors } from '../redux/actions/productActions';
-import { loadUser } from '../redux/actions/userActions';
+import BreadCrumb from '../../components/BreadCrumb';
+import { Spinner } from '../../components/Loader/Loader';
+import WishCard from '../../components/WishCard';
+import { clearErrors } from '../../redux/actions/productActions';
+import { loadUser } from '../../redux/actions/userActions';
 import {
   getAllWishlist,
   removeWishlist,
-} from '../redux/actions/wishlistAction';
-import { REMOVE_WISHLIST_RESET } from '../redux/constants/wishlistConstants';
-import MetaData from '../utils/MetaData';
+} from '../../redux/actions/wishlistAction';
+import { REMOVE_WISHLIST_RESET } from '../../redux/constants/wishlistConstants';
+import MetaData from '../../utils/MetaData';
 import { Link } from 'react-router-dom';
 
 const Wishlist = () => {

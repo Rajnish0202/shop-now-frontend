@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import BreadCrumb from '../components/BreadCrumb';
-import Loader from '../components/Loader/Loader';
-import { clearErrors, registerUser } from '../redux/actions/userActions';
-import MetaData from '../utils/MetaData';
-import { validateEmail } from '../utils/validateEmail';
+import BreadCrumb from '../../components/BreadCrumb';
+import Loader from '../../components/Loader/Loader';
+import { clearErrors, registerUser } from '../../redux/actions/userActions';
+import MetaData from '../../utils/MetaData';
+import { validateEmail } from '../../utils/validateEmail';
 
 const Signup = () => {
   const [firstName, setFirstName] = useState('');

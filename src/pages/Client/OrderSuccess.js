@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 
 const OrderSuccess = () => {
   return (

@@ -38,6 +38,10 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
+  UPDATE_USER_ROLE_REQUEST,
+  UPDATE_USER_ROLE_SUCCESS,
+  UPDATE_USER_ROLE_FAIL,
+  UPDATE_USER_ROLE_RESET,
 } from '../constants/userConstants';
 
 export const userReducer = (state = { user: {} }, action) => {
@@ -329,6 +333,46 @@ export const adminActionReducer = (state = {}, action) => {
       return {
         ...state,
         isDeleted: false,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const userRoleReducer = (state = {}, action) => {
+  switch (action.type) {
+    case UPDATE_USER_ROLE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+
+    case UPDATE_USER_ROLE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isChanged: action.payload.success,
+        message: action.payload.message,
+      };
+
+    case UPDATE_USER_ROLE_FAIL:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+
+    case UPDATE_USER_ROLE_RESET:
+      return {
+        ...state,
+        isChanged: false,
       };
 
     case CLEAR_ERRORS:

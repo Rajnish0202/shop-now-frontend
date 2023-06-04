@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrors, resetPassword } from '../redux/actions/userActions';
-import { TextSpinner } from '../components/Loader/Loader';
+import { clearErrors, resetPassword } from '../../redux/actions/userActions';
+import { TextSpinner } from '../../components/Loader/Loader';
 
 const ResetPassword = () => {
   const [password, setPassword] = useState('');

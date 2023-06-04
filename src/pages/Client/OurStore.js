@@ -1,17 +1,20 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import StarRatings from 'react-star-ratings';
-import ProductCard from '../components/ProductCard';
-import Color from '../components/Color';
+import ProductCard from '../../components/ProductCard';
+import Color from '../../components/Color';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clearErrors, getRandomProduct } from '../redux/actions/productActions';
-import Loader, { Spinner } from '../components/Loader/Loader';
-import { getProducts } from '../redux/actions/productActions';
+import {
+  clearErrors,
+  getRandomProduct,
+} from '../../redux/actions/productActions';
+import Loader, { Spinner } from '../../components/Loader/Loader';
+import { getProducts } from '../../redux/actions/productActions';
 import { Link, useParams } from 'react-router-dom';
-import ratings from '../utils/ratings';
-import { shortenText } from '../utils/ShortenText';
+import ratings from '../../utils/ratings';
+import { shortenText } from '../../utils/ShortenText';
 
 const OurStore = ({
   category,

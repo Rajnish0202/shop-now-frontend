@@ -1,6 +1,6 @@
 import React from 'react';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 
 const TermsAndCondition = () => {
   return (

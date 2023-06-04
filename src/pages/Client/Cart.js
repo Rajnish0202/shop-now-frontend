@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Spinner, TextSpinner } from '../components/Loader/Loader';
-import { emptyCart, userCart } from '../redux/actions/cartAction';
+import { Spinner, TextSpinner } from '../../components/Loader/Loader';
+import { emptyCart, userCart } from '../../redux/actions/cartAction';
 import { toast } from 'react-toastify';
 import {
   REMOVE_ALL_CART_ITEM_RESET,
   REMOVE_CART_ITEM_RESET,
-} from '../redux/constants/cartConstants';
-import CartCard from '../components/CartCard';
+} from '../../redux/constants/cartConstants';
+import CartCard from '../../components/CartCard';
 
 const Cart = () => {
   const { loading, cart } = useSelector((state) => state.cart);

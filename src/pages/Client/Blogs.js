@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import BlogCard from '../components/BlogCard';
-import BreadCrumb from '../components/BreadCrumb';
-import MetaData from '../utils/MetaData';
+import BlogCard from '../../components/BlogCard';
+import BreadCrumb from '../../components/BreadCrumb';
+import MetaData from '../../utils/MetaData';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clearErrors, getAllBlogs } from '../redux/actions/blogActions';
-import { Spinner } from '../components/Loader/Loader';
-import { getBlogCategories } from '../redux/actions/blogCategoryActions';
+import { clearErrors, getAllBlogs } from '../../redux/actions/blogActions';
+import { Spinner } from '../../components/Loader/Loader';
+import { getBlogCategories } from '../../redux/actions/blogCategoryActions';
 
 const Blogs = () => {
   const [limit, setLimit] = useState(8);

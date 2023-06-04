@@ -1,29 +1,29 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
-import BreadCrumb from '../components/BreadCrumb';
-import CheckoutWizard from '../components/CheckoutWizard/CheckoutWizard';
+import BreadCrumb from '../../components/BreadCrumb';
+import CheckoutWizard from '../../components/CheckoutWizard/CheckoutWizard';
 import {
   clearErrors,
   getAllCoupons,
   getSingleCoupon,
-} from '../redux/actions/couponActions';
-import MetaData from '../utils/MetaData';
+} from '../../redux/actions/couponActions';
+import MetaData from '../../utils/MetaData';
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { createOrder } from '../redux/actions/orderActions';
-import { shortenText } from '../utils/ShortenText';
+import { createOrder } from '../../redux/actions/orderActions';
+import { shortenText } from '../../utils/ShortenText';
 import {
   CardNumberElement,
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
 import axios from 'axios';
-import { BACKEND_URL } from '../utils/backendUrl';
-import Payment from '../components/Payment';
-import { CREATE_ORDER_RESET } from '../redux/constants/orderConstants';
-import { TextSpinner } from '../components/Loader/Loader';
-import { emptyCart, userCart } from '../redux/actions/cartAction';
+import { BACKEND_URL } from '../../utils/backendUrl';
+import Payment from '../../components/Payment';
+import { CREATE_ORDER_RESET } from '../../redux/constants/orderConstants';
+import { TextSpinner } from '../../components/Loader/Loader';
+import { emptyCart, userCart } from '../../redux/actions/cartAction';
 
 const PlaceOrder = () => {
   const [shippingAddress, setShippingAddress] = useState('');

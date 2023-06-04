@@ -92,6 +92,15 @@ const OrderDetails = () => {
                   </p>
                 </div>
                 <div className='d-flex align-items-center gap-10 mb-2'>
+                  <h5 className='fw-bolder mb-0 fs-5'>Order Status</h5>
+                  <p
+                    className='mb-0 text-success fs-6'
+                    style={{ fontWeight: '500' }}
+                  >
+                    {order?.orderStatus}
+                  </p>
+                </div>
+                <div className='d-flex align-items-center gap-10 mb-2'>
                   <h5 className='fw-bolder fs-5 mb-0'>Paid</h5>
                   <p
                     className='mb-0 text-success fs-6'
@@ -280,11 +289,16 @@ const OrderDetails = () => {
                   </div>
                 </li>
               </ul>
-              <div className='d-flex align-items-center justify-content-center'>
-                <Link to={`/invoice/${order?._id}`} className='btn btn-primary'>
-                  Download Invoice
-                </Link>
-              </div>
+              {order?.orderStatus === 'Delivered' && (
+                <div className='d-flex align-items-center justify-content-center'>
+                  <Link
+                    to={`/invoice/${order?._id}`}
+                    className='btn btn-primary'
+                  >
+                    Download Invoice
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import BreadCrumb from '../components/BreadCrumb';
-import CheckoutWizard from '../components/CheckoutWizard/CheckoutWizard';
-import { SAVE_PAYMENT_METHOD } from '../redux/constants/cartConstants';
-import MetaData from '../utils/MetaData';
+import BreadCrumb from '../../components/BreadCrumb';
+import CheckoutWizard from '../../components/CheckoutWizard/CheckoutWizard';
+import { SAVE_PAYMENT_METHOD } from '../../redux/constants/cartConstants';
+import MetaData from '../../utils/MetaData';
 
 const PaymentMethod = () => {
   const [paymentMethod, setPaymentMethod] = useState('');

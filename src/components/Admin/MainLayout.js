@@ -25,19 +25,23 @@ import { ImBlogger, ImBlogger2 } from 'react-icons/im';
 import { GoTasklist } from 'react-icons/go';
 import { GiDeliveryDrone } from 'react-icons/gi';
 import { FaShippingFast } from 'react-icons/fa';
+import { FiLogOut } from 'react-icons/fi';
 import { BiDuplicate, BiFontSize, BiListPlus } from 'react-icons/bi';
 import { VscGroupByRefType, VscTypeHierarchySub } from 'react-icons/vsc';
 
 import { Button, Layout, Menu, theme } from 'antd';
 import { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logoutUser } from '../../redux/actions/userActions';
 const { Header, Sider, Content } = Layout;
 const MainLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.user);
+  const { user, isAuthenticated } = useSelector((state) => state.user);
 
   const {
     token: { colorBgContainer },
@@ -62,7 +66,14 @@ const MainLayout = () => {
           theme='dark'
           mode='inline'
           defaultSelectedKeys={['']}
-          onClick={({ key }) => navigate(key)}
+          onClick={({ key }) => {
+            if (key === 'logout') {
+              dispatch(logoutUser());
+              navigate('/');
+            } else {
+              navigate(key);
+            }
+          }}
           items={[
             {
               key: '',
@@ -228,6 +239,11 @@ const MainLayout = () => {
               icon: <BsSendCheck className='fs-4' />,
               label: 'Enquiries',
             },
+            {
+              key: 'logout',
+              icon: <FiLogOut className='fs-4' />,
+              label: 'Logout',
+            },
           ]}
         />
       </Sider>
@@ -264,18 +280,40 @@ const MainLayout = () => {
               </span>
             </div>
             <div className='d-flex gap-3 align-items-center'>
-              <div className='admin-user'>
-                <img
-                  src='https://res.cloudinary.com/dukdn1bpp/image/upload/v1670577687/avatars/ytffuvbukg5j3nrp5uhc.png'
-                  alt='avataar'
-                />
-              </div>
-              <div>
-                <h5 className='mb-0 text-capitalize'>
-                  {user?.firstname} {user?.lastname}
-                </h5>
-                <p className='mb-0'>{user?.email}</p>
-              </div>
+              {isAuthenticated ? (
+                <>
+                  <div className='admin-user'>
+                    <img
+                      src='https://res.cloudinary.com/dukdn1bpp/image/upload/v1670577687/avatars/ytffuvbukg5j3nrp5uhc.png'
+                      alt='avataar'
+                    />
+                  </div>
+                  <div>
+                    <h5 className='mb-0 text-capitalize'>
+                      {user?.firstname} {user?.lastname}
+                    </h5>
+                    <p className='mb-0'>{user?.email}</p>
+                  </div>
+                </>
+              ) : (
+                <Link
+                  to='/login'
+                  className='d-flex align-items-center gap-10 text-white button'
+                  style={{
+                    padding: '10px 20px',
+                    borderRadius: '5px',
+                    fontWeight: '600',
+                    letterSpacing: '1px',
+                  }}
+                >
+                  <img
+                    src='/assests/user.svg'
+                    alt='login'
+                    style={{ width: '20px' }}
+                  />
+                  <p className='mb-0'>Log in</p>
+                </Link>
+              )}
             </div>
           </div>
         </Header>
