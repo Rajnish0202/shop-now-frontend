@@ -208,7 +208,7 @@ const MainLayout = () => {
                 {
                   key: 'all-blog-category',
                   icon: <MdOutlineCategory className='fs-4' />,
-                  label: 'Blog Category',
+                  label: 'Add Category',
                 },
                 {
                   key: 'blog-category-list',

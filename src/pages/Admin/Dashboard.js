@@ -85,6 +85,11 @@ const Dashboard = () => {
     (state) => state.yearlyIncome
   );
 
+  const yearlyTotal =
+    yearlyIncome[0]?.amount -
+    yearlyIncome[0]?.taxPrice -
+    yearlyIncome[0]?.shippingPrice;
+
   const data1 = [];
   for (let i = 0; i < adminOrders.length; i++) {
     data1.push({
@@ -217,12 +222,7 @@ const Dashboard = () => {
           <div className='d-flex justify-content-between align-items-end flex-grow-1 bg-white p-3 rounded-3'>
             <div>
               <p className=''>Total Income</p>
-              <h4 className='mb-0'>
-                ₹{' '}
-                {yearlyIncome[0]?.amount -
-                  yearlyIncome[0]?.taxPrice -
-                  yearlyIncome[0]?.shippingPrice}
-              </h4>
+              <h4 className='mb-0'>₹ {yearlyTotal.toFixed(2)}</h4>
             </div>
             <div className='d-flex flex-column align-items-end'>
               <p className='mb-0'>Income in Last Year before Today</p>

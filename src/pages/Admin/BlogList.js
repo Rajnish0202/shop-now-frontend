@@ -164,7 +164,9 @@ const BlogList = () => {
       <div>
         <h3 className='mb-4'>
           Blog List (
-          {blogs?.allBlog?.length > 9
+          {blogs?.allBlog?.length === 0
+            ? '00'
+            : blogs?.allBlog?.length > 9
             ? blogs?.allBlog?.length
             : blogs?.allBlog?.length?.toString().padStart(2, '0')}
           )

@@ -42,6 +42,10 @@ input::-webkit-inner-spin-button {
   padding: 10px;
 }
 
+.marginBottom {
+  margin-bottom: 100px;
+}
+
 .ant-layout-content {
   overflow-y: scroll;
   height: 85vh;

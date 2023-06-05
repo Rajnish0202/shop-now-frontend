@@ -58,7 +58,9 @@ const Blogs = () => {
       <MetaData title='Our Blogs' />
       <BreadCrumb
         title={`Our Blogs (${
-          blogs?.blogCount > 10
+          blogs?.blogCount === undefined
+            ? '00'
+            : blogs?.blogCount > 10
             ? blogs?.blogCount
             : blogs?.blogCount?.toString()?.padStart(2, '0')
         })`}

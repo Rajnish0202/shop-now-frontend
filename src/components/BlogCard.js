@@ -12,7 +12,13 @@ const BlogCard = ({ blog }) => {
       className={`${location.pathname === '/blogs' ? 'blog-width' : 'col-3'}`}
     >
       <div className='blog-card'>
-        <div className='card-image'>
+        <div
+          className={`${
+            location.pathname === '/blogs'
+              ? 'card-image'
+              : 'card-image blog_page_image'
+          }`}
+        >
           <img
             src={blog?.images[0]?.url}
             className='img-fluid'
@@ -28,11 +34,21 @@ const BlogCard = ({ blog }) => {
               {blog?.category?.title}
             </p>
           </div>
-          <h5 className='title'>{blog?.title}</h5>
+          <h5 className='title' title={blog?.title}>
+            {location.pathname === '/blogs'
+              ? blog?.title
+              : shortenText(blog?.title, 25)}
+          </h5>
           <div
-            className='desc mb-2'
+            className={`desc ${
+              blog?.description?.length >= 200 ? 'mb-2' : 'marginBottom'
+            }`}
             dangerouslySetInnerHTML={{
-              __html: DOMPurify.sanitize(shortenText(blog?.description, 200)),
+              __html: DOMPurify.sanitize(
+                location.pathname === '/blogs'
+                  ? shortenText(blog?.description, 250)
+                  : shortenText(blog?.description, 200)
+              ),
             }}
           ></div>
           <Link to={`/blogs/${blog?._id}`} className='button'>

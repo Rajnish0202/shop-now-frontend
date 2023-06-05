@@ -132,7 +132,9 @@ const BlogCategoryList = () => {
       <div>
         <h3 className='mb-4'>
           Blog Category List (
-          {blogCategories.length > 9
+          {blogCategories.length === 0
+            ? '00'
+            : blogCategories.length > 9
             ? blogCategories.length
             : blogCategories.length?.toString().padStart(2, '0')}
           )

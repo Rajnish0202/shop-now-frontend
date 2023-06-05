@@ -39,11 +39,20 @@ const ProductCard = ({ grid, product }) => {
             <img src='/assests/wish.svg' alt='wishlist' />
           </button>
         </div>
-        <div className='product-image'>
+        <div
+          className={`${
+            location.pathname === '/ourstore'
+              ? 'product-image'
+              : 'product-image home_page_image'
+          }`}
+        >
           <img src={product?.images[0]?.url} alt={product?.slug} />
           <img src={product?.images[1]?.url} alt={product?.slug} />
         </div>
-        <div className='product-details'>
+        <div
+          className='product-details'
+          style={{ width: `${grid === 12 && '592px'}` }}
+        >
           <h6 className='brand'>{product?.brand?.title}</h6>
           <h5 className='title' title={product?.title}>
             {grid && grid > 6

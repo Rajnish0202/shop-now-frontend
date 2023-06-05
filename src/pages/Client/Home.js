@@ -430,7 +430,9 @@ const Home = ({ setCategory, setType, setBrand }) => {
             <div className='col-12'>
               <h3 className='section-heading'>
                 Featured Collection (
-                {featuredTotal > 10
+                {featuredTotal === undefined
+                  ? '00'
+                  : featuredTotal > 10
                   ? featuredTotal
                   : featuredTotal?.toString().padStart(2, 0)}
                 ){' '}
@@ -513,7 +515,9 @@ const Home = ({ setCategory, setType, setBrand }) => {
             <div className='col-12'>
               <h3 className='section-heading'>
                 Special Products (
-                {totalSpecial > 9
+                {totalSpecial === undefined
+                  ? '00'
+                  : totalSpecial > 9
                   ? totalSpecial
                   : totalSpecial?.toString().padStart(2, '0')}
                 )
@@ -548,7 +552,9 @@ const Home = ({ setCategory, setType, setBrand }) => {
             <div className='col-12'>
               <h3 className='section-heading'>
                 Our Popular Products (
-                {totalPopular && totalPopular > 10
+                {totalPopular === undefined
+                  ? '00'
+                  : totalPopular && totalPopular > 10
                   ? totalPopular
                   : totalPopular?.toString()?.padStart(2, '0')}
                 )
@@ -616,7 +622,15 @@ const Home = ({ setCategory, setType, setBrand }) => {
         <div className='container-xxl'>
           <div className='row'>
             <div className='col-12'>
-              <h3 className='section-heading'>Our Latest Blogs</h3>
+              <h3 className='section-heading'>
+                Our Latest Blogs (
+                {blogs?.blogCount === undefined
+                  ? '00'
+                  : blogs?.blogCount && blogs?.blogCount > 10
+                  ? blogs?.blogCount
+                  : blogs?.blogCount?.toString()?.padStart(2, '0')}
+                )
+              </h3>
             </div>
             {blogLoading && <Spinner />}
             {blogs &&

@@ -395,7 +395,7 @@ const PlaceOrder = () => {
                       </p>
                     </div>
                   )}
-                  {couponsList?.length >= 1 && (
+                  {cartTotal >= 1000 && couponsList?.length >= 1 && (
                     <div className='d-flex flex-column'>
                       <div
                         className='border-bottom border-top py-2 border-2'
